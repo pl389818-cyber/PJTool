@@ -1,0 +1,37 @@
+{
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Extensions/NSScreen+DisplayID.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/NSScreen+DisplayID.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/NSScreen+DisplayID.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/NSScreen+DisplayID.dia",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/NSScreen+DisplayID.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/NSScreen+DisplayID.swiftdeps"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Models/AudioInputSource.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/AudioInputSource.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/AudioInputSource.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/AudioInputSource.dia",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/AudioInputSource.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/AudioInputSource.swiftdeps"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Models/CameraProcessingSample.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CameraProcessingSample.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CameraProcessingSample.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CameraProcessingSample.dia",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CameraProcessingSample.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CameraProcessingSample.swiftdeps"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Models/CameraSource.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CameraSource.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CameraSource.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CameraSource.dia",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CameraSource.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CameraSource.swiftdeps"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Models/CaptureMode.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CaptureMode.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CaptureMode.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CaptureMode.dia",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CaptureMode.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CaptureMode.swiftdeps"
+  }
+}

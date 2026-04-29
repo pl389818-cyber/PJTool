@@ -1,0 +1,248 @@
+{
+  "source": "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Views/Settings/VideoProcessingSettingsView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "导入视频拼接",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 45
+        }
+      },
+      {
+        "comment": "",
+        "key": "主轨：%@",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 57
+        }
+      },
+      {
+        "comment": "",
+        "key": "暂无导入片段",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 69
+        }
+      },
+      {
+        "comment": "",
+        "key": "选择主轨视频",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 49
+        }
+      },
+      {
+        "comment": "",
+        "key": "使用最近录屏成片",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 52
+        }
+      },
+      {
+        "comment": "",
+        "key": "插入时间(秒)",
+        "location": {
+          "startingColumn": 27,
+          "startingLine": 62
+        }
+      },
+      {
+        "comment": "",
+        "key": "导入片段静音",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 64
+        }
+      },
+      {
+        "comment": "",
+        "key": "导入拼接片段",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 65
+        }
+      },
+      {
+        "comment": "",
+        "key": "%@ @ %.2fs",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 75
+        }
+      },
+      {
+        "comment": "",
+        "key": "静音",
+        "location": {
+          "startingColumn": 43,
+          "startingLine": 77
+        }
+      },
+      {
+        "comment": "",
+        "key": "保留音频",
+        "location": {
+          "startingColumn": 54,
+          "startingLine": 77
+        }
+      },
+      {
+        "comment": "",
+        "key": "删除",
+        "location": {
+          "startingColumn": 32,
+          "startingLine": 80
+        }
+      },
+      {
+        "comment": "",
+        "key": "导出拼接",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 87
+        }
+      },
+      {
+        "comment": "",
+        "key": "打开拼接结果",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 90
+        }
+      },
+      {
+        "comment": "",
+        "key": "多段剪切",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 102
+        }
+      },
+      {
+        "comment": "",
+        "key": "剪切源：%@",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 114
+        }
+      },
+      {
+        "comment": "",
+        "key": "暂无删除段",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 125
+        }
+      },
+      {
+        "comment": "",
+        "key": "选择剪切源",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 106
+        }
+      },
+      {
+        "comment": "",
+        "key": "使用拼接结果",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 109
+        }
+      },
+      {
+        "comment": "",
+        "key": "删除开始(秒)",
+        "location": {
+          "startingColumn": 27,
+          "startingLine": 119
+        }
+      },
+      {
+        "comment": "",
+        "key": "删除结束(秒)",
+        "location": {
+          "startingColumn": 27,
+          "startingLine": 120
+        }
+      },
+      {
+        "comment": "",
+        "key": "添加删除段",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 121
+        }
+      },
+      {
+        "comment": "",
+        "key": "%.2fs - %.2fs",
+        "location": {
+          "startingColumn": 30,
+          "startingLine": 131
+        }
+      },
+      {
+        "comment": "",
+        "key": "删除",
+        "location": {
+          "startingColumn": 32,
+          "startingLine": 133
+        }
+      },
+      {
+        "comment": "",
+        "key": "导出剪切",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 142
+        }
+      },
+      {
+        "comment": "",
+        "key": "打开剪切结果",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 145
+        }
+      },
+      {
+        "comment": "",
+        "key": "验证报告",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 153
+        }
+      },
+      {
+        "comment": "",
+        "key": "结果：%@",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 158
+        }
+      },
+      {
+        "comment": "",
+        "key": "报告文件：%@",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 163
+        }
+      },
+      {
+        "comment": "",
+        "key": "生成 ValidationReport",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 156
+        }
+      }
+    ]
+  },
+  "version": 1
+}

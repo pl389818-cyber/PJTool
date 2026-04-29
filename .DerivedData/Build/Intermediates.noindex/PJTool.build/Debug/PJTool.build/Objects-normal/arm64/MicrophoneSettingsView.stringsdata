@@ -1,0 +1,88 @@
+{
+  "source": "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Views/Settings/MicrophoneSettingsView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "输入电平：%lld",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 48
+        }
+      },
+      {
+        "comment": "",
+        "key": "输入设备",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 20
+        }
+      },
+      {
+        "comment": "",
+        "key": "刷新设备",
+        "location": {
+          "startingColumn": 28,
+          "startingLine": 30
+        }
+      },
+      {
+        "comment": "",
+        "key": "停止监控",
+        "location": {
+          "startingColumn": 70,
+          "startingLine": 32
+        }
+      },
+      {
+        "comment": "",
+        "key": "开始监控",
+        "location": {
+          "startingColumn": 87,
+          "startingLine": 32
+        }
+      },
+      {
+        "comment": "",
+        "key": "请求麦克风权限",
+        "location": {
+          "startingColumn": 32,
+          "startingLine": 42
+        }
+      },
+      {
+        "comment": "",
+        "key": "PiP 监听状态：%@ · Level %lld",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 81
+        }
+      },
+      {
+        "comment": "",
+        "key": "预览监听静音",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 54
+        }
+      },
+      {
+        "comment": "",
+        "key": "预览音量",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 64
+        }
+      },
+      {
+        "comment": "",
+        "key": "%lld",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 73
+        }
+      }
+    ]
+  },
+  "version": 1
+}

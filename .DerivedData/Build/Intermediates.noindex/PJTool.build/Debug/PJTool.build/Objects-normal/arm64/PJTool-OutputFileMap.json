@@ -1,0 +1,429 @@
+{
+  "" : {
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PJTool-primary.dia",
+    "emit-module-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PJTool-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PJTool-primary-emit-module.dia",
+    "pch" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PJTool-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PJTool-primary.swiftdeps"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/DerivedSources/GeneratedAssetSymbols.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/GeneratedAssetSymbols.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/GeneratedAssetSymbols.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/GeneratedAssetSymbols.dia",
+    "index-unit-output-path" : "/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/GeneratedAssetSymbols.o",
+    "llvm-bc" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/GeneratedAssetSymbols.bc",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/GeneratedAssetSymbols.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/GeneratedAssetSymbols.swiftdeps",
+    "swiftmodule" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/GeneratedAssetSymbols~partial.swiftmodule"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/ContentView.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/ContentView.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/ContentView.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/ContentView.dia",
+    "index-unit-output-path" : "/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/ContentView.o",
+    "llvm-bc" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/ContentView.bc",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/ContentView.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/ContentView.swiftdeps",
+    "swiftmodule" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/ContentView~partial.swiftmodule"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Extensions/NSScreen+DisplayID.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/NSScreen+DisplayID.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/NSScreen+DisplayID.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/NSScreen+DisplayID.dia",
+    "index-unit-output-path" : "/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/NSScreen+DisplayID.o",
+    "llvm-bc" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/NSScreen+DisplayID.bc",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/NSScreen+DisplayID.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/NSScreen+DisplayID.swiftdeps",
+    "swiftmodule" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/NSScreen+DisplayID~partial.swiftmodule"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Models/AudioInputSource.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/AudioInputSource.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/AudioInputSource.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/AudioInputSource.dia",
+    "index-unit-output-path" : "/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/AudioInputSource.o",
+    "llvm-bc" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/AudioInputSource.bc",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/AudioInputSource.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/AudioInputSource.swiftdeps",
+    "swiftmodule" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/AudioInputSource~partial.swiftmodule"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Models/CameraProcessingSample.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CameraProcessingSample.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CameraProcessingSample.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CameraProcessingSample.dia",
+    "index-unit-output-path" : "/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CameraProcessingSample.o",
+    "llvm-bc" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CameraProcessingSample.bc",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CameraProcessingSample.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CameraProcessingSample.swiftdeps",
+    "swiftmodule" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CameraProcessingSample~partial.swiftmodule"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Models/CameraSource.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CameraSource.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CameraSource.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CameraSource.dia",
+    "index-unit-output-path" : "/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CameraSource.o",
+    "llvm-bc" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CameraSource.bc",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CameraSource.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CameraSource.swiftdeps",
+    "swiftmodule" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CameraSource~partial.swiftmodule"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Models/CaptureMode.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CaptureMode.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CaptureMode.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CaptureMode.dia",
+    "index-unit-output-path" : "/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CaptureMode.o",
+    "llvm-bc" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CaptureMode.bc",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CaptureMode.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CaptureMode.swiftdeps",
+    "swiftmodule" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CaptureMode~partial.swiftmodule"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Models/CompositionProject.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CompositionProject.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CompositionProject.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CompositionProject.dia",
+    "index-unit-output-path" : "/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CompositionProject.o",
+    "llvm-bc" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CompositionProject.bc",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CompositionProject.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CompositionProject.swiftdeps",
+    "swiftmodule" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CompositionProject~partial.swiftmodule"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Models/FaceFramingKeyframe.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/FaceFramingKeyframe.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/FaceFramingKeyframe.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/FaceFramingKeyframe.dia",
+    "index-unit-output-path" : "/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/FaceFramingKeyframe.o",
+    "llvm-bc" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/FaceFramingKeyframe.bc",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/FaceFramingKeyframe.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/FaceFramingKeyframe.swiftdeps",
+    "swiftmodule" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/FaceFramingKeyframe~partial.swiftmodule"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Models/PiPAspectRatio.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPAspectRatio.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPAspectRatio.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPAspectRatio.dia",
+    "index-unit-output-path" : "/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPAspectRatio.o",
+    "llvm-bc" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPAspectRatio.bc",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPAspectRatio.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPAspectRatio.swiftdeps",
+    "swiftmodule" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPAspectRatio~partial.swiftmodule"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Models/PiPAudioPreviewConfig.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPAudioPreviewConfig.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPAudioPreviewConfig.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPAudioPreviewConfig.dia",
+    "index-unit-output-path" : "/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPAudioPreviewConfig.o",
+    "llvm-bc" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPAudioPreviewConfig.bc",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPAudioPreviewConfig.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPAudioPreviewConfig.swiftdeps",
+    "swiftmodule" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPAudioPreviewConfig~partial.swiftmodule"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Models/PiPFramingKeyframeNormalizer.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPFramingKeyframeNormalizer.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPFramingKeyframeNormalizer.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPFramingKeyframeNormalizer.dia",
+    "index-unit-output-path" : "/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPFramingKeyframeNormalizer.o",
+    "llvm-bc" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPFramingKeyframeNormalizer.bc",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPFramingKeyframeNormalizer.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPFramingKeyframeNormalizer.swiftdeps",
+    "swiftmodule" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPFramingKeyframeNormalizer~partial.swiftmodule"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Models/PiPGeometry.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPGeometry.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPGeometry.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPGeometry.dia",
+    "index-unit-output-path" : "/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPGeometry.o",
+    "llvm-bc" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPGeometry.bc",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPGeometry.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPGeometry.swiftdeps",
+    "swiftmodule" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPGeometry~partial.swiftmodule"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Models/PiPLayoutState.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPLayoutState.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPLayoutState.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPLayoutState.dia",
+    "index-unit-output-path" : "/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPLayoutState.o",
+    "llvm-bc" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPLayoutState.bc",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPLayoutState.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPLayoutState.swiftdeps",
+    "swiftmodule" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPLayoutState~partial.swiftmodule"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Models/PiPProcessingConfig.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPProcessingConfig.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPProcessingConfig.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPProcessingConfig.dia",
+    "index-unit-output-path" : "/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPProcessingConfig.o",
+    "llvm-bc" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPProcessingConfig.bc",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPProcessingConfig.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPProcessingConfig.swiftdeps",
+    "swiftmodule" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPProcessingConfig~partial.swiftmodule"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Models/RecordingArtifact.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RecordingArtifact.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RecordingArtifact.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RecordingArtifact.dia",
+    "index-unit-output-path" : "/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RecordingArtifact.o",
+    "llvm-bc" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RecordingArtifact.bc",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RecordingArtifact.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RecordingArtifact.swiftdeps",
+    "swiftmodule" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RecordingArtifact~partial.swiftmodule"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Models/RecordingRequest.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RecordingRequest.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RecordingRequest.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RecordingRequest.dia",
+    "index-unit-output-path" : "/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RecordingRequest.o",
+    "llvm-bc" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RecordingRequest.bc",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RecordingRequest.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RecordingRequest.swiftdeps",
+    "swiftmodule" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RecordingRequest~partial.swiftmodule"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Models/RecordingState.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RecordingState.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RecordingState.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RecordingState.dia",
+    "index-unit-output-path" : "/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RecordingState.o",
+    "llvm-bc" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RecordingState.bc",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RecordingState.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RecordingState.swiftdeps",
+    "swiftmodule" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RecordingState~partial.swiftmodule"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Models/RegionSelection.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RegionSelection.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RegionSelection.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RegionSelection.dia",
+    "index-unit-output-path" : "/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RegionSelection.o",
+    "llvm-bc" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RegionSelection.bc",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RegionSelection.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RegionSelection.swiftdeps",
+    "swiftmodule" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RegionSelection~partial.swiftmodule"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Models/SettingsSection.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/SettingsSection.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/SettingsSection.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/SettingsSection.dia",
+    "index-unit-output-path" : "/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/SettingsSection.o",
+    "llvm-bc" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/SettingsSection.bc",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/SettingsSection.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/SettingsSection.swiftdeps",
+    "swiftmodule" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/SettingsSection~partial.swiftmodule"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Models/TrimModels.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/TrimModels.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/TrimModels.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/TrimModels.dia",
+    "index-unit-output-path" : "/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/TrimModels.o",
+    "llvm-bc" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/TrimModels.bc",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/TrimModels.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/TrimModels.swiftdeps",
+    "swiftmodule" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/TrimModels~partial.swiftmodule"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Models/ValidationReport.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/ValidationReport.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/ValidationReport.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/ValidationReport.dia",
+    "index-unit-output-path" : "/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/ValidationReport.o",
+    "llvm-bc" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/ValidationReport.bc",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/ValidationReport.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/ValidationReport.swiftdeps",
+    "swiftmodule" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/ValidationReport~partial.swiftmodule"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/PJToolApp.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PJToolApp.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PJToolApp.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PJToolApp.dia",
+    "index-unit-output-path" : "/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PJToolApp.o",
+    "llvm-bc" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PJToolApp.bc",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PJToolApp.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PJToolApp.swiftdeps",
+    "swiftmodule" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PJToolApp~partial.swiftmodule"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Services/AppCoordinator.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/AppCoordinator.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/AppCoordinator.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/AppCoordinator.dia",
+    "index-unit-output-path" : "/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/AppCoordinator.o",
+    "llvm-bc" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/AppCoordinator.bc",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/AppCoordinator.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/AppCoordinator.swiftdeps",
+    "swiftmodule" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/AppCoordinator~partial.swiftmodule"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Services/AudioInputEngine.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/AudioInputEngine.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/AudioInputEngine.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/AudioInputEngine.dia",
+    "index-unit-output-path" : "/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/AudioInputEngine.o",
+    "llvm-bc" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/AudioInputEngine.bc",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/AudioInputEngine.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/AudioInputEngine.swiftdeps",
+    "swiftmodule" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/AudioInputEngine~partial.swiftmodule"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Services/CameraEngine.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CameraEngine.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CameraEngine.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CameraEngine.dia",
+    "index-unit-output-path" : "/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CameraEngine.o",
+    "llvm-bc" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CameraEngine.bc",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CameraEngine.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CameraEngine.swiftdeps",
+    "swiftmodule" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CameraEngine~partial.swiftmodule"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Services/CompositionExportEngine.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CompositionExportEngine.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CompositionExportEngine.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CompositionExportEngine.dia",
+    "index-unit-output-path" : "/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CompositionExportEngine.o",
+    "llvm-bc" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CompositionExportEngine.bc",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CompositionExportEngine.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CompositionExportEngine.swiftdeps",
+    "swiftmodule" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CompositionExportEngine~partial.swiftmodule"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Services/ImportCompositeEngine.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/ImportCompositeEngine.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/ImportCompositeEngine.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/ImportCompositeEngine.dia",
+    "index-unit-output-path" : "/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/ImportCompositeEngine.o",
+    "llvm-bc" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/ImportCompositeEngine.bc",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/ImportCompositeEngine.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/ImportCompositeEngine.swiftdeps",
+    "swiftmodule" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/ImportCompositeEngine~partial.swiftmodule"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Services/PiPFrameProcessingEngine.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPFrameProcessingEngine.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPFrameProcessingEngine.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPFrameProcessingEngine.dia",
+    "index-unit-output-path" : "/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPFrameProcessingEngine.o",
+    "llvm-bc" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPFrameProcessingEngine.bc",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPFrameProcessingEngine.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPFrameProcessingEngine.swiftdeps",
+    "swiftmodule" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPFrameProcessingEngine~partial.swiftmodule"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Services/PiPOverlayWindowController.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPOverlayWindowController.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPOverlayWindowController.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPOverlayWindowController.dia",
+    "index-unit-output-path" : "/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPOverlayWindowController.o",
+    "llvm-bc" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPOverlayWindowController.bc",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPOverlayWindowController.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPOverlayWindowController.swiftdeps",
+    "swiftmodule" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPOverlayWindowController~partial.swiftmodule"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Services/RegionSelectionOverlayService.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RegionSelectionOverlayService.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RegionSelectionOverlayService.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RegionSelectionOverlayService.dia",
+    "index-unit-output-path" : "/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RegionSelectionOverlayService.o",
+    "llvm-bc" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RegionSelectionOverlayService.bc",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RegionSelectionOverlayService.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RegionSelectionOverlayService.swiftdeps",
+    "swiftmodule" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RegionSelectionOverlayService~partial.swiftmodule"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Services/RegionSelectorService.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RegionSelectorService.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RegionSelectorService.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RegionSelectorService.dia",
+    "index-unit-output-path" : "/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RegionSelectorService.o",
+    "llvm-bc" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RegionSelectorService.bc",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RegionSelectorService.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RegionSelectorService.swiftdeps",
+    "swiftmodule" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RegionSelectorService~partial.swiftmodule"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Services/ScreenRecorderEngine.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/ScreenRecorderEngine.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/ScreenRecorderEngine.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/ScreenRecorderEngine.dia",
+    "index-unit-output-path" : "/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/ScreenRecorderEngine.o",
+    "llvm-bc" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/ScreenRecorderEngine.bc",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/ScreenRecorderEngine.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/ScreenRecorderEngine.swiftdeps",
+    "swiftmodule" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/ScreenRecorderEngine~partial.swiftmodule"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Services/TrimExportEngine.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/TrimExportEngine.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/TrimExportEngine.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/TrimExportEngine.dia",
+    "index-unit-output-path" : "/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/TrimExportEngine.o",
+    "llvm-bc" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/TrimExportEngine.bc",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/TrimExportEngine.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/TrimExportEngine.swiftdeps",
+    "swiftmodule" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/TrimExportEngine~partial.swiftmodule"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Services/ValidationService.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/ValidationService.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/ValidationService.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/ValidationService.dia",
+    "index-unit-output-path" : "/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/ValidationService.o",
+    "llvm-bc" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/ValidationService.bc",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/ValidationService.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/ValidationService.swiftdeps",
+    "swiftmodule" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/ValidationService~partial.swiftmodule"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Views/AudioLevelMeterView.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/AudioLevelMeterView.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/AudioLevelMeterView.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/AudioLevelMeterView.dia",
+    "index-unit-output-path" : "/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/AudioLevelMeterView.o",
+    "llvm-bc" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/AudioLevelMeterView.bc",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/AudioLevelMeterView.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/AudioLevelMeterView.swiftdeps",
+    "swiftmodule" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/AudioLevelMeterView~partial.swiftmodule"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Views/Settings/GlobalActionBarView.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/GlobalActionBarView.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/GlobalActionBarView.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/GlobalActionBarView.dia",
+    "index-unit-output-path" : "/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/GlobalActionBarView.o",
+    "llvm-bc" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/GlobalActionBarView.bc",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/GlobalActionBarView.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/GlobalActionBarView.swiftdeps",
+    "swiftmodule" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/GlobalActionBarView~partial.swiftmodule"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Views/Settings/MicrophoneSettingsView.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/MicrophoneSettingsView.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/MicrophoneSettingsView.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/MicrophoneSettingsView.dia",
+    "index-unit-output-path" : "/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/MicrophoneSettingsView.o",
+    "llvm-bc" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/MicrophoneSettingsView.bc",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/MicrophoneSettingsView.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/MicrophoneSettingsView.swiftdeps",
+    "swiftmodule" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/MicrophoneSettingsView~partial.swiftmodule"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Views/Settings/PiPCameraSettingsView.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPCameraSettingsView.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPCameraSettingsView.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPCameraSettingsView.dia",
+    "index-unit-output-path" : "/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPCameraSettingsView.o",
+    "llvm-bc" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPCameraSettingsView.bc",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPCameraSettingsView.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPCameraSettingsView.swiftdeps",
+    "swiftmodule" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPCameraSettingsView~partial.swiftmodule"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Views/Settings/RecordingSettingsView.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RecordingSettingsView.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RecordingSettingsView.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RecordingSettingsView.dia",
+    "index-unit-output-path" : "/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RecordingSettingsView.o",
+    "llvm-bc" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RecordingSettingsView.bc",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RecordingSettingsView.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RecordingSettingsView.swiftdeps",
+    "swiftmodule" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RecordingSettingsView~partial.swiftmodule"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Views/Settings/SettingsSidebarView.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/SettingsSidebarView.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/SettingsSidebarView.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/SettingsSidebarView.dia",
+    "index-unit-output-path" : "/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/SettingsSidebarView.o",
+    "llvm-bc" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/SettingsSidebarView.bc",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/SettingsSidebarView.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/SettingsSidebarView.swiftdeps",
+    "swiftmodule" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/SettingsSidebarView~partial.swiftmodule"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Views/Settings/VideoProcessingSettingsView.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/VideoProcessingSettingsView.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/VideoProcessingSettingsView.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/VideoProcessingSettingsView.dia",
+    "index-unit-output-path" : "/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/VideoProcessingSettingsView.o",
+    "llvm-bc" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/VideoProcessingSettingsView.bc",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/VideoProcessingSettingsView.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/VideoProcessingSettingsView.swiftdeps",
+    "swiftmodule" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/VideoProcessingSettingsView~partial.swiftmodule"
+  }
+}

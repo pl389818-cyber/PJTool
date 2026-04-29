@@ -1,0 +1,772 @@
+[
+  {
+    "isFramework" : true,
+    "moduleName" : "AVFAudio",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/26.4\/AVFAudio.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "AVFoundation",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/26.4\/AVFoundation.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "Accelerate",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/26.4\/Accelerate.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : true,
+    "moduleName" : "Accessibility",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/26.4\/Accessibility.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : true,
+    "moduleName" : "AppKit",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/26.4\/AppKit.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : true,
+    "moduleName" : "AudioToolbox",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/26.4\/AudioToolbox.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : true,
+    "moduleName" : "Combine",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/26.4\/Combine.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "CoreAudio",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/26.4\/CoreAudio.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : true,
+    "moduleName" : "CoreData",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/26.4\/CoreData.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "CoreFoundation",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/26.4\/CoreFoundation.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : true,
+    "moduleName" : "CoreGraphics",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/26.4\/CoreGraphics.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "CoreImage",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/26.4\/CoreImage.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "CoreMIDI",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/26.4\/CoreMIDI.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : true,
+    "moduleName" : "CoreML",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/26.4\/CoreML.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "CoreMedia",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/26.4\/CoreMedia.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : true,
+    "moduleName" : "CoreText",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/26.4\/CoreText.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : true,
+    "moduleName" : "CoreTransferable",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/26.4\/CoreTransferable.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : true,
+    "moduleName" : "CoreVideo",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/26.4\/CoreVideo.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "Darwin",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/26.4\/Darwin.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : true,
+    "moduleName" : "DataDetection",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/26.4\/DataDetection.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : true,
+    "moduleName" : "DeveloperToolsSupport",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/26.4\/DeveloperToolsSupport.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "Dispatch",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/26.4\/Dispatch.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : true,
+    "moduleName" : "Foundation",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/26.4\/Foundation.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "IOKit",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/26.4\/IOKit.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "Metal",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/26.4\/Metal.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "OSLog",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/26.4\/OSLog.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "ObjectiveC",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/26.4\/ObjectiveC.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "Observation",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/26.4\/Observation.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "QuartzCore",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/26.4\/QuartzCore.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : true,
+    "moduleName" : "ScreenCaptureKit",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/26.4\/ScreenCaptureKit.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "Spatial",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/26.4\/Spatial.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "Swift",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/26.4\/Swift.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "SwiftOnoneSupport",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/26.4\/SwiftOnoneSupport.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : true,
+    "moduleName" : "SwiftUI",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/26.4\/SwiftUI.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : true,
+    "moduleName" : "SwiftUICore",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/26.4\/SwiftUICore.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : true,
+    "moduleName" : "Symbols",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/26.4\/Symbols.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "Synchronization",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/26.4\/Synchronization.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "System",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/26.4\/System.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "UniformTypeIdentifiers",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/26.4\/UniformTypeIdentifiers.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : true,
+    "moduleName" : "Vision",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/26.4\/Vision.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "XPC",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/26.4\/XPC.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "_Builtin_float",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/26.4\/_Builtin_float.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "_Concurrency",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/26.4\/_Concurrency.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "_DarwinFoundation1",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/26.4\/_DarwinFoundation1.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "_DarwinFoundation2",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/26.4\/_DarwinFoundation2.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "_DarwinFoundation3",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/26.4\/_DarwinFoundation3.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "_StringProcessing",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/26.4\/_StringProcessing.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "os",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/26.4\/os.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "isFramework" : false,
+    "moduleName" : "simd",
+    "modulePath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/swift\/macosx\/prebuilt-modules\/26.4\/simd.swiftmodule\/arm64e-apple-macos.swiftmodule"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/AVFAudio.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/AVFAudio-AHDQLC35ZEGK6CKVI63O8CNJ4.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "AVFAudio"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/AVFoundation.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/AVFoundation-1DF7NWCPLZCIC8CRE467Z6728.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "AVFoundation"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/Accelerate.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/Accelerate-9YLYJG1Q9OJBKOXFCKI76YOKF.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "Accelerate"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/Accessibility.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/Accessibility-D1XY5LDECSVGXCCVZMBQNATD6.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "Accessibility"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/AppKit.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/AppKit-9KGOT1Z3ATPU87INBQLYRUMC4.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "AppKit"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/ApplicationServices.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/ApplicationServices-CRFD4BU1B8MG1VU0N1SV1GTQ2.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "ApplicationServices"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/AudioToolbox.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/AudioToolbox-9G7OUD4OVXIMOIU85AD1X043O.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "AudioToolbox"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/CFNetwork.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/CFNetwork-9L5CN2QACGLK1CVHTES1PG5N0.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "CFNetwork"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/usr\/include\/cups.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/CUPS-7XTM9VHWGKCC1V11QV1GE9IBI.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "CUPS"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/Carbon.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/Carbon-2DYS05XO3S9UGL6G59DLJ4F3K.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "Carbon"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/ColorSync.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/ColorSync-4GESRK5OWZO6M710U6CCRDT82.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "ColorSync"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/CoreAudio.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/CoreAudio-CEWW4L76YQOVKWFWDG9SFDC5X.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "CoreAudio"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/CoreAudioTypes.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/CoreAudioTypes-Q8FD3OFWEMNLHL7PRLNX4S6.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "CoreAudioTypes"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/CoreData.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/CoreData-9CZFH84N456UUW3C7I2JYFZDF.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "CoreData"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/CoreFoundation.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/CoreFoundation-EWBNV941YZE6ITLUX7EBBPXEN.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "CoreFoundation"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/CoreGraphics.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/CoreGraphics-RVCUJOP6DISUG4T99NOBTZKW.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "CoreGraphics"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/CoreImage.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/CoreImage-CYIXQ46OBSYTJQL2983Y5LDQP.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "CoreImage"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/CoreMIDI.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/CoreMIDI-42YK1NESZYOW2A9R8M5U6BOY1.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "CoreMIDI"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/CoreML.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/CoreML-2FMP8LGY0TVKCZSR75491RVTJ.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "CoreML"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/CoreMedia.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/CoreMedia-1D6B5YRBZBNT0568A1S9JKI38.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "CoreMedia"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/CoreServices.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/CoreServices-8G1LZ7RLGBQX9H6XUVGDAN8CV.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "CoreServices"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/CoreText.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/CoreText-9X8Y8TJROR5OPCE2HRKLK0CI5.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "CoreText"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/CoreTransferable.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/CoreTransferable-EI2TQKTXOEVEI1BZUXQ2KP4CB.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "CoreTransferable"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/CoreVideo.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/CoreVideo-9TDDLC8WJVQSGNUDAJ13W3Y37.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "CoreVideo"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/usr\/include\/Darwin.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/Darwin-E2AK6JFPIVF8S67A15AXBP8NL.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "Darwin"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/DataDetection.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/DataDetection-APX09RLLBS2NUNWK27BQOGLK4.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "DataDetection"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/DeveloperToolsSupport.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/DeveloperToolsSupport-C2V4GTS1YX2XSXPZZ2UYX3FXG.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "DeveloperToolsSupport"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/DiskArbitration.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/DiskArbitration-40OQAF6EJMJTRQ7AHLW81TX4A.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "DiskArbitration"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/usr\/include\/dispatch.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/Dispatch-BTMB1KVGQUEO415ELBFRCON42.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "Dispatch"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/Foundation.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/Foundation-6CH7S8NRNI6TRFOW30ZW7O1FT.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "Foundation"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/IOKit.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/IOKit-6FVOH90E4N13D7MKK4GQXEWFH.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "IOKit"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/IOSurface.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/IOSurface-5YEFTSJBJYD5888P3XR5MGSJ2.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "IOSurface"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/ImageIO.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/ImageIO-3R8GV1CD359HAFIZ231WGAKHX.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "ImageIO"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/usr\/include\/DarwinBasic.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/MachO-7WGWY6S2RHU3WEMSJGBA3NN6N.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "MachO"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/MediaToolbox.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/MediaToolbox-6TILBP77RNMSCSACXNBHGDOMG.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "MediaToolbox"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/Metal.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/Metal-BGHZZ4W4LFIJHFKJ4U3GHBI94.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "Metal"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/OSLog.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/OSLog-67CNWF79K2BTBQ6VX640YSZTY.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "OSLog"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/usr\/include\/ObjectiveC.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/ObjectiveC-9W29BTPXPXUVGK5PYMN5EZFFT.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "ObjectiveC"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/OpenGL.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/OpenGL-95C34W2BBDK52Z85RNI7TTGSO.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "OpenGL"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/QuartzCore.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/QuartzCore-APIZJY7V79K9L2A7GX4BXXUJI.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "QuartzCore"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/ScreenCaptureKit.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/ScreenCaptureKit-111DIOAB8NQ4RM2W22MK9ZRUR.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "ScreenCaptureKit"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/Security.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/Security-D8R2UG87Z05TM19UBJ7P99Y6Q.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "Security"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/usr\/include\/Spatial\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/Spatial-EKMXF8FDIZ0LTU7MWN557VH4E.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "Spatial"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/usr\/lib\/swift\/shims\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/SwiftShims-3LWIXYGWZIY4F21WQ14OFBY3L.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "SwiftShims"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/SwiftUI.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/SwiftUI-889PYLLWBK4KEYZ2WUS5DQW2P.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "SwiftUI"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/SwiftUICore.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/SwiftUICore-DSHW4X7ZSHEI4ZMB9C5KALFWA.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "SwiftUICore"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/Symbols.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/Symbols-1L3PG76SZ0XORVVUR09OF2B09.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "Symbols"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/UniformTypeIdentifiers.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/UniformTypeIdentifiers-1C7LGH9O7C4OCME6FMIBXEPE8.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "UniformTypeIdentifiers"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/System\/Library\/Frameworks\/Vision.framework\/Modules\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/Vision-4SO3GSKSBJJRHJJ732QAIQLVG.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "Vision"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/usr\/include\/xpc.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/XPC-CSMPRF0LXY5QV0H1B2YUNLGT6.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "XPC"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/usr\/include\/DarwinFoundation1.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/_AvailabilityInternal-D84ZQPFF1MVNWU3PKRGRNDBAQ.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "_AvailabilityInternal"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/21\/include\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/_Builtin_float-7PWD03HVP8C0NDDKYTBGZ8JG3.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "_Builtin_float"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/21\/include\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/_Builtin_intrinsics-1XEMO1VRF2RSRWQR869C83NRI.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "_Builtin_intrinsics"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/21\/include\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/_Builtin_inttypes-5B9MTMU969Z6ETZGFA139SWO5.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "_Builtin_inttypes"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/21\/include\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/_Builtin_limits-9S639T4K1SL74YJ5LMECEJW4X.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "_Builtin_limits"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/21\/include\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/_Builtin_stdarg-CS30PPCCCLJ6RAHLBX5XRZ8OF.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "_Builtin_stdarg"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/21\/include\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/_Builtin_stdatomic-13WEQGKBH7XPA1OYGFGMCO17S.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "_Builtin_stdatomic"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/21\/include\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/_Builtin_stdbool-AKER6QWCJ0E8XGHV8HRWRRYVQ.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "_Builtin_stdbool"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/21\/include\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/_Builtin_stddef-7B5K18DYYB3IBREB2AX9OITVC.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "_Builtin_stddef"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/21\/include\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/_Builtin_stdint-CIWAFB1HPFQPY00I06AI6KL42.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "_Builtin_stdint"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/21\/include\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/_Builtin_tgmath-5SNJXMMQCBN365X3ZL5H02M4G.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "_Builtin_tgmath"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/usr\/include\/DarwinFoundation1.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/_DarwinFoundation1-BL8GLAODY4O2LKDU6SXXQX6X1.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "_DarwinFoundation1"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/usr\/include\/DarwinFoundation2.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/_DarwinFoundation2-TJSNGP4RZ3LIEA30LKCLIQYV.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "_DarwinFoundation2"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/usr\/include\/DarwinFoundation3.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/_DarwinFoundation3-BZSIF04DCBG25P8VY1C5O3IFK.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "_DarwinFoundation3"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/usr\/lib\/swift\/shims\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/_SwiftConcurrencyShims-CPEHFRXHU52S9PMXNVZE0H0QF.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "_SwiftConcurrencyShims"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/usr\/include\/launch.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/launch-C471S1W88EDP8DLKVDN1SRFLW.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "launch"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/usr\/include\/libDER\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/libDER-79EEG895MLVJHITQQFA2JK0Y1.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "libDER"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/usr\/include\/libkern.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/libkern-288KYKVU2YU4M544N8QDI2SAD.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "libkern"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/usr\/include\/os.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/os-AKVJMIBY4U7FK91ZW1GUYWVDB.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "os"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/usr\/include\/os.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/os_object-DOKAITFK5ZDK30CZE6V5K9804.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "os_object"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/usr\/include\/os.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/os_workgroup-B8U0EJDBCR87R75WZGVPR33B2.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "os_workgroup"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/21\/include\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/ptrauth-ECM04XJLW2TFPEO31G0KY578L.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "ptrauth"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Toolchains\/XcodeDefault.xctoolchain\/usr\/lib\/clang\/21\/include\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/ptrcheck-E8SHKF9MEYSSN8RRF37L7AKIF.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "ptrcheck"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/usr\/include\/simd\/module.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/simd-64LGAGFWFHA96ASZS3GHBQJXH.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "simd"
+  },
+  {
+    "clangModuleMapPath" : "\/Applications\/Xcode.app\/Contents\/Developer\/Platforms\/MacOSX.platform\/Developer\/SDKs\/MacOSX.sdk\/usr\/include\/DarwinFoundation2.modulemap",
+    "clangModulePath" : "\/Users\/jamie\/CodexAi\/pjtool\/PJTool\/.DerivedData\/ModuleCache.noindex\/sys_types-9GAYNOEB9MEQL9JSLJ0LMH1KV.pcm",
+    "isBridgingHeaderDependency" : false,
+    "isFramework" : false,
+    "moduleName" : "sys_types"
+  }
+]

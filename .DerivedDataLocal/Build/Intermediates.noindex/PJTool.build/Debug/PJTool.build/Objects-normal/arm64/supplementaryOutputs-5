@@ -1,0 +1,30 @@
+{
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Services/AudioInputEngine.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedDataLocal/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/AudioInputEngine.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedDataLocal/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/AudioInputEngine.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedDataLocal/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/AudioInputEngine.dia",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedDataLocal/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/AudioInputEngine.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedDataLocal/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/AudioInputEngine.swiftdeps"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Services/CameraAudioLevelExtractor.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedDataLocal/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CameraAudioLevelExtractor.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedDataLocal/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CameraAudioLevelExtractor.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedDataLocal/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CameraAudioLevelExtractor.dia",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedDataLocal/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CameraAudioLevelExtractor.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedDataLocal/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CameraAudioLevelExtractor.swiftdeps"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Services/CameraDeviceCatalog.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedDataLocal/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CameraDeviceCatalog.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedDataLocal/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CameraDeviceCatalog.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedDataLocal/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CameraDeviceCatalog.dia",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedDataLocal/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CameraDeviceCatalog.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedDataLocal/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CameraDeviceCatalog.swiftdeps"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Services/CameraEngine.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedDataLocal/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CameraEngine.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedDataLocal/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CameraEngine.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedDataLocal/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CameraEngine.dia",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedDataLocal/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CameraEngine.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedDataLocal/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/CameraEngine.swiftdeps"
+  }
+}

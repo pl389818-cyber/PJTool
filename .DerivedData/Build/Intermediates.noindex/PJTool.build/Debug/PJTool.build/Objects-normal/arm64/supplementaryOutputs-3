@@ -1,0 +1,30 @@
+{
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Models/PiPGeometry.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPGeometry.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPGeometry.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPGeometry.dia",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPGeometry.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPGeometry.swiftdeps"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Models/PiPLayoutState.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPLayoutState.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPLayoutState.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPLayoutState.dia",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPLayoutState.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPLayoutState.swiftdeps"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Models/PiPProcessingConfig.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPProcessingConfig.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPProcessingConfig.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPProcessingConfig.dia",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPProcessingConfig.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPProcessingConfig.swiftdeps"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Models/RecordingArtifact.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RecordingArtifact.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RecordingArtifact.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RecordingArtifact.dia",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RecordingArtifact.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RecordingArtifact.swiftdeps"
+  }
+}

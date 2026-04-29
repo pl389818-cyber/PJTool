@@ -1,0 +1,30 @@
+{
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Services/PiPOverlayWindowController.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPOverlayWindowController.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPOverlayWindowController.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPOverlayWindowController.dia",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPOverlayWindowController.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/PiPOverlayWindowController.swiftdeps"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Services/RegionSelectionOverlayService.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RegionSelectionOverlayService.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RegionSelectionOverlayService.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RegionSelectionOverlayService.dia",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RegionSelectionOverlayService.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RegionSelectionOverlayService.swiftdeps"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Services/RegionSelectorService.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RegionSelectorService.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RegionSelectorService.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RegionSelectorService.dia",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RegionSelectorService.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/RegionSelectorService.swiftdeps"
+  },
+  "/Users/jamie/CodexAi/pjtool/PJTool/PJTool/Services/ScreenRecorderEngine.swift" : {
+    "const-values" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/ScreenRecorderEngine.swiftconstvalues",
+    "dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/ScreenRecorderEngine.d",
+    "diagnostics" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/ScreenRecorderEngine.dia",
+    "object" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/ScreenRecorderEngine.o",
+    "swift-dependencies" : "/Users/jamie/CodexAi/pjtool/PJTool/.DerivedData/Build/Intermediates.noindex/PJTool.build/Debug/PJTool.build/Objects-normal/arm64/ScreenRecorderEngine.swiftdeps"
+  }
+}
