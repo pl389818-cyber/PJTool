@@ -66,6 +66,8 @@ final class PiPOverlayWindowController: NSObject, ObservableObject {
 
         if let previewView = panel.contentView as? PiPPreviewView {
             previewView.attach(session: session)
+            previewView.applyTitleBarVisibility(windowConfig.isTitleBarVisible)
+            previewView.applyFrameStyle(windowConfig.frameStyle)
             previewView.onScale = { [weak self] delta in
                 self?.scaleWindow(by: delta)
             }
@@ -145,6 +147,11 @@ final class PiPOverlayWindowController: NSObject, ObservableObject {
         windowConfig = config
         guard let panel else { return }
         panel.title = config.resolvedWindowTitle
+        applyTitleBarVisibility(using: panel, isVisible: config.isTitleBarVisible)
+        if let previewView = panel.contentView as? PiPPreviewView {
+            previewView.applyTitleBarVisibility(config.isTitleBarVisible)
+            previewView.applyFrameStyle(config.frameStyle)
+        }
         applyLevel(using: panel)
         if panel.isVisible, config.isAlwaysOnTop {
             panel.orderFrontRegardless()
@@ -275,8 +282,7 @@ final class PiPOverlayWindowController: NSObject, ObservableObject {
         panel.isOpaque = true
         panel.backgroundColor = .windowBackgroundColor
         panel.title = windowConfig.resolvedWindowTitle
-        panel.titleVisibility = .visible
-        panel.titlebarAppearsTransparent = false
+        applyTitleBarVisibility(using: panel, isVisible: windowConfig.isTitleBarVisible)
         panel.tabbingMode = .disallowed
         panel.isReleasedWhenClosed = false
         panel.isRestorable = false
@@ -367,6 +373,36 @@ final class PiPOverlayWindowController: NSObject, ObservableObject {
         panel.maxSize = CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)
         // Avoid AppKit aspect-ratio property mutations during resize; we constrain
         // non-auto ratios in windowWillResize instead for better runtime stability.
+    }
+
+    private func applyTitleBarVisibility(using panel: NSPanel, isVisible: Bool) {
+        if isVisible {
+            panel.styleMask.insert(.titled)
+            panel.styleMask.insert(.closable)
+            panel.styleMask.insert(.miniaturizable)
+            panel.styleMask.insert(.resizable)
+            panel.styleMask.remove(.fullSizeContentView)
+        } else {
+            // Removing `.titled` avoids the 1px top hairline left by transparent titlebars.
+            panel.styleMask.remove(.titled)
+            panel.styleMask.remove(.closable)
+            panel.styleMask.remove(.miniaturizable)
+            panel.styleMask.insert(.resizable)
+            panel.styleMask.insert(.fullSizeContentView)
+        }
+        panel.titleVisibility = isVisible ? .visible : .hidden
+        panel.titlebarAppearsTransparent = !isVisible
+        panel.backgroundColor = isVisible ? .windowBackgroundColor : .clear
+        panel.isOpaque = isVisible
+        panel.hasShadow = isVisible
+        panel.standardWindowButton(.closeButton)?.isHidden = !isVisible
+        panel.standardWindowButton(.miniaturizeButton)?.isHidden = !isVisible
+        panel.standardWindowButton(.zoomButton)?.isHidden = !isVisible
+        if #available(macOS 11.0, *) {
+            panel.titlebarSeparatorStyle = isVisible ? .automatic : .none
+        }
+        panel.isMovableByWindowBackground = !isVisible
+        panel.invalidateShadow()
     }
 
     private func minimumSize(for aspectRatio: PiPAspectRatio) -> CGSize {
@@ -598,11 +634,14 @@ private final class PiPPreviewView: NSView {
 
     private var previewLayer: AVCaptureVideoPreviewLayer?
     private var processedLayer: CALayer?
+    private var frameStyle: PiPWindowFrameStyle = .circle
+    private var isTitleBarVisible = true
 
     override func layout() {
         super.layout()
         previewLayer?.frame = bounds
         processedLayer?.frame = bounds
+        applyFrameShape()
     }
 
     func attach(session: AVCaptureSession) {
@@ -630,15 +669,20 @@ private final class PiPPreviewView: NSView {
             rootLayer.addSublayer(processedLayer)
         }
 
-        if let rootLayer = layer {
-            rootLayer.masksToBounds = true
-            rootLayer.cornerRadius = 22
-            rootLayer.cornerCurve = .continuous
-            rootLayer.borderWidth = 1
-            rootLayer.borderColor = NSColor.white.withAlphaComponent(0.08).cgColor
-        }
+        applyTitleBarVisibility(true)
+        applyFrameStyle(.circle)
         previewLayer?.frame = bounds
         processedLayer?.frame = bounds
+    }
+
+    func applyTitleBarVisibility(_ isTitleBarVisible: Bool) {
+        self.isTitleBarVisible = isTitleBarVisible
+        applyFrameShape()
+    }
+
+    func applyFrameStyle(_ style: PiPWindowFrameStyle) {
+        frameStyle = style
+        applyFrameShape()
     }
 
     func updateProcessedImage(_ image: CGImage?) {
@@ -660,5 +704,30 @@ private final class PiPPreviewView: NSView {
             return
         }
         wantsLayer = true
+    }
+
+    private func applyFrameShape() {
+        guard let rootLayer = layer else { return }
+        let effectiveBounds = bounds
+        guard effectiveBounds.width > 0, effectiveBounds.height > 0 else { return }
+
+        rootLayer.masksToBounds = true
+        rootLayer.borderWidth = 0
+        rootLayer.borderColor = nil
+        rootLayer.cornerCurve = .continuous
+        rootLayer.mask = nil
+
+        switch frameStyle {
+        case .square:
+            rootLayer.cornerRadius = 22
+            if isTitleBarVisible {
+                rootLayer.borderWidth = 1
+                rootLayer.borderColor = NSColor.white.withAlphaComponent(0.08).cgColor
+            }
+        case .circle:
+            rootLayer.cornerRadius = min(effectiveBounds.width, effectiveBounds.height) / 2.0
+        }
+
+        rootLayer.backgroundColor = isTitleBarVisible ? NSColor.black.cgColor : NSColor.clear.cgColor
     }
 }

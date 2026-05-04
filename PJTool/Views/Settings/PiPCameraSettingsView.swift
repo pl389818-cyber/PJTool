@@ -126,10 +126,20 @@ struct PiPCameraSettingsView: View {
                 ))
 
                 HStack(alignment: .center, spacing: 10) {
+                    Toggle("", isOn: Binding(
+                        get: { appCoordinator.pipWindowConfig.isTitleBarVisible },
+                        set: { newValue in
+                            var next = appCoordinator.pipWindowConfig
+                            next.isTitleBarVisible = newValue
+                            appCoordinator.pipWindowConfig = next
+                        }
+                    ))
+                    .labelsHidden()
+
                     Text("PiP 摄像标题栏")
                         .font(.subheadline.weight(.medium))
                     TextField(
-                        "PiP 摄像",
+                        PiPWindowConfig.defaultWindowTitle,
                         text: Binding(
                             get: { appCoordinator.pipWindowConfig.windowTitle },
                             set: { newValue in
@@ -142,6 +152,20 @@ struct PiPCameraSettingsView: View {
                     .textFieldStyle(.roundedBorder)
                     .frame(maxWidth: .infinity)
                 }
+
+                Picker("边框样式", selection: Binding(
+                    get: { appCoordinator.pipWindowConfig.frameStyle },
+                    set: { newValue in
+                        var next = appCoordinator.pipWindowConfig
+                        next.frameStyle = newValue
+                        appCoordinator.pipWindowConfig = next
+                    }
+                )) {
+                    ForEach(PiPWindowFrameStyle.allCases, id: \.self) { style in
+                        Text(style.rawValue).tag(style)
+                    }
+                }
+                .pickerStyle(.segmented)
 
                 Picker("画面比例", selection: Binding(
                     get: { appCoordinator.pipAspectRatio },
@@ -157,6 +181,9 @@ struct PiPCameraSettingsView: View {
                     .font(.footnote)
                     .foregroundStyle(.secondary)
                 Text("当前标题：\(appCoordinator.pipWindowConfig.resolvedWindowTitle)")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                Text("当前边框：\(appCoordinator.pipWindowConfig.frameStyle.rawValue)")
                     .font(.footnote)
                     .foregroundStyle(.secondary)
                 Text("窗口默认以 240x240 弹出，后续可直接拖拽边缘或滚轮自由缩放。")
