@@ -9,18 +9,33 @@ import SwiftUI
 
 @main
 struct PJToolApp: App {
+    private static let videoCuttingWindowID = "video-cutting-window"
     @StateObject private var appCoordinator = AppCoordinator()
-    @State private var hasRequestedLaunchPermissions = false
+    @StateObject private var videoCuttingViewModel = VideoCuttingViewModel()
 
     var body: some Scene {
         WindowGroup("PJTool", id: "main-window") {
-            ContentView(appCoordinator: appCoordinator)
-                .onAppear {
-                    guard !hasRequestedLaunchPermissions else { return }
-                    hasRequestedLaunchPermissions = true
-                    appCoordinator.requestPermissionsOnLaunchIfNeeded()
-                }
+            ContentView(
+                appCoordinator: appCoordinator,
+                videoCuttingViewModel: videoCuttingViewModel,
+                videoCuttingWindowID: Self.videoCuttingWindowID
+            )
         }
+
+        Window("智能裁剪", id: Self.videoCuttingWindowID) {
+            VideoCuttingModalView(
+                viewModel: videoCuttingViewModel,
+                windowID: Self.videoCuttingWindowID
+            )
+            .onDisappear {
+                if appCoordinator.selectedSettingsSection == .videoCutting {
+                    appCoordinator.selectedSettingsSection = .videoProcessing
+                }
+            }
+        }
+        .defaultSize(width: 1320, height: 860)
+        .defaultLaunchBehavior(.suppressed)
+        .restorationBehavior(.disabled)
 
         MenuBarExtra {
             VStack(alignment: .leading, spacing: 8) {

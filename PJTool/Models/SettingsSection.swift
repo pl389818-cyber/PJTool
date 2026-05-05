@@ -11,6 +11,7 @@ enum SettingsSection: String, CaseIterable, Identifiable {
     case recording
     case pipCamera
     case videoProcessing
+    case videoCutting
 
     var id: String { rawValue }
 
@@ -22,6 +23,8 @@ enum SettingsSection: String, CaseIterable, Identifiable {
             return "PiP 摄像"
         case .videoProcessing:
             return "视频处理"
+        case .videoCutting:
+            return "视频剪切"
         }
     }
 
@@ -33,6 +36,8 @@ enum SettingsSection: String, CaseIterable, Identifiable {
             return "设备与预览"
         case .videoProcessing:
             return "拼接、剪切、导出"
+        case .videoCutting:
+            return "智能裁剪弹窗"
         }
     }
 
@@ -44,6 +49,8 @@ enum SettingsSection: String, CaseIterable, Identifiable {
             return "video.badge.waveform"
         case .videoProcessing:
             return "film.stack"
+        case .videoCutting:
+            return "scissors"
         }
     }
 }

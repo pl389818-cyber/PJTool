@@ -9,13 +9,19 @@ import CoreMedia
 import Foundation
 
 struct CutRange: Identifiable, Equatable {
-    let id = UUID()
+    let id: UUID
     var start: CMTime
     var end: CMTime
 
+    init(id: UUID = UUID(), start: CMTime, end: CMTime) {
+        self.id = id
+        self.start = start
+        self.end = end
+    }
+
     var normalized: CutRange {
         if end < start {
-            return CutRange(start: end, end: start)
+            return CutRange(id: id, start: end, end: start)
         }
         return self
     }

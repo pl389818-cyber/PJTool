@@ -10,6 +10,9 @@ import SwiftUI
 struct ContentView: View {
     private static let sidebarLaunchWidth: CGFloat = 200
     @ObservedObject private var appCoordinator: AppCoordinator
+    @ObservedObject private var videoCuttingViewModel: VideoCuttingViewModel
+    @Environment(\.openWindow) private var openWindow
+    private let videoCuttingWindowID: String
 
     @AppStorage("pjtool.sidebarCollapsed") private var sidebarCollapsedStorage = false
     @AppStorage("pjtool.sidebarWidth") private var sidebarWidthStorage = 0.0
@@ -30,12 +33,19 @@ struct ContentView: View {
     @State private var hasBootstrappedUIState = false
     @State private var lastKnownContainerWidth: CGFloat = 1000
     @State private var sidebarDragStartWidth: CGFloat?
+    @State private var hasUserOpenedVideoCutting = false
 
     private let trimEngine = TrimExportEngine()
     private let validationService = ValidationService()
 
-    init(appCoordinator: AppCoordinator) {
+    init(
+        appCoordinator: AppCoordinator,
+        videoCuttingViewModel: VideoCuttingViewModel,
+        videoCuttingWindowID: String
+    ) {
         self._appCoordinator = ObservedObject(wrappedValue: appCoordinator)
+        self._videoCuttingViewModel = ObservedObject(wrappedValue: videoCuttingViewModel)
+        self.videoCuttingWindowID = videoCuttingWindowID
     }
 
     private var audioSelectionBinding: Binding<String> {
@@ -103,7 +113,12 @@ struct ContentView: View {
             isCollapsed: Binding(
                 get: { appCoordinator.isSidebarCollapsed },
                 set: { appCoordinator.isSidebarCollapsed = $0 }
-            )
+            ),
+            onSectionSelected: { section in
+                guard section == .videoCutting else { return }
+                hasUserOpenedVideoCutting = true
+                openVideoCuttingWindow()
+            }
         )
     }
 
@@ -146,7 +161,29 @@ struct ContentView: View {
                 trimEngine: trimEngine,
                 validationService: validationService
             )
+        case .videoCutting:
+            videoCuttingEntryView
         }
+    }
+
+    private var videoCuttingEntryView: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("视频剪切")
+                .font(.title3.weight(.semibold))
+            Text("已进入视频剪切模块，弹窗未出现时可点击下方按钮重新打开。")
+                .font(.callout)
+                .foregroundStyle(.secondary)
+            Button("打开智能裁剪弹窗") {
+                hasUserOpenedVideoCutting = true
+                openVideoCuttingWindow()
+            }
+            .buttonStyle(.borderedProminent)
+        }
+        .padding(14)
+        .background(
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .fill(Color(nsColor: .controlBackgroundColor))
+        )
     }
 
     private func bootstrapUIStateIfNeeded(totalWidth: CGFloat) {
@@ -214,5 +251,10 @@ struct ContentView: View {
         let minWidth: CGFloat = Self.sidebarLaunchWidth
         let maxWidth: CGFloat = max(minWidth, totalWidth * 0.55)
         return min(max(value, minWidth), maxWidth)
+    }
+
+    private func openVideoCuttingWindow() {
+        guard hasUserOpenedVideoCutting else { return }
+        openWindow(id: videoCuttingWindowID)
     }
 }

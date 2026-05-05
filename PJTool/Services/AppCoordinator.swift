@@ -63,7 +63,6 @@ final class AppCoordinator: ObservableObject {
     let importEngine: ImportCompositeEngine
 
     private var cancellables: Set<AnyCancellable> = []
-    private var hasRequestedLaunchPermissions = false
     private var shouldRestoreMainWindowAfterRecording = false
 
     convenience init() {
@@ -142,28 +141,6 @@ final class AppCoordinator: ObservableObject {
         }
         pipController.applyWindowConfig(pipWindowConfig)
         pipPreviewRuntime.applyPreviewAudioConfig(pipAudioPreviewConfig)
-    }
-
-    func requestPermissionsOnLaunchIfNeeded() {
-        guard !hasRequestedLaunchPermissions else { return }
-        hasRequestedLaunchPermissions = true
-        _ = requestScreenRecordingAccessIfNeeded()
-        requestPiPPermissionsSequentially()
-    }
-
-    private func requestPiPPermissionsSequentially() {
-        if pipPreviewRuntime.authorizationStatus == .notDetermined {
-            pipPreviewRuntime.requestCameraAccess { [weak self] in
-                self?.requestPiPMicrophonePermissionIfNeeded()
-            }
-            return
-        }
-        requestPiPMicrophonePermissionIfNeeded()
-    }
-
-    private func requestPiPMicrophonePermissionIfNeeded() {
-        guard pipPreviewRuntime.microphoneAuthorizationStatus == .notDetermined else { return }
-        pipPreviewRuntime.requestMicrophoneAccess()
     }
 
     func showPiPPreview(on screen: NSScreen? = nil) {

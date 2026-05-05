@@ -10,6 +10,7 @@ import SwiftUI
 struct SettingsSidebarView: View {
     @Binding var selectedSection: SettingsSection
     @Binding var isCollapsed: Bool
+    var onSectionSelected: ((SettingsSection) -> Void)?
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
@@ -52,16 +53,26 @@ struct SettingsSidebarView: View {
 
     private var navList: some View {
         VStack(spacing: 6) {
-            ForEach(SettingsSection.allCases) { section in
+            ForEach(orderedSections) { section in
                 sidebarRow(section: section)
             }
         }
+    }
+
+    private var orderedSections: [SettingsSection] {
+        [
+            .recording,
+            .pipCamera,
+            .videoProcessing,
+            .videoCutting
+        ]
     }
 
     private func sidebarRow(section: SettingsSection) -> some View {
         let isSelected = selectedSection == section
         return Button {
             selectedSection = section
+            onSectionSelected?(section)
         } label: {
             HStack(spacing: 10) {
                 Image(systemName: section.symbolName)
