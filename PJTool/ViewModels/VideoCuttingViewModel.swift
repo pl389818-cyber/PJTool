@@ -52,6 +52,7 @@ final class VideoCuttingViewModel: ObservableObject {
     private let maximumFrameDuration: Double = 1.0
     private let cropMinPoints = CGSize(width: 120, height: 120)
     let player = AVPlayer()
+    let noiseReductionStep: Double = 10
 
     init(trimEngine: TrimExportEngine? = nil) {
         self.trimEngine = trimEngine ?? TrimExportEngine()
@@ -353,7 +354,9 @@ final class VideoCuttingViewModel: ObservableObject {
     }
 
     func updateNoiseReductionPercent(_ percent: Double) {
-        noiseReductionPercent = max(0, min(100, percent))
+        let clamped = max(0, min(100, percent))
+        let snapped = (clamped / noiseReductionStep).rounded() * noiseReductionStep
+        noiseReductionPercent = max(0, min(100, snapped))
         applyAudioPreviewProcessing()
     }
 
@@ -423,10 +426,23 @@ final class VideoCuttingViewModel: ObservableObject {
         }
     }
 
-    func resetCropRect() {
+    func resetCropRect(showStatus: Bool = true) {
         guard hasSource else { return }
         cropRectNormalized = .full
-        statusMessage = "已重置裁切框。"
+        if showStatus {
+            statusMessage = "已重置裁切框。"
+        }
+    }
+
+    func selectAspectPresetWithReset(_ preset: VideoCuttingAspectPreset) {
+        guard hasSource else {
+            selectedAspectPreset = preset
+            return
+        }
+        selectedAspectPreset = preset
+        // Prevent prior drag state from affecting new aspect interaction.
+        resetCropRect(showStatus: false)
+        applyPresetToCropRect()
     }
 
     func applyPresetToCropRect() {

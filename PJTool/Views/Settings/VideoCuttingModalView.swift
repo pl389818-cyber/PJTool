@@ -7,13 +7,27 @@
 
 import AVKit
 import SwiftUI
+#if os(macOS)
+import AppKit
+#endif
 
 struct VideoCuttingModalView: View {
+    private enum CropInteractionABMode {
+        case normal
+        case resizeOnly
+        case moveOnly
+    }
+
     @ObservedObject var viewModel: VideoCuttingViewModel
     @Environment(\.dismissWindow) private var dismissWindow
     let windowID: String?
 
     @State private var cropDragStartRect: CGRect?
+    @State private var hoveredCropHandle: VideoCropHandle?
+    @State private var activeDragHandle: VideoCropHandle?
+    private let cropResizeHotspotDiameter: CGFloat = 50
+    private let cropInteractionCoordinateSpace = "videoCuttingCropInteractionSpace"
+    private let cropInteractionABMode: CropInteractionABMode = .normal
 
     private let aspectGridRows: [[VideoCuttingAspectPreset]] = [
         [.adaptive, .nineBySixteen, .sixteenByNine, .oneByOne],
@@ -150,9 +164,11 @@ struct VideoCuttingModalView: View {
                     .background(Color.black)
                     .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
                     .frame(width: proxy.size.width, height: proxy.size.height)
+                    .allowsHitTesting(false)
 
                 cropOverlay(fitRect: fitRect)
             }
+            .coordinateSpace(name: cropInteractionCoordinateSpace)
             .contentShape(Rectangle())
             .frame(width: bounds.width, height: bounds.height)
             .onDrop(of: [.fileURL], isTargeted: nil) { providers in
@@ -185,49 +201,96 @@ struct VideoCuttingModalView: View {
                     )
                 )
                 .compositingGroup()
-
-            // Transparent hit area so users can drag the crop box from anywhere inside it.
-            Rectangle()
-                .fill(Color.clear)
-                .frame(width: cropFrame.width, height: cropFrame.height)
-                .position(x: cropFrame.midX, y: cropFrame.midY)
-                .contentShape(Rectangle())
-                .gesture(cropDragGesture(handle: .move, fitRect: fitRect))
+                .allowsHitTesting(false)
 
             Rectangle()
                 .stroke(Color.cyan.opacity(0.95), lineWidth: 2)
                 .frame(width: cropFrame.width, height: cropFrame.height)
-                .position(x: cropFrame.midX, y: cropFrame.midY)
+                .offset(
+                    x: cropFrame.midX - fitRect.midX,
+                    y: cropFrame.midY - fitRect.midY
+                )
+                .allowsHitTesting(false)
+                .zIndex(1)
+
+            // Single interaction layer: determines move/resize by drag start position.
+            Rectangle()
+                .fill(Color.white.opacity(0.001))
+                .frame(width: cropFrame.width, height: cropFrame.height)
+                .offset(
+                    x: cropFrame.midX - fitRect.midX,
+                    y: cropFrame.midY - fitRect.midY
+                )
+                .contentShape(Rectangle())
+                .gesture(cropInteractionGesture(fitRect: fitRect, cropFrame: cropFrame))
+                .onContinuousHover(coordinateSpace: .named(cropInteractionCoordinateSpace)) { phase in
+                    switch phase {
+                    case .active(let location):
+                        guard cropDragStartRect == nil else { return }
+                        let detected = cropHandle(at: location, cropFrame: cropFrame) ?? .move
+                        if let resolved = resolveHandleForAB(detected) {
+                            hoveredCropHandle = resolved
+                            hoverCursor(for: resolved).set()
+                        } else {
+                            hoveredCropHandle = nil
+                            NSCursor.arrow.set()
+                        }
+                    case .ended:
+                        hoveredCropHandle = nil
+                        guard cropDragStartRect == nil else { return }
+                        NSCursor.arrow.set()
+                    }
+                }
+                .zIndex(2)
 
             cropHandles(cropFrame: cropFrame, fitRect: fitRect)
+                .zIndex(3)
         }
     }
 
     private func cropHandles(cropFrame: CGRect, fitRect: CGRect) -> some View {
-        ZStack {
-            handleDot(position: CGPoint(x: cropFrame.minX, y: cropFrame.minY), handle: .topLeft, fitRect: fitRect)
-            handleDot(position: CGPoint(x: cropFrame.midX, y: cropFrame.minY), handle: .top, fitRect: fitRect)
-            handleDot(position: CGPoint(x: cropFrame.maxX, y: cropFrame.minY), handle: .topRight, fitRect: fitRect)
-            handleDot(position: CGPoint(x: cropFrame.minX, y: cropFrame.midY), handle: .left, fitRect: fitRect)
-            handleDot(position: CGPoint(x: cropFrame.maxX, y: cropFrame.midY), handle: .right, fitRect: fitRect)
-            handleDot(position: CGPoint(x: cropFrame.minX, y: cropFrame.maxY), handle: .bottomLeft, fitRect: fitRect)
-            handleDot(position: CGPoint(x: cropFrame.midX, y: cropFrame.maxY), handle: .bottom, fitRect: fitRect)
-            handleDot(position: CGPoint(x: cropFrame.maxX, y: cropFrame.maxY), handle: .bottomRight, fitRect: fitRect)
+        return ZStack {
+            handleDot(position: CGPoint(x: cropFrame.minX, y: cropFrame.minY), fitRect: fitRect)
+            handleDot(position: CGPoint(x: cropFrame.midX, y: cropFrame.minY), fitRect: fitRect)
+            handleDot(position: CGPoint(x: cropFrame.maxX, y: cropFrame.minY), fitRect: fitRect)
+            handleDot(position: CGPoint(x: cropFrame.minX, y: cropFrame.midY), fitRect: fitRect)
+            handleDot(position: CGPoint(x: cropFrame.maxX, y: cropFrame.midY), fitRect: fitRect)
+            handleDot(position: CGPoint(x: cropFrame.minX, y: cropFrame.maxY), fitRect: fitRect)
+            handleDot(position: CGPoint(x: cropFrame.midX, y: cropFrame.maxY), fitRect: fitRect)
+            handleDot(position: CGPoint(x: cropFrame.maxX, y: cropFrame.maxY), fitRect: fitRect)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
     }
 
-    private func handleDot(position: CGPoint, handle: VideoCropHandle, fitRect: CGRect) -> some View {
+    private func handleDot(
+        position: CGPoint,
+        fitRect: CGRect
+    ) -> some View {
         Circle()
             .fill(Color.white)
             .frame(width: 10, height: 10)
-            .position(position)
-            .contentShape(Rectangle().inset(by: -8))
-            .gesture(cropDragGesture(handle: handle, fitRect: fitRect))
+            .offset(
+                x: position.x - fitRect.midX,
+                y: position.y - fitRect.midY
+            )
+            .allowsHitTesting(false)
     }
 
-    private func cropDragGesture(handle: VideoCropHandle, fitRect: CGRect) -> some Gesture {
-        DragGesture(minimumDistance: 0)
+    private func cropInteractionGesture(
+        fitRect: CGRect,
+        cropFrame: CGRect
+    ) -> some Gesture {
+        DragGesture(minimumDistance: 0, coordinateSpace: .named(cropInteractionCoordinateSpace))
             .onChanged { value in
+                if activeDragHandle == nil {
+                    let detected = cropHandle(at: value.startLocation, cropFrame: cropFrame) ?? .move
+                    activeDragHandle = resolveHandleForAB(detected)
+                }
+                guard let handle = activeDragHandle else { return }
+                if hoveredCropHandle == nil {
+                    hoveredCropHandle = handle
+                }
+                setDragCursor(for: handle)
                 if cropDragStartRect == nil {
                     cropDragStartRect = viewModel.cropRectNormalized.cgRect
                 }
@@ -246,7 +309,114 @@ struct VideoCuttingModalView: View {
             }
             .onEnded { _ in
                 cropDragStartRect = nil
+                if let handle = activeDragHandle {
+                    activeDragHandle = nil
+                    hoveredCropHandle = handle
+                    hoverCursor(for: handle).set()
+                } else {
+                    hoveredCropHandle = nil
+                    NSCursor.arrow.set()
+                }
             }
+    }
+
+    private func setDragCursor(for handle: VideoCropHandle) {
+        if handle == .move {
+            NSCursor.closedHand.set()
+        } else {
+            hoverCursor(for: handle).set()
+        }
+    }
+
+    private func hoverCursor(for handle: VideoCropHandle) -> NSCursor {
+        switch handle {
+        case .move:
+            return .openHand
+        case .left, .right:
+            return frameResizeCursor(for: handle)
+        case .top, .bottom:
+            return frameResizeCursor(for: handle)
+        case .topLeft, .bottomRight:
+            return frameResizeCursor(for: handle)
+        case .topRight, .bottomLeft:
+            return frameResizeCursor(for: handle)
+        }
+    }
+
+    private func cropHandle(at location: CGPoint, cropFrame: CGRect) -> VideoCropHandle? {
+        guard cropFrame.width > 0, cropFrame.height > 0 else { return nil }
+        let radius = cropResizeHotspotDiameter / 2.0
+        let points: [(VideoCropHandle, CGPoint)] = [
+            (.topLeft, CGPoint(x: cropFrame.minX, y: cropFrame.minY)),
+            (.top, CGPoint(x: cropFrame.midX, y: cropFrame.minY)),
+            (.topRight, CGPoint(x: cropFrame.maxX, y: cropFrame.minY)),
+            (.left, CGPoint(x: cropFrame.minX, y: cropFrame.midY)),
+            (.right, CGPoint(x: cropFrame.maxX, y: cropFrame.midY)),
+            (.bottomLeft, CGPoint(x: cropFrame.minX, y: cropFrame.maxY)),
+            (.bottom, CGPoint(x: cropFrame.midX, y: cropFrame.maxY)),
+            (.bottomRight, CGPoint(x: cropFrame.maxX, y: cropFrame.maxY))
+        ]
+
+        var bestHandle: VideoCropHandle?
+        var bestDistance = CGFloat.greatestFiniteMagnitude
+
+        for (handle, point) in points {
+            let dx = location.x - point.x
+            let dy = location.y - point.y
+            let distance = sqrt(dx * dx + dy * dy)
+            if distance <= radius, distance < bestDistance {
+                bestDistance = distance
+                bestHandle = handle
+            }
+        }
+        return bestHandle
+    }
+
+    private func resolveHandleForAB(_ detected: VideoCropHandle) -> VideoCropHandle? {
+        switch cropInteractionABMode {
+        case .normal:
+            return detected
+        case .resizeOnly:
+            return detected == .move ? nil : detected
+        case .moveOnly:
+            return .move
+        }
+    }
+
+    private func frameResizeCursor(for handle: VideoCropHandle) -> NSCursor {
+        if #available(macOS 15.0, *) {
+            let position: NSCursor.FrameResizePosition
+            switch handle {
+            case .left:
+                position = .left
+            case .right:
+                position = .right
+            case .top:
+                position = .top
+            case .bottom:
+                position = .bottom
+            case .topLeft:
+                position = .topLeft
+            case .topRight:
+                position = .topRight
+            case .bottomLeft:
+                position = .bottomLeft
+            case .bottomRight:
+                position = .bottomRight
+            case .move:
+                return .openHand
+            }
+            return NSCursor.frameResize(position: position, directions: .all)
+        }
+
+        switch handle {
+        case .left, .right:
+            return .resizeLeftRight
+        case .top, .bottom, .topLeft, .topRight, .bottomLeft, .bottomRight:
+            return .resizeUpDown
+        case .move:
+            return .openHand
+        }
     }
 
     private var timelineBar: some View {
@@ -365,6 +535,9 @@ struct VideoCuttingModalView: View {
         let duration = max(viewModel.sourceDuration, 0.001)
         let start = viewModel.deleteRangeStartSeconds(for: range.id)
         let end = viewModel.deleteRangeEndSeconds(for: range.id)
+        let startText = String(format: "%.2f", start)
+        let endText = String(format: "%.2f", end)
+        let deleteTip = "将删除 \(startText)s 到 \(endText)s"
         let startRatio = CGFloat(start / duration)
         let endRatio = CGFloat(end / duration)
         let x = trackWidth * startRatio
@@ -380,7 +553,7 @@ struct VideoCuttingModalView: View {
             Rectangle()
                 .fill(Color.red.opacity(isSelected ? 0.75 : 0.55))
                 .overlay(
-                    Text("\(String(format: "%.2f", start))s - \(String(format: "%.2f", end))s")
+                    Text("\(startText)s - \(endText)s")
                         .font(.caption2.monospacedDigit())
                         .foregroundStyle(Color.white.opacity(0.92))
                         .lineLimit(1)
@@ -402,6 +575,13 @@ struct VideoCuttingModalView: View {
             RoundedRectangle(cornerRadius: 6, style: .continuous)
                 .stroke(isSelected ? Color.cyan.opacity(0.9) : Color.white.opacity(0.18), lineWidth: isSelected ? 2 : 1)
         )
+        .help(deleteTip)
+        .contextMenu {
+            Button("取消本段裁切") {
+                viewModel.selectDeleteRange(id: range.id)
+                viewModel.removeDeleteRange(id: range.id)
+            }
+        }
         .position(x: x + width / 2, y: 21)
     }
 
@@ -476,8 +656,7 @@ struct VideoCuttingModalView: View {
     private func aspectCard(for preset: VideoCuttingAspectPreset) -> some View {
         let selected = preset == viewModel.selectedAspectPreset
         return Button {
-            viewModel.selectedAspectPreset = preset
-            viewModel.applyPresetToCropRect()
+            viewModel.selectAspectPresetWithReset(preset)
         } label: {
             VStack(spacing: 8) {
                 RoundedRectangle(cornerRadius: 2, style: .continuous)
@@ -531,7 +710,7 @@ struct VideoCuttingModalView: View {
                         set: { viewModel.updateNoiseReductionPercent($0) }
                     ),
                     in: 0...100,
-                    step: 1
+                    step: viewModel.noiseReductionStep
                 )
                 .tint(Color.cyan.opacity(0.9))
                 .disabled(!viewModel.hasAudioTrack || !viewModel.isNoiseReductionEnabled)

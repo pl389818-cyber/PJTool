@@ -16,6 +16,10 @@ swiftc -parse-as-library \
   "$ROOT_DIR/PJTool/Models/PiPFramingKeyframeNormalizer.swift" \
   "$ROOT_DIR/PJTool/Models/CompositionProject.swift" \
   "$ROOT_DIR/PJTool/Models/TrimModels.swift" \
+  "$ROOT_DIR/PJTool/Models/VideoCuttingAspectPreset.swift" \
+  "$ROOT_DIR/PJTool/Models/VideoCuttingAudioModels.swift" \
+  "$ROOT_DIR/PJTool/Models/VideoCropModels.swift" \
+  "$ROOT_DIR/PJTool/Models/VideoCropGeometry.swift" \
   "$ROOT_DIR/PJTool/Models/CameraSource.swift" \
   "$ROOT_DIR/PJTool/Models/AudioInputSource.swift" \
   "$ROOT_DIR/PJTool/Services/CompositionExportEngine.swift" \

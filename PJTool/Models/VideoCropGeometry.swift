@@ -9,10 +9,12 @@ import CoreGraphics
 import Foundation
 
 enum VideoCropGeometry {
+    private static let minNormalizedSize: CGFloat = 0.0001
+
     static func clampNormalizedRect(_ rect: CGRect) -> CGRect {
         var next = rect.standardized
-        next.size.width = min(1, max(0.0001, next.width))
-        next.size.height = min(1, max(0.0001, next.height))
+        next.size.width = min(1, max(minNormalizedSize, next.width))
+        next.size.height = min(1, max(minNormalizedSize, next.height))
         if next.minX < 0 {
             next.origin.x = 0
         }
@@ -36,8 +38,8 @@ enum VideoCropGeometry {
             return CGSize(width: 0.1, height: 0.1)
         }
         return CGSize(
-            width: min(1, max(0.0001, minPoints.width / videoDisplaySize.width)),
-            height: min(1, max(0.0001, minPoints.height / videoDisplaySize.height))
+            width: min(1, max(minNormalizedSize, minPoints.width / videoDisplaySize.width)),
+            height: min(1, max(minNormalizedSize, minPoints.height / videoDisplaySize.height))
         )
     }
 
@@ -118,60 +120,47 @@ enum VideoCropGeometry {
         guard displaySize.width > 0, displaySize.height > 0 else { return startRect }
         let dx = translation.width / displaySize.width
         let dy = translation.height / displaySize.height
+        let normalizedStart = clampNormalizedRect(startRect.standardized)
+        let normalizedMinSize = CGSize(
+            width: min(1, max(minNormalizedSize, minSize.width)),
+            height: min(1, max(minNormalizedSize, minSize.height))
+        )
 
-        var rect = startRect.standardized
-        let initialCenter = CGPoint(x: rect.midX, y: rect.midY)
-
-        switch handle {
-        case .move:
-            rect.origin.x += dx
-            rect.origin.y += dy
-        case .left:
-            rect.origin.x += dx
-            rect.size.width -= dx
-        case .right:
-            rect.size.width += dx
-        case .top:
-            rect.origin.y += dy
-            rect.size.height -= dy
-        case .bottom:
-            rect.size.height += dy
-        case .topLeft:
-            rect.origin.x += dx
-            rect.size.width -= dx
-            rect.origin.y += dy
-            rect.size.height -= dy
-        case .topRight:
-            rect.size.width += dx
-            rect.origin.y += dy
-            rect.size.height -= dy
-        case .bottomLeft:
-            rect.origin.x += dx
-            rect.size.width -= dx
-            rect.size.height += dy
-        case .bottomRight:
-            rect.size.width += dx
-            rect.size.height += dy
-        }
-
-        rect = rect.standardized
-        rect = enforceMinSize(rect, minSize: minSize)
-
-        if let lockedAspectRatio, lockedAspectRatio > 0, handle != .move {
-            let anchor = anchorPoint(for: handle, rect: startRect)
-            rect = resizeWithAspect(rect: rect, anchor: anchor, aspectRatio: lockedAspectRatio, minSize: minSize)
-        }
-
-        rect = clampNormalizedRect(rect)
-
+        // Dragging inside crop frame should only move position and keep size.
         if handle == .move {
-            return rect
+            let moved = normalizedStart.offsetBy(dx: dx, dy: dy)
+            return clampPositionOnly(moved)
         }
 
-        if let lockedAspectRatio, lockedAspectRatio > 0 {
-            return fitRectKeepingCenter(rect: rect, center: initialCenter, aspectRatio: lockedAspectRatio, minSize: minSize)
+        // Adaptive mode: free-resize with min-size and bounds clamp.
+        guard let lockedAspectRatio, lockedAspectRatio > 0 else {
+            var rect = applyHandleResize(
+                rect: normalizedStart,
+                dx: dx,
+                dy: dy,
+                handle: handle
+            )
+            rect = enforceMinSize(rect, minSize: normalizedMinSize)
+            return clampNormalizedRect(rect)
         }
-        return rect
+
+        // Fixed-ratio mode: any edge/corner scales around center.
+        let centerScaled = scaleFromCenter(
+            startRect: normalizedStart,
+            dx: dx,
+            dy: dy,
+            handle: handle,
+            aspectRatio: lockedAspectRatio,
+            minSize: normalizedMinSize
+        )
+        let clamped = clampPositionOnly(centerScaled)
+        let corrected = fitRectKeepingCenter(
+            rect: clamped,
+            center: CGPoint(x: clamped.midX, y: clamped.midY),
+            aspectRatio: lockedAspectRatio,
+            minSize: normalizedMinSize
+        )
+        return clampPositionOnly(corrected)
     }
 
     static func fitRectKeepingCenter(
@@ -205,60 +194,110 @@ enum VideoCropGeometry {
         return clampNormalizedRect(next)
     }
 
-    private static func resizeWithAspect(
+    private static func applyHandleResize(
         rect: CGRect,
-        anchor: CGPoint,
+        dx: CGFloat,
+        dy: CGFloat,
+        handle: VideoCropHandle
+    ) -> CGRect {
+        var next = rect.standardized
+        switch handle {
+        case .move:
+            next.origin.x += dx
+            next.origin.y += dy
+        case .left:
+            next.origin.x += dx
+            next.size.width -= dx
+        case .right:
+            next.size.width += dx
+        case .top:
+            next.origin.y += dy
+            next.size.height -= dy
+        case .bottom:
+            next.size.height += dy
+        case .topLeft:
+            next.origin.x += dx
+            next.size.width -= dx
+            next.origin.y += dy
+            next.size.height -= dy
+        case .topRight:
+            next.size.width += dx
+            next.origin.y += dy
+            next.size.height -= dy
+        case .bottomLeft:
+            next.origin.x += dx
+            next.size.width -= dx
+            next.size.height += dy
+        case .bottomRight:
+            next.size.width += dx
+            next.size.height += dy
+        }
+        return next.standardized
+    }
+
+    private static func scaleFromCenter(
+        startRect: CGRect,
+        dx: CGFloat,
+        dy: CGFloat,
+        handle: VideoCropHandle,
         aspectRatio: CGFloat,
         minSize: CGSize
     ) -> CGRect {
-        var width = max(rect.width, minSize.width)
-        var height = width / aspectRatio
-        if height < minSize.height {
-            height = minSize.height
-            width = height * aspectRatio
-        }
+        let base = fitRectKeepingCenter(
+            rect: startRect,
+            center: CGPoint(x: startRect.midX, y: startRect.midY),
+            aspectRatio: aspectRatio,
+            minSize: minSize
+        )
+        let center = CGPoint(x: base.midX, y: base.midY)
+        let width = max(base.width, minNormalizedSize)
+        let height = max(base.height, minNormalizedSize)
 
-        var next = CGRect(origin: .zero, size: CGSize(width: width, height: height))
-
-        if anchor.x <= rect.minX + 0.0001 {
-            next.origin.x = anchor.x
-        } else if anchor.x >= rect.maxX - 0.0001 {
-            next.origin.x = anchor.x - width
-        } else {
-            next.origin.x = anchor.x - width / 2.0
-        }
-
-        if anchor.y <= rect.minY + 0.0001 {
-            next.origin.y = anchor.y
-        } else if anchor.y >= rect.maxY - 0.0001 {
-            next.origin.y = anchor.y - height
-        } else {
-            next.origin.y = anchor.y - height / 2.0
-        }
-
-        return clampNormalizedRect(next)
-    }
-
-    private static func anchorPoint(for handle: VideoCropHandle, rect: CGRect) -> CGPoint {
+        let scaleDelta: CGFloat
         switch handle {
         case .left:
-            return CGPoint(x: rect.maxX, y: rect.midY)
+            scaleDelta = -dx / width
         case .right:
-            return CGPoint(x: rect.minX, y: rect.midY)
+            scaleDelta = dx / width
         case .top:
-            return CGPoint(x: rect.midX, y: rect.maxY)
+            scaleDelta = -dy / height
         case .bottom:
-            return CGPoint(x: rect.midX, y: rect.minY)
+            scaleDelta = dy / height
         case .topLeft:
-            return CGPoint(x: rect.maxX, y: rect.maxY)
+            scaleDelta = max(-dx / width, -dy / height)
         case .topRight:
-            return CGPoint(x: rect.minX, y: rect.maxY)
+            scaleDelta = max(dx / width, -dy / height)
         case .bottomLeft:
-            return CGPoint(x: rect.maxX, y: rect.minY)
+            scaleDelta = max(-dx / width, dy / height)
         case .bottomRight:
-            return CGPoint(x: rect.minX, y: rect.minY)
+            scaleDelta = max(dx / width, dy / height)
         case .move:
-            return CGPoint(x: rect.midX, y: rect.midY)
+            scaleDelta = 0
         }
+
+        let minWidthForAspect = max(minSize.width, minSize.height * aspectRatio)
+        let minHeightForAspect = max(minSize.height, minSize.width / aspectRatio)
+        let minScale = max(minWidthForAspect / width, minHeightForAspect / height)
+        let targetScale = max(minScale, 1 + scaleDelta)
+
+        let scaledWidth = min(1, max(minWidthForAspect, width * targetScale))
+        let scaledHeight = min(1, max(minHeightForAspect, scaledWidth / aspectRatio))
+
+        return CGRect(
+            x: center.x - scaledWidth / 2.0,
+            y: center.y - scaledHeight / 2.0,
+            width: scaledWidth,
+            height: scaledHeight
+        )
     }
+
+    private static func clampPositionOnly(_ rect: CGRect) -> CGRect {
+        var next = rect.standardized
+        next.size.width = min(1, max(minNormalizedSize, next.width))
+        next.size.height = min(1, max(minNormalizedSize, next.height))
+        next.origin.x = min(max(0, next.origin.x), 1 - next.width)
+        next.origin.y = min(max(0, next.origin.y), 1 - next.height)
+        return next
+    }
+
 }

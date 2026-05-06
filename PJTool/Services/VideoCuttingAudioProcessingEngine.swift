@@ -95,6 +95,7 @@ private final class TapState {
         let cfg = config.clamped
         let denoise = Float(cfg.noiseReductionEnabled ? cfg.noiseReductionPercent / 100.0 : 0)
         let params = eqPresetParams(cfg.eqPreset)
+        let useBalancedCleanup = (cfg.eqPreset == .balanced) && denoise > 0.001
 
         let buffers = UnsafeMutableAudioBufferListPointer(bufferList)
         guard !buffers.isEmpty else { return }
@@ -122,6 +123,31 @@ private final class TapState {
                     let drySample = sample
                     drySamples[i] = drySample
                     dryPeak = max(dryPeak, abs(drySample))
+
+                    if useBalancedCleanup {
+                        if channelIndex == 0 {
+                            collectHumSample(sample)
+                            if detectedHumBaseHz == nil, humDetectionSamples.count >= humDetectionWindow {
+                                let detected = detectHumBaseFrequency(from: humDetectionSamples)
+                                detectedHumBaseHz = detected ?? 50
+                                resetHumNotchesOnAllChannels(baseFrequency: detectedHumBaseHz)
+                            }
+                        }
+
+                        let hpCutoff: Float = 55 + denoise * 70
+                        var cleaned = applyDCBlock(sample, state: &state)
+                        cleaned = applyOnePoleHighPass(cleaned, cutoffHz: hpCutoff, state: &state)
+                        cleaned = applyHumNotchFilters(cleaned, state: &state)
+                        let lpCutoff: Float = max(7_500, 15_500 - denoise * 6_000)
+                        cleaned = applyOnePoleLowPass(cleaned, cutoffHz: lpCutoff, state: &state)
+
+                        if cleaned.isFinite {
+                            let mix: Float = 0.30 + denoise * 0.50
+                            sample = drySample * (1 - mix) + cleaned * mix
+                        } else {
+                            sample = drySample
+                        }
+                    }
 
                     if params.speechCleanupTuned {
                         if channelIndex == 0 {
@@ -323,11 +349,11 @@ private final class TapState {
         switch preset {
         case .balanced:
             return EQParams(
-                lowGain: 0.56,
-                midGain: 1.28,
-                highGain: 0.50,
-                lowPassAlpha: 0.08,
-                highPassAlpha: 0.11,
+                lowGain: 0.68,
+                midGain: 1.32,
+                highGain: 0.84,
+                lowPassAlpha: 0.10,
+                highPassAlpha: 0.09,
                 speechCleanupTuned: false
             )
         case .vocalBoost:

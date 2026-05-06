@@ -58,6 +58,82 @@ private struct LogicChecksRunner {
             failures.append("Auto aspect should obey max width ratio")
         }
 
+        // Task E: crop geometry behavior for adaptive + locked ratio modes.
+        let startCrop = CGRect(x: 0.25, y: 0.20, width: 0.30, height: 0.24)
+        let minCropSize = CGSize(width: 0.08, height: 0.08)
+        let displaySize = CGSize(width: 1000, height: 800)
+
+        let adaptiveDrag = VideoCropGeometry.applyDrag(
+            startRect: startCrop,
+            translation: CGSize(width: 180, height: 0),
+            handle: .right,
+            displaySize: displaySize,
+            lockedAspectRatio: nil,
+            minSize: minCropSize
+        )
+        let adaptiveRatioBefore = startCrop.width / startCrop.height
+        let adaptiveRatioAfter = adaptiveDrag.width / adaptiveDrag.height
+        if abs(adaptiveRatioAfter - adaptiveRatioBefore) <= 0.0005 {
+            failures.append("Adaptive crop should allow free width/height change")
+        }
+
+        let lockedRatio: CGFloat = 16.0 / 9.0
+        let lockedDrag = VideoCropGeometry.applyDrag(
+            startRect: startCrop,
+            translation: CGSize(width: 180, height: 120),
+            handle: .bottomRight,
+            displaySize: displaySize,
+            lockedAspectRatio: lockedRatio,
+            minSize: minCropSize
+        )
+        let lockedRatioAfter = lockedDrag.width / lockedDrag.height
+        if abs(lockedRatioAfter - lockedRatio) > 0.0015 {
+            failures.append("Locked crop should keep ratio when resizing from corner")
+        }
+
+        let lockedEdgeDrag = VideoCropGeometry.applyDrag(
+            startRect: startCrop,
+            translation: CGSize(width: -120, height: 0),
+            handle: .left,
+            displaySize: displaySize,
+            lockedAspectRatio: lockedRatio,
+            minSize: minCropSize
+        )
+        let lockedEdgeRatioAfter = lockedEdgeDrag.width / lockedEdgeDrag.height
+        if abs(lockedEdgeRatioAfter - lockedRatio) > 0.0015 {
+            failures.append("Locked crop should keep ratio when resizing from edge")
+        }
+
+        let lockedMove = VideoCropGeometry.applyDrag(
+            startRect: startCrop,
+            translation: CGSize(width: 220, height: 90),
+            handle: .move,
+            displaySize: displaySize,
+            lockedAspectRatio: lockedRatio,
+            minSize: minCropSize
+        )
+        if abs(lockedMove.width - startCrop.width) > 0.0001 ||
+            abs(lockedMove.height - startCrop.height) > 0.0001 {
+            failures.append("Move drag should not change crop size in locked mode")
+        }
+        if lockedMove.minX < -0.0001 || lockedMove.minY < -0.0001 ||
+            lockedMove.maxX > 1.0001 || lockedMove.maxY > 1.0001 {
+            failures.append("Move drag should stay inside normalized bounds")
+        }
+
+        let extremeDrag = VideoCropGeometry.applyDrag(
+            startRect: CGRect(x: 0.90, y: 0.88, width: 0.09, height: 0.09),
+            translation: CGSize(width: 500, height: 500),
+            handle: .bottomRight,
+            displaySize: displaySize,
+            lockedAspectRatio: 1.0,
+            minSize: CGSize(width: 0.08, height: 0.08)
+        )
+        if extremeDrag.minX < -0.0001 || extremeDrag.minY < -0.0001 ||
+            extremeDrag.maxX > 1.0001 || extremeDrag.maxY > 1.0001 {
+            failures.append("Extreme locked drag should clamp inside bounds")
+        }
+
         // Task B: Continuity/offline badge and source sorting semantics.
         let continuity = CameraSource(
             id: "cam.cont",
@@ -177,6 +253,7 @@ private struct LogicChecksRunner {
         if failures.isEmpty {
             print("LOGIC_CHECK PASS")
             print("- TaskA geometry: keep-height + bounds + min-size")
+            print("- TaskE crop geometry: adaptive free-resize + locked-ratio center scaling")
             print("- TaskB badges: Continuity/Offline visibility")
             print("- TaskC preview mute semantics: monitor-only config")
             print("- TaskD keyframes: monotonic + normalized rect range")
