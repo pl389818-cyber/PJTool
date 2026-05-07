@@ -435,6 +435,11 @@ private struct ScreenDrawToolbarView: View {
             sessionStore.selectedColorPreset = preset
         } label: {
             ZStack {
+                // Keep full circular hit-testing even when using hollow ring style.
+                Circle()
+                    .fill(Color.clear)
+                    .frame(width: 30, height: 30)
+
                 if isSelected {
                     Circle()
                         .fill(Color(nsColor: preset.color))
@@ -448,6 +453,8 @@ private struct ScreenDrawToolbarView: View {
                     .font(.caption.weight(.bold))
                     .foregroundStyle(colorLabelTextColor(for: preset, isSelected: isSelected))
             }
+            .frame(width: 30, height: 30)
+            .contentShape(Circle())
         }
         .buttonStyle(.plain)
         .help(preset.title)
@@ -471,6 +478,10 @@ private struct ScreenDrawToolbarView: View {
             sessionStore.activeTool = tool
         } label: {
             ZStack {
+                // Keep full circular hit-testing even when icon/outline is thin.
+                Circle()
+                    .fill(Color.clear)
+
                 if isSelected {
                     Circle()
                         .fill(Color.accentColor.opacity(0.16))
@@ -484,6 +495,7 @@ private struct ScreenDrawToolbarView: View {
                     .foregroundStyle(isSelected ? Color.accentColor : Color.primary)
             }
             .frame(width: 30, height: 30)
+            .contentShape(Circle())
         }
         .buttonStyle(.plain)
         .help(tool.title)
@@ -521,6 +533,11 @@ private struct CloseDotButton: View {
     var body: some View {
         Button(action: action) {
             ZStack {
+                // Keep full circular hit-testing for the close button.
+                Circle()
+                    .fill(Color.clear)
+                    .frame(width: 30, height: 30)
+
                 Circle()
                     .stroke(Color.primary.opacity(0.42), lineWidth: 1)
                     .frame(width: 30, height: 30)
@@ -536,6 +553,7 @@ private struct CloseDotButton: View {
                 }
             }
             .frame(width: 30, height: 30)
+            .contentShape(Circle())
         }
         .buttonStyle(.plain)
         .onHover { hovering in
