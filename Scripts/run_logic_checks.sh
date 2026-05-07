@@ -23,7 +23,6 @@ swiftc -parse-as-library \
   "$ROOT_DIR/PJTool/Models/CameraSource.swift" \
   "$ROOT_DIR/PJTool/Models/AudioInputSource.swift" \
   "$ROOT_DIR/PJTool/Services/CompositionExportEngine.swift" \
-  "$ROOT_DIR/PJTool/Services/ImportCompositeEngine.swift" \
   "$ROOT_DIR/PJTool/Services/TrimExportEngine.swift" \
   "$ROOT_DIR/Scripts/logic_checks.swift" \
   -o "$RUNNER_BIN"

@@ -13,6 +13,7 @@ struct RecordingRequest {
     let cameraDeviceID: String?
     let cameraAudioDeviceID: String?
     let pipWindowID: CGWindowID?
+    let screenDrawWindowIDs: [CGWindowID]
     let pipLayout: PiPLayoutState
     let pipAspectRatio: PiPAspectRatio
     let pipProcessingConfig: PiPProcessingConfig

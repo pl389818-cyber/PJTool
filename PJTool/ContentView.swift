@@ -17,26 +17,10 @@ struct ContentView: View {
     @AppStorage("pjtool.sidebarCollapsed") private var sidebarCollapsedStorage = false
     @AppStorage("pjtool.sidebarWidth") private var sidebarWidthStorage = 0.0
 
-    @State private var baseStitchURL: URL?
-    @State private var stitchInsertTimeText = "0"
-    @State private var stitchMuteImportedAudio = false
-    @State private var stitchOutputURL: URL?
-
-    @State private var trimSourceURL: URL?
-    @State private var cutStartText = "0"
-    @State private var cutEndText = "1"
-    @State private var cutRanges: [CutRange] = []
-    @State private var trimOutputURL: URL?
-
-    @State private var validationSummary = "未执行"
-    @State private var validationReportURL: URL?
     @State private var hasBootstrappedUIState = false
     @State private var lastKnownContainerWidth: CGFloat = 1000
     @State private var sidebarDragStartWidth: CGFloat?
     @State private var hasUserOpenedVideoCutting = false
-
-    private let trimEngine = TrimExportEngine()
-    private let validationService = ValidationService()
 
     init(
         appCoordinator: AppCoordinator,
@@ -83,19 +67,6 @@ struct ContentView: View {
             }
         }
         .frame(minWidth: 1000, minHeight: 860)
-        .onAppear {
-            if baseStitchURL == nil {
-                baseStitchURL = appCoordinator.recorder.lastOutputURL
-            }
-            if trimSourceURL == nil {
-                trimSourceURL = appCoordinator.recorder.lastOutputURL
-            }
-        }
-        .onReceive(appCoordinator.recorder.$lastOutputURL) { url in
-            guard let url else { return }
-            baseStitchURL = url
-            trimSourceURL = url
-        }
         .onChange(of: appCoordinator.isSidebarCollapsed) { _, newValue in
             sidebarCollapsedStorage = newValue
         }
@@ -115,9 +86,10 @@ struct ContentView: View {
                 set: { appCoordinator.isSidebarCollapsed = $0 }
             ),
             onSectionSelected: { section in
-                guard section == .videoCutting else { return }
-                hasUserOpenedVideoCutting = true
-                openVideoCuttingWindow()
+                if section == .videoCutting {
+                    hasUserOpenedVideoCutting = true
+                    openVideoCuttingWindow()
+                }
             }
         )
     }
@@ -144,23 +116,8 @@ struct ContentView: View {
             )
         case .pipCamera:
             PiPCameraSettingsView(appCoordinator: appCoordinator)
-        case .videoProcessing:
-            VideoProcessingSettingsView(
-                appCoordinator: appCoordinator,
-                baseStitchURL: $baseStitchURL,
-                stitchInsertTimeText: $stitchInsertTimeText,
-                stitchMuteImportedAudio: $stitchMuteImportedAudio,
-                stitchOutputURL: $stitchOutputURL,
-                trimSourceURL: $trimSourceURL,
-                cutStartText: $cutStartText,
-                cutEndText: $cutEndText,
-                cutRanges: $cutRanges,
-                trimOutputURL: $trimOutputURL,
-                validationSummary: $validationSummary,
-                validationReportURL: $validationReportURL,
-                trimEngine: trimEngine,
-                validationService: validationService
-            )
+        case .screenDrawing:
+            ScreenDrawingSettingsView(appCoordinator: appCoordinator)
         case .videoCutting:
             videoCuttingEntryView
         }

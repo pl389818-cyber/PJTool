@@ -27,11 +27,6 @@ struct PJToolApp: App {
                 viewModel: videoCuttingViewModel,
                 windowID: Self.videoCuttingWindowID
             )
-            .onDisappear {
-                if appCoordinator.selectedSettingsSection == .videoCutting {
-                    appCoordinator.selectedSettingsSection = .videoProcessing
-                }
-            }
         }
         .defaultSize(width: 1320, height: 860)
         .defaultLaunchBehavior(.suppressed)

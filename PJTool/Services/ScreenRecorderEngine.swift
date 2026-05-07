@@ -109,7 +109,8 @@ final class ScreenRecorderEngine: NSObject, ObservableObject {
             let streamBundle = try await buildScreenStream(
                 screenRawURL: outputContext.screenRawURL,
                 microphoneDeviceID: request.microphoneDeviceID,
-                pipWindowID: request.pipWindowID
+                pipWindowID: request.pipWindowID,
+                extraIncludedWindowIDs: request.screenDrawWindowIDs
             )
             stream = streamBundle.stream
             recordingOutput = streamBundle.recordingOutput
@@ -216,7 +217,7 @@ final class ScreenRecorderEngine: NSObject, ObservableObject {
         }
     }
 
-    func updatePiPWindowCapture(windowID: CGWindowID?) async {
+    func updatePiPWindowCapture(windowID: CGWindowID?, extraWindowIDs: [CGWindowID] = []) async {
         guard state.isRecording else { return }
         guard let stream else { return }
 
@@ -228,7 +229,8 @@ final class ScreenRecorderEngine: NSObject, ObservableObject {
             let filterContext = makeDisplayFilterContext(
                 from: content,
                 display: display,
-                pipWindowID: windowID
+                pipWindowID: windowID,
+                extraIncludedWindowIDs: extraWindowIDs
             )
             try await stream.updateContentFilter(filterContext.filter)
             includesPiPWindowInScreenCapture = filterContext.includesPiPWindowInScreenCapture
@@ -275,7 +277,8 @@ final class ScreenRecorderEngine: NSObject, ObservableObject {
     private func buildScreenStream(
         screenRawURL: URL,
         microphoneDeviceID: String?,
-        pipWindowID: CGWindowID?
+        pipWindowID: CGWindowID?,
+        extraIncludedWindowIDs: [CGWindowID]
     ) async throws -> (
         stream: SCStream,
         recordingOutput: SCRecordingOutput,
@@ -291,7 +294,8 @@ final class ScreenRecorderEngine: NSObject, ObservableObject {
         let filterContext = makeDisplayFilterContext(
             from: content,
             display: display,
-            pipWindowID: pipWindowID
+            pipWindowID: pipWindowID,
+            extraIncludedWindowIDs: extraIncludedWindowIDs
         )
 
         let configuration = SCStreamConfiguration()
@@ -344,26 +348,27 @@ final class ScreenRecorderEngine: NSObject, ObservableObject {
     private func makeDisplayFilterContext(
         from content: SCShareableContent,
         display: SCDisplay,
-        pipWindowID: CGWindowID?
+        pipWindowID: CGWindowID?,
+        extraIncludedWindowIDs: [CGWindowID]
     ) -> DisplayFilterContext {
         let excludedApplicationBundleIDs = Set(["com.apple.dock", Bundle.main.bundleIdentifier].compactMap { $0 })
         let excludedApplications = content.applications.filter { application in
             excludedApplicationBundleIDs.contains(application.bundleIdentifier)
         }
-        let pipIncludedWindows = content.windows.filter { window in
-            guard let pipWindowID else { return false }
-            return window.windowID == pipWindowID
+        let allowedWindowIDs = Set(([pipWindowID].compactMap { $0 }) + extraIncludedWindowIDs)
+        let includedWindows = content.windows.filter { window in
+            allowedWindowIDs.contains(window.windowID)
         }
         let filter = SCContentFilter(
             display: display,
             excludingApplications: excludedApplications,
-            exceptingWindows: pipIncludedWindows
+            exceptingWindows: includedWindows
         )
         let warnsAppWindowExclusion = !excludedApplications.contains { $0.bundleIdentifier == Bundle.main.bundleIdentifier }
         return DisplayFilterContext(
             filter: filter,
             warnsAppWindowExclusion: warnsAppWindowExclusion,
-            includesPiPWindowInScreenCapture: !pipIncludedWindows.isEmpty
+            includesPiPWindowInScreenCapture: !includedWindows.isEmpty
         )
     }
 

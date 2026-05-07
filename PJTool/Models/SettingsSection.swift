@@ -10,7 +10,7 @@ import Foundation
 enum SettingsSection: String, CaseIterable, Identifiable {
     case recording
     case pipCamera
-    case videoProcessing
+    case screenDrawing
     case videoCutting
 
     var id: String { rawValue }
@@ -21,8 +21,8 @@ enum SettingsSection: String, CaseIterable, Identifiable {
             return "录屏"
         case .pipCamera:
             return "PiP 摄像"
-        case .videoProcessing:
-            return "视频处理"
+        case .screenDrawing:
+            return "屏幕画图"
         case .videoCutting:
             return "视频剪切"
         }
@@ -34,8 +34,8 @@ enum SettingsSection: String, CaseIterable, Identifiable {
             return "主屏录制"
         case .pipCamera:
             return "设备与预览"
-        case .videoProcessing:
-            return "拼接、剪切、导出"
+        case .screenDrawing:
+            return "透明画布工具条"
         case .videoCutting:
             return "智能裁剪弹窗"
         }
@@ -47,8 +47,8 @@ enum SettingsSection: String, CaseIterable, Identifiable {
             return "record.circle"
         case .pipCamera:
             return "video.badge.waveform"
-        case .videoProcessing:
-            return "film.stack"
+        case .screenDrawing:
+            return "pencil.and.scribble"
         case .videoCutting:
             return "scissors"
         }

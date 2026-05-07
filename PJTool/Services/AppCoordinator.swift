@@ -53,26 +53,36 @@ final class AppCoordinator: ObservableObject {
     @Published private(set) var statusMessage = "待机"
     @Published private(set) var pipStatusMessage = "PiP 待机"
     @Published private(set) var isPiPPreviewVisible = false
+    @Published private(set) var drawStatusMessage = "屏幕画图待机"
+    @Published private(set) var isDrawOverlayVisible = false
+    @Published private(set) var isDrawGlobalHotkeysEnabled = false
     @Published private(set) var recorderState: RecordingState = .idle
 
     let audioEngine: AudioInputEngine
     let pipPreviewRuntime: PiPPreviewRuntime
     let pipController: PiPOverlayWindowController
+    let screenDrawToolbarController: ScreenDrawToolbarWindowController
+    let screenDrawCanvasController: ScreenDrawCanvasWindowController
     let recordingControlController: RecordingControlWindowController
     let recorder: ScreenRecorderEngine
-    let importEngine: ImportCompositeEngine
 
+    private let screenDrawHotkeyService: ScreenDrawHotkeyService
+    private let screenDrawExportService = ScreenDrawExportService()
     private var cancellables: Set<AnyCancellable> = []
     private var shouldRestoreMainWindowAfterRecording = false
+    private var drawSystemDefinedMonitor: Any?
 
     convenience init() {
+        let drawSessionStore = ScreenDrawSessionStore()
         self.init(
             audioEngine: AudioInputEngine(),
             recordingCameraEngine: CameraEngine(),
             pipPreviewRuntime: PiPPreviewRuntime(),
             pipController: PiPOverlayWindowController(),
+            screenDrawToolbarController: ScreenDrawToolbarWindowController(sessionStore: drawSessionStore),
+            screenDrawCanvasController: ScreenDrawCanvasWindowController(sessionStore: drawSessionStore),
             recordingControlController: RecordingControlWindowController(),
-            importEngine: ImportCompositeEngine()
+            screenDrawHotkeyService: ScreenDrawHotkeyService()
         )
     }
 
@@ -81,15 +91,36 @@ final class AppCoordinator: ObservableObject {
         recordingCameraEngine: CameraEngine,
         pipPreviewRuntime: PiPPreviewRuntime,
         pipController: PiPOverlayWindowController,
+        screenDrawToolbarController: ScreenDrawToolbarWindowController,
+        screenDrawCanvasController: ScreenDrawCanvasWindowController,
         recordingControlController: RecordingControlWindowController,
-        importEngine: ImportCompositeEngine
+        screenDrawHotkeyService: ScreenDrawHotkeyService
     ) {
         self.audioEngine = audioEngine
         self.pipPreviewRuntime = pipPreviewRuntime
         self.pipController = pipController
+        self.screenDrawToolbarController = screenDrawToolbarController
+        self.screenDrawCanvasController = screenDrawCanvasController
         self.recordingControlController = recordingControlController
-        self.importEngine = importEngine
+        self.screenDrawHotkeyService = screenDrawHotkeyService
         self.recorder = ScreenRecorderEngine(cameraEngine: recordingCameraEngine)
+
+        if self.screenDrawToolbarController.drawSessionStore !== self.screenDrawCanvasController.drawSessionStore {
+            assertionFailure("Screen drawing toolbar and canvas must share the same session store")
+        }
+
+        self.screenDrawCanvasController.drawSessionStore.onSessionEvent = { [weak self] event in
+            guard let self else { return }
+            self.drawStatusMessage = event
+        }
+
+        self.screenDrawHotkeyService.onAction = { [weak self] action in
+            self?.handleDrawHotkeyAction(action)
+        }
+        self.screenDrawHotkeyService.shouldHandleAction = { [weak self] action in
+            self?.shouldHandleDrawHotkeyAction(action) ?? false
+        }
+
         self.pipController.onVisibilityChanged = { [weak self] isVisible in
             guard let self else { return }
             if isVisible {
@@ -107,13 +138,45 @@ final class AppCoordinator: ObservableObject {
                 }
             }
         }
+
         self.recordingControlController.onStartRequested = { [weak self] in
             self?.beginRecordingFromOverlay()
         }
         self.recordingControlController.onStopRequested = { [weak self] in
             self?.stopRecordingAndRestoreMonitoring()
         }
+
+        self.screenDrawToolbarController.onVisibilityChanged = { [weak self] visible in
+            guard let self else { return }
+            self.isDrawOverlayVisible = visible
+            self.drawStatusMessage = visible ? "屏幕画图工具条已显示" : "屏幕画图工具条已收起"
+        }
+        self.screenDrawToolbarController.onRequestClose = { [weak self] in
+            self?.hideScreenDrawOverlay()
+        }
+        self.screenDrawToolbarController.onScreenRecoveryEvent = { [weak self] event in
+            self?.handleDrawToolbarScreenRecoveryEvent(event)
+        }
+        self.screenDrawCanvasController.onVisibilityChanged = { [weak self] visible in
+            guard let self else { return }
+            if !visible {
+                self.isDrawOverlayVisible = false
+                self.drawStatusMessage = "屏幕画图画布已收起"
+            }
+        }
+        self.screenDrawCanvasController.onScreenRecoveryEvent = { [weak self] event in
+            self?.handleDrawCanvasScreenRecoveryEvent(event)
+        }
+
         bindState()
+    }
+
+    deinit {
+        if let drawSystemDefinedMonitor {
+            NSEvent.removeMonitor(drawSystemDefinedMonitor)
+            self.drawSystemDefinedMonitor = nil
+        }
+        screenDrawHotkeyService.stop()
     }
 
     var canStartRecording: Bool {
@@ -122,6 +185,14 @@ final class AppCoordinator: ObservableObject {
 
     var canStopRecording: Bool {
         (recorderState.isRecording || recorder.state.isRecording) && !recorderState.isBusy
+    }
+
+    var drawHandDrawnIntensity: CGFloat {
+        screenDrawCanvasController.drawSessionStore.handDrawnIntensity
+    }
+
+    var drawMarkStyle: ScreenDrawMarkStyle {
+        screenDrawCanvasController.drawSessionStore.markStyle
     }
 
     var isAudioAuthorized: Bool {
@@ -141,10 +212,10 @@ final class AppCoordinator: ObservableObject {
         }
         pipController.applyWindowConfig(pipWindowConfig)
         pipPreviewRuntime.applyPreviewAudioConfig(pipAudioPreviewConfig)
+        configureDrawHotkeysIfNeeded()
     }
 
     func showPiPPreview(on screen: NSScreen? = nil) {
-        print("[PiP] show request enable=\(enableCameraPiP) cameraAuth=\(isCameraAuthorized) selectedCamera=\(pipPreviewRuntime.selectedSourceID ?? "nil")")
         guard enableCameraPiP else {
             pipStatusMessage = "PiP 已关闭，请先启用摄像头 PiP。"
             print("[PiP] aborted: enableCameraPiP=false")
@@ -204,6 +275,83 @@ final class AppCoordinator: ObservableObject {
     func hidePiPPreview() {
         pipLayout = pipController.currentLayoutState()
         pipController.hide()
+    }
+
+    func showScreenDrawOverlay() {
+        guard !isDrawOverlayVisible else { return }
+        let targetScreen = activeScreenByPointer()
+            ?? NSApp.keyWindow?.screen
+            ?? NSApp.mainWindow?.screen
+            ?? NSScreen.main
+            ?? NSScreen.screens.first
+
+        let didShowCanvas = screenDrawCanvasController.show(on: targetScreen)
+        if didShowCanvas {
+            screenDrawCanvasController.setCanvasInteractionEnabled(true)
+            screenDrawToolbarController.show(on: targetScreen)
+            isDrawOverlayVisible = true
+            drawStatusMessage = "屏幕画图工具条与透明画布已显示"
+        } else {
+            isDrawOverlayVisible = false
+            screenDrawToolbarController.hide()
+            drawStatusMessage = "屏幕画图显示失败，请检查当前桌面空间。"
+        }
+    }
+
+    func hideScreenDrawOverlay() {
+        screenDrawToolbarController.hide()
+        screenDrawCanvasController.hide()
+        isDrawOverlayVisible = false
+        drawStatusMessage = "屏幕画图工具条与透明画布已收起"
+    }
+
+    func clearScreenDrawCanvas() {
+        screenDrawCanvasController.drawSessionStore.clearCanvas()
+    }
+
+    func setDrawHandDrawnIntensity(_ value: CGFloat) {
+        let clamped = max(0, min(value, 1))
+        screenDrawCanvasController.drawSessionStore.handDrawnIntensity = clamped
+        drawStatusMessage = "手绘强度：\(Int(clamped * 100))%"
+    }
+
+    func setDrawMarkStyle(_ style: ScreenDrawMarkStyle) {
+        screenDrawCanvasController.drawSessionStore.markStyle = style
+        drawStatusMessage = "对/错风格已切换：\(style.title)"
+    }
+
+    func exportScreenDrawCanvasAsPNG() {
+        do {
+            guard let image = screenDrawCanvasController.snapshotImage() else {
+                drawStatusMessage = "导出失败：当前画布不可用。"
+                return
+            }
+            let outputURL = try screenDrawExportService.pickOutputURL()
+            try screenDrawExportService.writeTransparentPNG(from: image, to: outputURL)
+            drawStatusMessage = "导出成功：\(outputURL.lastPathComponent)"
+            NSWorkspace.shared.activateFileViewerSelecting([outputURL])
+        } catch {
+            if let exportError = error as? ScreenDrawExportError, case .cancelled = exportError {
+                drawStatusMessage = exportError.errorDescription ?? "已取消导出。"
+                return
+            }
+            drawStatusMessage = "导出失败：\(error.localizedDescription)"
+        }
+    }
+
+    // Compatibility wrappers for existing callers.
+    func showScreenDrawingOverlay() {
+        showScreenDrawOverlay()
+    }
+
+    func hideScreenDrawingOverlay() {
+        hideScreenDrawOverlay()
+    }
+
+    func endScreenDrawingSession() {
+        screenDrawCanvasController.drawSessionStore.resetForNewSession()
+        hideScreenDrawOverlay()
+        drawStatusMessage = "屏幕画图会话已结束。"
     }
 
     func startRecordingFromCurrentConfig(preferredScreen: NSScreen? = nil) {
@@ -278,7 +426,7 @@ final class AppCoordinator: ObservableObject {
     }
 
     private func unavailableReason() -> String {
-        return "当前状态不可开始录制。"
+        "当前状态不可开始录制。"
     }
 
     private func hideMainWindowForRecording() {
@@ -327,7 +475,7 @@ final class AppCoordinator: ObservableObject {
     private func syncPiPWindowCaptureState() async {
         guard recorderState.isRecording else { return }
         let pipWindowID = isPiPPreviewVisible ? pipController.currentWindowID : nil
-        await recorder.updatePiPWindowCapture(windowID: pipWindowID)
+        await recorder.updatePiPWindowCapture(windowID: pipWindowID, extraWindowIDs: screenDrawWhitelistWindowIDs())
     }
 
     private func beginRecordingFromOverlay() {
@@ -361,6 +509,7 @@ final class AppCoordinator: ObservableObject {
             cameraDeviceID: shouldCaptureCameraTrack ? pipPreviewRuntime.selectedSourceID : nil,
             cameraAudioDeviceID: shouldCaptureCameraTrack ? pipPreviewRuntime.selectedAudioSourceID : nil,
             pipWindowID: isPiPPreviewVisible ? pipController.currentWindowID : nil,
+            screenDrawWindowIDs: screenDrawWhitelistWindowIDs(),
             pipLayout: pipLayout,
             pipAspectRatio: pipAspectRatio,
             pipProcessingConfig: pipProcessingConfig,
@@ -393,6 +542,103 @@ final class AppCoordinator: ObservableObject {
     private func activeScreenByPointer() -> NSScreen? {
         let pointer = NSEvent.mouseLocation
         return NSScreen.screens.first(where: { $0.frame.contains(pointer) })
+    }
+
+    private func screenDrawWhitelistWindowIDs() -> [CGWindowID] {
+        var ids: [CGWindowID] = []
+        if isDrawOverlayVisible {
+            if let canvasID = screenDrawCanvasController.currentWindowID {
+                ids.append(canvasID)
+            }
+            if let toolbarID = screenDrawToolbarController.currentWindowID {
+                ids.append(toolbarID)
+            }
+        }
+        return ids
+    }
+
+    private func configureDrawHotkeysIfNeeded() {
+        if let drawSystemDefinedMonitor {
+            NSEvent.removeMonitor(drawSystemDefinedMonitor)
+            self.drawSystemDefinedMonitor = nil
+        }
+
+        isDrawGlobalHotkeysEnabled = screenDrawHotkeyService.start()
+        if isDrawGlobalHotkeysEnabled {
+            drawStatusMessage = "快捷键已就绪：⌃⌥1~5 颜色，⌘⌥1~6 工具，⌘⌥C 清空。"
+        } else {
+            drawStatusMessage = "全局快捷键注册失败：请先重启 PJTool；若仍失败，请先用前台快捷键并在系统设置检查权限。"
+        }
+    }
+
+    private func handleDrawHotkeyAction(_ action: ScreenDrawHotkeyAction) {
+        switch action {
+        case let .selectColor(preset):
+            screenDrawCanvasController.drawSessionStore.selectedColorPreset = preset
+            drawStatusMessage = "颜色已切换：\(preset.title)"
+        case let .selectTool(tool):
+            screenDrawCanvasController.drawSessionStore.activeTool = tool
+            drawStatusMessage = "工具已切换：\(tool.title)"
+        case .clearCanvas:
+            clearScreenDrawCanvas()
+        case .showOverlay:
+            showScreenDrawOverlay()
+            drawStatusMessage = "屏幕画图已展示。"
+        case .hideOverlay:
+            hideScreenDrawOverlay()
+            drawStatusMessage = "屏幕画图已收起。"
+        case .disableCanvas:
+            if !isDrawOverlayVisible {
+                showScreenDrawOverlay()
+            }
+            screenDrawCanvasController.setCanvasInteractionEnabled(false)
+            drawStatusMessage = "画布已关闭交互，鼠标可穿透到其他应用。"
+        case .enableCanvas:
+            if !isDrawOverlayVisible {
+                showScreenDrawOverlay()
+            }
+            screenDrawCanvasController.setCanvasInteractionEnabled(true)
+            drawStatusMessage = "画布已启用，可继续绘制。"
+        }
+    }
+
+    private func shouldHandleDrawHotkeyAction(_ action: ScreenDrawHotkeyAction) -> Bool {
+        switch action {
+        case .showOverlay, .hideOverlay:
+            return true
+        case .enableCanvas, .disableCanvas:
+            return true
+        case .clearCanvas, .selectColor, .selectTool:
+            return isDrawOverlayVisible
+        }
+    }
+
+    private func handleDrawCanvasScreenRecoveryEvent(_ event: ScreenDrawCanvasWindowController.ScreenRecoveryEvent) {
+        guard isDrawOverlayVisible else { return }
+        switch event {
+        case .switchedToFallbackMainScreen:
+            drawStatusMessage = "主屏变化：透明画布已回退到当前主屏。"
+        case .switchedToFallbackFirstScreen:
+            drawStatusMessage = "主屏不可用：透明画布已回退到可用显示器。"
+        case .noAvailableScreen:
+            drawStatusMessage = "当前未检测到可用显示器，屏幕画图暂不可用。"
+        case .frameRecomputedAfterScreenChange:
+            drawStatusMessage = "显示器拓扑变化：透明画布已重算位置。"
+        }
+    }
+
+    private func handleDrawToolbarScreenRecoveryEvent(_ event: ScreenDrawToolbarWindowController.ScreenRecoveryEvent) {
+        guard isDrawOverlayVisible else { return }
+        switch event {
+        case .switchedToFallbackMainScreen:
+            drawStatusMessage = "主屏变化：工具条已回退到当前主屏。"
+        case .switchedToFallbackFirstScreen:
+            drawStatusMessage = "主屏不可用：工具条已回退到可用显示器。"
+        case .noAvailableScreen:
+            drawStatusMessage = "当前未检测到可用显示器，屏幕画图暂不可用。"
+        case .frameRecomputedAfterScreenChange:
+            drawStatusMessage = "显示器拓扑变化：工具条已重算位置。"
+        }
     }
 
     @discardableResult

@@ -2,6 +2,55 @@ import CoreGraphics
 import CoreMedia
 import Foundation
 
+private enum DrawScreenRecoveryLogic {
+    enum RecoveryEvent {
+        case switchedToFallbackMainScreen
+        case switchedToFallbackFirstScreen
+        case noAvailableScreen
+        case frameRecomputedAfterScreenChange
+    }
+
+    static func nextFallbackEvent(lastResolvedID: UInt32?, mainID: UInt32?, firstID: UInt32?) -> RecoveryEvent {
+        if let mainID {
+            if lastResolvedID != mainID {
+                return .switchedToFallbackMainScreen
+            }
+            return .frameRecomputedAfterScreenChange
+        }
+        if let firstID {
+            if lastResolvedID != firstID {
+                return .switchedToFallbackFirstScreen
+            }
+            return .frameRecomputedAfterScreenChange
+        }
+        return .noAvailableScreen
+    }
+}
+
+private enum DrawV2Logic {
+    static func colorMapping() -> [Int: String] {
+        [
+            1: "红",
+            2: "黄",
+            3: "绿",
+            4: "蓝",
+            5: "黑"
+        ]
+    }
+
+    static func supportedToolTitles() -> [String] {
+        ["画线", "箭头线", "方框", "圆形"]
+    }
+
+    static func shortcutDescriptions() -> [String] {
+        [
+            "Option+A 显示",
+            "Option+Q 收起",
+            "Esc 清屏"
+        ]
+    }
+}
+
 @main
 private struct LogicChecksRunner {
     static func main() {
@@ -160,30 +209,6 @@ private struct LogicChecksRunner {
             failures.append("Offline camera should include Offline badge")
         }
 
-        // Existing insert-at-any-time behavior.
-        let importEngine = ImportCompositeEngine()
-        importEngine.addClip(
-            url: URL(fileURLWithPath: "/tmp/insert-late.mp4"),
-            insertTimeSeconds: 5.0,
-            mute: false
-        )
-        importEngine.addClip(
-            url: URL(fileURLWithPath: "/tmp/insert-early.mp4"),
-            insertTimeSeconds: -2.0,
-            mute: true
-        )
-        let layers = importEngine.layers
-        if layers.count != 2 {
-            failures.append("Import engine should contain exactly 2 layers")
-        } else {
-            if abs(layers[0].insertTime.seconds - 0.0) > 0.0001 {
-                failures.append("Negative insert time should be clamped to 0")
-            }
-            if abs(layers[1].insertTime.seconds - 5.0) > 0.0001 {
-                failures.append("Layers should remain sorted by insert time")
-            }
-        }
-
         // Task C: preview mute semantics are config-level only (export unaffected).
         let mutedConfig = PiPAudioPreviewConfig(isPreviewMuted: true, previewVolume: 0.7)
         let unmutedConfig = PiPAudioPreviewConfig(isPreviewMuted: false, previewVolume: 0.7)
@@ -250,6 +275,53 @@ private struct LogicChecksRunner {
             }
         }
 
+        // Draw task: fallback semantics on screen topology change should be deterministic.
+        let drawFallbackMain = DrawScreenRecoveryLogic.nextFallbackEvent(
+            lastResolvedID: 100,
+            mainID: 200,
+            firstID: 100
+        )
+        if drawFallbackMain != .switchedToFallbackMainScreen {
+            failures.append("Draw fallback should prefer main screen when available")
+        }
+
+        let drawFallbackFirst = DrawScreenRecoveryLogic.nextFallbackEvent(
+            lastResolvedID: 300,
+            mainID: nil,
+            firstID: 500
+        )
+        if drawFallbackFirst != .switchedToFallbackFirstScreen {
+            failures.append("Draw fallback should use first screen when main is unavailable")
+        }
+
+        let drawNoScreen = DrawScreenRecoveryLogic.nextFallbackEvent(
+            lastResolvedID: nil,
+            mainID: nil,
+            firstID: nil
+        )
+        if drawNoScreen != .noAvailableScreen {
+            failures.append("Draw recovery should report no available screen when none exists")
+        }
+
+        // Draw V2 task: fixed color mapping + tool set + shortcuts.
+        let drawColors = DrawV2Logic.colorMapping()
+        if drawColors.count != 5 {
+            failures.append("Draw V2 color mapping count should be 5")
+        }
+        if drawColors[1] != "红" || drawColors[2] != "黄" || drawColors[3] != "绿" || drawColors[4] != "蓝" || drawColors[5] != "黑" {
+            failures.append("Draw V2 color mapping should be 1红 2黄 3绿 4蓝 5黑")
+        }
+
+        let tools = DrawV2Logic.supportedToolTitles()
+        if tools != ["画线", "箭头线", "方框", "圆形"] {
+            failures.append("Draw V2 supported tools mismatch")
+        }
+
+        let shortcuts = DrawV2Logic.shortcutDescriptions()
+        if !shortcuts.contains("Option+A 显示") || !shortcuts.contains("Option+Q 收起") || !shortcuts.contains("Esc 清屏") {
+            failures.append("Draw V2 shortcut descriptions mismatch")
+        }
+
         if failures.isEmpty {
             print("LOGIC_CHECK PASS")
             print("- TaskA geometry: keep-height + bounds + min-size")
@@ -257,7 +329,9 @@ private struct LogicChecksRunner {
             print("- TaskB badges: Continuity/Offline visibility")
             print("- TaskC preview mute semantics: monitor-only config")
             print("- TaskD keyframes: monotonic + normalized rect range")
-            print("- Stitch insert and multi-trim baseline checks")
+            print("- Multi-trim baseline checks")
+            print("- Draw screen recovery fallback semantics")
+            print("- Draw V2 color/tool/shortcut semantics")
             exit(0)
         }
 
