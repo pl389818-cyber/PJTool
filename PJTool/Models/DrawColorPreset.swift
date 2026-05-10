@@ -20,20 +20,35 @@ enum DrawColorPreset: Int, CaseIterable, Identifiable {
     var title: String {
         switch self {
         case .one:
-            return "1 红"
+            return L10n.tr("legacy.k_1")
         case .two:
-            return "2 黄"
+            return L10n.tr("legacy.k_2")
         case .three:
-            return "3 绿"
+            return L10n.tr("legacy.k_3")
         case .four:
-            return "4 蓝"
+            return L10n.tr("legacy.k_4")
         case .five:
-            return "5 黑"
+            return L10n.tr("legacy.k_5")
         }
     }
 
     var shortLabel: String {
         "\(rawValue)"
+    }
+
+    var displayName: String {
+        switch self {
+        case .one:
+            return L10n.tr("color.red")
+        case .two:
+            return L10n.tr("color.yellow")
+        case .three:
+            return L10n.tr("color.green")
+        case .four:
+            return L10n.tr("color.blue")
+        case .five:
+            return L10n.tr("color.black")
+        }
     }
 
     var color: NSColor {

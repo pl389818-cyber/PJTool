@@ -18,13 +18,13 @@ enum ScreenDrawExportError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .cancelled:
-            return "已取消导出。"
+            return L10n.tr("legacy.key_85")
         case .renderFailed:
-            return "导出失败：无法渲染当前画布。"
+            return L10n.tr("legacy.key_61")
         case .bitmapInitFailed:
-            return "导出失败：无法创建位图数据。"
+            return L10n.tr("legacy.key_60")
         case .pngEncodingFailed:
-            return "导出失败：PNG 编码失败。"
+            return L10n.tr("legacy.png")
         }
     }
 }

@@ -42,8 +42,6 @@ struct VideoCuttingModalView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            topBar
-            Divider().overlay(Color.black.opacity(0.35))
             bodyContent
             Divider().overlay(Color.black.opacity(0.35))
             bottomBar
@@ -59,29 +57,6 @@ struct VideoCuttingModalView: View {
         } onCancellation: {
             viewModel.handleImportPanelCancellation()
         }
-    }
-
-    private var topBar: some View {
-        ZStack {
-            HStack {
-                Button {
-                    dismissCuttingWindow()
-                } label: {
-                    Circle()
-                        .fill(Color.red.opacity(0.92))
-                        .frame(width: 14, height: 14)
-                }
-                .buttonStyle(.plain)
-                Spacer()
-            }
-
-            Text("智能裁剪")
-                .font(.headline.weight(.semibold))
-                .foregroundStyle(Color.white.opacity(0.92))
-        }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 12)
-        .background(Color(red: 0.19, green: 0.20, blue: 0.23))
     }
 
     private var bodyContent: some View {
@@ -120,13 +95,13 @@ struct VideoCuttingModalView: View {
                 Image(systemName: "plus.circle.fill")
                     .font(.system(size: 52, weight: .medium))
                     .foregroundStyle(Color.cyan.opacity(0.95))
-                Text("导入视频")
+                Text(L10n.tr("legacy.key_54"))
                     .font(.title3.weight(.semibold))
                     .foregroundStyle(Color.white.opacity(0.92))
-                Text("拖动视频到此处，或点击按钮选择文件")
+                Text(L10n.tr("legacy.key_133"))
                     .font(.body)
                     .foregroundStyle(Color.white.opacity(0.45))
-                Text("选择文件导入")
+                Text(L10n.tr("legacy.key_213"))
                     .font(.body.weight(.semibold))
                     .foregroundStyle(Color.white.opacity(0.96))
                     .padding(.horizontal, 18)
@@ -435,21 +410,21 @@ struct VideoCuttingModalView: View {
                     .font(.system(.body, design: .monospaced))
                     .foregroundStyle(Color.cyan.opacity(0.92))
 
-                Text("保留开始(秒)")
+                Text(L10n.tr("legacy.key_12"))
                     .font(.footnote)
                     .foregroundStyle(Color.white.opacity(0.65))
                 TextField("0", text: $viewModel.keepStartText)
                     .textFieldStyle(.roundedBorder)
                     .frame(width: 96)
 
-                Text("保留结束(秒)")
+                Text(L10n.tr("legacy.key_13"))
                     .font(.footnote)
                     .foregroundStyle(Color.white.opacity(0.65))
                 TextField("10", text: $viewModel.keepEndText)
                     .textFieldStyle(.roundedBorder)
                     .frame(width: 96)
 
-                Button("应用保留区间") {
+                Button(L10n.tr("legacy.key_96")) {
                     viewModel.applyQuickKeepRangeInput()
                 }
                 .buttonStyle(.bordered)
@@ -481,7 +456,7 @@ struct VideoCuttingModalView: View {
 
     private var deleteTrackToolbar: some View {
         HStack(spacing: 10) {
-            Text("删除区间轨道")
+            Text(L10n.tr("legacy.key_24"))
                 .font(.footnote.weight(.semibold))
                 .foregroundStyle(Color.white.opacity(0.8))
 
@@ -489,12 +464,12 @@ struct VideoCuttingModalView: View {
                 .font(.caption.monospacedDigit())
                 .foregroundStyle(Color.white.opacity(0.52))
 
-            Button("新增区间") {
+            Button(L10n.tr("legacy.key_149")) {
                 viewModel.addDeleteRangeAtPlayhead()
             }
             .buttonStyle(.bordered)
 
-            Button(viewModel.isExporting ? "处理中..." : "选中删除") {
+            Button(viewModel.isExporting ? L10n.tr("legacy.key_46") : L10n.tr("legacy.key_211")) {
                 viewModel.deleteSelectedRangeAndReload()
             }
             .buttonStyle(.bordered)
@@ -513,7 +488,7 @@ struct VideoCuttingModalView: View {
                     .stroke(Color.white.opacity(0.12), lineWidth: 1)
 
                 if viewModel.deleteRanges.isEmpty {
-                    Text("暂无删除区间，可点击“新增区间”或通过保留区间快捷生成。")
+                    Text(L10n.tr("legacy.key_158"))
                         .font(.caption)
                         .foregroundStyle(Color.white.opacity(0.45))
                         .padding(.horizontal, 10)
@@ -537,7 +512,7 @@ struct VideoCuttingModalView: View {
         let end = viewModel.deleteRangeEndSeconds(for: range.id)
         let startText = String(format: "%.2f", start)
         let endText = String(format: "%.2f", end)
-        let deleteTip = "将删除 \(startText)s 到 \(endText)s"
+        let deleteTip = L10n.f("fmt.video.delete_tip_range", startText, endText)
         let startRatio = CGFloat(start / duration)
         let endRatio = CGFloat(end / duration)
         let x = trackWidth * startRatio
@@ -577,7 +552,7 @@ struct VideoCuttingModalView: View {
         )
         .help(deleteTip)
         .contextMenu {
-            Button("取消本段裁切") {
+            Button(L10n.tr("legacy.key_35")) {
                 viewModel.selectDeleteRange(id: range.id)
                 viewModel.removeDeleteRange(id: range.id)
             }
@@ -604,10 +579,13 @@ struct VideoCuttingModalView: View {
     private var sidePanel: some View {
         VStack(alignment: .leading, spacing: 16) {
             HStack(spacing: 10) {
-                Text("目标比例")
+                Text(L10n.tr("legacy.key_186"))
                     .font(.title3.weight(.semibold))
                     .foregroundStyle(Color.white.opacity(0.92))
-                Button(viewModel.isApplyingCrop ? "处理中..." : "执行裁切") {
+
+                Spacer(minLength: 0)
+
+                Button(viewModel.isApplyingCrop ? L10n.tr("legacy.key_46") : L10n.tr("legacy.key_126")) {
                     viewModel.executeCropAndReload()
                 }
                 .buttonStyle(.borderedProminent)
@@ -628,13 +606,13 @@ struct VideoCuttingModalView: View {
             }
 
             HStack(spacing: 8) {
-                Button("重置裁切框") {
+                Button(L10n.tr("legacy.key_215")) {
                     viewModel.resetCropRect()
                 }
                 .buttonStyle(.bordered)
 
                 if viewModel.isCropNoOp {
-                    Text("当前无可裁切变化")
+                    Text(L10n.tr("legacy.key_103"))
                         .font(.caption)
                         .foregroundStyle(Color.white.opacity(0.5))
                 }
@@ -679,13 +657,13 @@ struct VideoCuttingModalView: View {
 
     private var audioSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("声音降噪🔊")
+            Text(L10n.tr("legacy.key_45"))
                 .font(.title3.weight(.semibold))
                 .foregroundStyle(Color.white.opacity(0.92))
 
             VStack(spacing: 10) {
                 HStack(spacing: 10) {
-                    Text("背景降噪")
+                    Text(L10n.tr("legacy.key_193"))
                         .font(.body.weight(.medium))
                         .foregroundStyle(Color.white.opacity(0.78))
 
@@ -721,7 +699,7 @@ struct VideoCuttingModalView: View {
             .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
 
             HStack(spacing: 10) {
-                Text("均衡器")
+                Text(L10n.tr("legacy.key_44"))
                     .font(.body.weight(.medium))
                     .foregroundStyle(Color.white.opacity(0.78))
                 Spacer(minLength: 0)
@@ -742,7 +720,7 @@ struct VideoCuttingModalView: View {
             }
 
             if !viewModel.hasAudioTrack {
-                Text("源视频无音频轨道")
+                Text(L10n.tr("legacy.key_174"))
                     .font(.caption)
                     .foregroundStyle(Color.orange.opacity(0.86))
             }
@@ -751,13 +729,13 @@ struct VideoCuttingModalView: View {
 
     private var bottomBar: some View {
         HStack(spacing: 12) {
-            Button("重新导入") {
+            Button(L10n.tr("legacy.key_214")) {
                 viewModel.importByPanel()
             }
             .buttonStyle(.bordered)
 
             if let exportURL = viewModel.exportURL {
-                Button("打开导出文件") {
+                Button(L10n.tr("legacy.key_122")) {
                     viewModel.revealExport()
                 }
                 .buttonStyle(.bordered)
@@ -771,16 +749,11 @@ struct VideoCuttingModalView: View {
 
             Spacer(minLength: 0)
 
-            Button(viewModel.isExporting ? "导出中..." : "导出") {
+            Button(viewModel.isExporting ? L10n.tr("legacy.key_56") : L10n.tr("legacy.key_55")) {
                 viewModel.exportTrimmedVideo()
             }
             .buttonStyle(.borderedProminent)
             .disabled(!viewModel.canExport)
-
-            Button("导入到新草稿") {
-                viewModel.importByPanel()
-            }
-            .buttonStyle(.bordered)
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)

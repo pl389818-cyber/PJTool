@@ -246,7 +246,7 @@ private final class RecordingControlView: NSView {
         iconButton.image = resolveSymbolImage(
             preferred: "camera.fill",
             fallback: "video.fill",
-            description: "开始录屏"
+            description: L10n.tr("legacy.key_98")
         )
         iconButton.imagePosition = .imageOnly
         iconButton.symbolConfiguration = symbolConfig
@@ -284,7 +284,7 @@ private final class RecordingControlView: NSView {
             iconButton.image = resolveSymbolImage(
                 preferred: "camera.fill",
                 fallback: "video.fill",
-                description: "开始录屏"
+                description: L10n.tr("legacy.key_98")
             )
             iconButton.contentTintColor = .labelColor
             stopRecordingBreathAnimation()
@@ -296,7 +296,7 @@ private final class RecordingControlView: NSView {
             iconButton.image = resolveSymbolImage(
                 preferred: "stop.square.fill",
                 fallback: "stop.fill",
-                description: "停止录屏"
+                description: L10n.tr("legacy.key_15")
             )
             iconButton.contentTintColor = .systemRed
             startRecordingBreathAnimation()

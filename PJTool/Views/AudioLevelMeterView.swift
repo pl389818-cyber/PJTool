@@ -38,7 +38,7 @@ struct AudioLevelMeterView: View {
             }
         }
         .frame(height: 12)
-        .accessibilityLabel("音频电平")
+        .accessibilityLabel(L10n.tr("legacy.key_220"))
         .accessibilityValue(Text("\(Int(clampedLevel * 100))"))
     }
 }

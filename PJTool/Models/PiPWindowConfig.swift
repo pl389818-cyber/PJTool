@@ -8,10 +8,19 @@
 import Foundation
 
 enum PiPWindowFrameStyle: String, Codable, CaseIterable, Identifiable {
-    case square = "方形框"
-    case circle = "圆形框"
+    case square
+    case circle
 
     var id: String { rawValue }
+
+    var displayTitle: String {
+        switch self {
+        case .square:
+            return L10n.tr("legacy.key_151")
+        case .circle:
+            return L10n.tr("legacy.key_42")
+        }
+    }
 }
 
 struct PiPWindowConfig: Equatable, Codable {
@@ -20,7 +29,7 @@ struct PiPWindowConfig: Equatable, Codable {
     var frameStyle: PiPWindowFrameStyle
     var windowTitle: String
 
-    static let defaultWindowTitle = "PJ Lee 摄像"
+    static let defaultWindowTitle = L10n.tr("legacy.pj_lee")
 
     var resolvedWindowTitle: String {
         let trimmed = windowTitle.trimmingCharacters(in: .whitespacesAndNewlines)

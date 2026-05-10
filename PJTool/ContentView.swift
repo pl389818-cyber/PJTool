@@ -120,17 +120,19 @@ struct ContentView: View {
             ScreenDrawingSettingsView(appCoordinator: appCoordinator)
         case .videoCutting:
             videoCuttingEntryView
+        case .appSettings:
+            LanguageSettingsView(appCoordinator: appCoordinator)
         }
     }
 
     private var videoCuttingEntryView: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("视频剪切")
+            Text(L10n.tr("legacy.key_197"))
                 .font(.title3.weight(.semibold))
-            Text("已进入视频剪切模块，弹窗未出现时可点击下方按钮重新打开。")
+            Text(L10n.tr("legacy.key_93"))
                 .font(.callout)
                 .foregroundStyle(.secondary)
-            Button("打开智能裁剪弹窗") {
+            Button(L10n.tr("legacy.key_124")) {
                 hasUserOpenedVideoCutting = true
                 openVideoCuttingWindow()
             }

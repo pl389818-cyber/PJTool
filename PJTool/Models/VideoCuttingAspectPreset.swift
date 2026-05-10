@@ -24,7 +24,7 @@ enum VideoCuttingAspectPreset: String, CaseIterable, Identifiable {
     var title: String {
         switch self {
         case .adaptive:
-            return "适应"
+            return L10n.tr("legacy.key_210")
         case .nineBySixteen:
             return "9:16"
         case .sixteenByNine:

@@ -20,17 +20,17 @@ enum ScreenDrawTool: String, CaseIterable, Identifiable {
     var title: String {
         switch self {
         case .line:
-            return "画线"
+            return L10n.tr("legacy.key_183")
         case .arrow:
-            return "箭头线"
+            return L10n.tr("legacy.key_191")
         case .rectangle:
-            return "方框"
+            return L10n.tr("legacy.key_152")
         case .ellipse:
-            return "圆形"
+            return L10n.tr("legacy.key_41")
         case .cross:
-            return "错"
+            return L10n.tr("legacy.key_216")
         case .check:
-            return "对"
+            return L10n.tr("legacy.key_47")
         }
     }
 

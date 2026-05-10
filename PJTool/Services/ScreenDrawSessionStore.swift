@@ -7,6 +7,7 @@
 
 import AppKit
 import Combine
+import QuartzCore
 import Foundation
 
 @MainActor
@@ -15,14 +16,21 @@ final class ScreenDrawSessionStore: ObservableObject {
     @Published var selectedColorPreset: DrawColorPreset = .one
     @Published var handDrawnIntensity: CGFloat = 0.58
     @Published var markStyle: ScreenDrawMarkStyle = .rounded
+    @Published var dismissalAnimationMode: DrawDismissalAnimationMode = .random
+    @Published var dismissalAnimationFixedStyle: DrawDismissalAnimationStyle = .shatterDrop
+    @Published private(set) var isDismissingWithAnimation = false
+    @Published private(set) var activeDismissalStyle: DrawDismissalAnimationStyle?
+    @Published private(set) var dismissalAnimationStartedAt: CFTimeInterval = 0
     @Published private(set) var shapes: [ScreenDrawShape] = []
     @Published private(set) var previewShape: ScreenDrawShape?
 
     var onSessionEvent: ((String) -> Void)?
 
     private let defaultLineWidth: CGFloat = 2
+    private var lastDismissalStyle: DrawDismissalAnimationStyle?
 
     func beginInteraction(at point: CGPoint) {
+        guard !isDismissingWithAnimation else { return }
         guard let shapeType = shapeType(for: activeTool) else { return }
         previewShape = ScreenDrawShape(
             type: shapeType,
@@ -35,6 +43,7 @@ final class ScreenDrawSessionStore: ObservableObject {
     }
 
     func continueInteraction(at point: CGPoint) {
+        guard !isDismissingWithAnimation else { return }
         guard var shape = previewShape else {
             beginInteraction(at: point)
             return
@@ -47,6 +56,7 @@ final class ScreenDrawSessionStore: ObservableObject {
     }
 
     func endInteraction(at point: CGPoint) {
+        guard !isDismissingWithAnimation else { return }
         guard var shape = previewShape else { return }
         shape.endPoint = point
         if shape.type == .line || shape.type == .arrow {
@@ -57,28 +67,69 @@ final class ScreenDrawSessionStore: ObservableObject {
         }
         if shouldCommitShape(shape) {
             shapes.append(shape)
-            onSessionEvent?("已添加\(shape.type.tool.title)（颜色 \(shape.colorPreset.shortLabel)）")
+            onSessionEvent?(
+                L10n.f(
+                    "fmt.draw.shape_added",
+                    shape.type.tool.title,
+                    shape.colorPreset.shortLabel
+                )
+            )
         }
         previewShape = nil
     }
 
     func clearCanvas() {
+        guard !isDismissingWithAnimation else { return }
         if shapes.isEmpty {
-            onSessionEvent?("画布已经是空白。")
+            onSessionEvent?(L10n.tr("legacy.key_182"))
             return
         }
         shapes.removeAll(keepingCapacity: false)
         previewShape = nil
-        onSessionEvent?("画布已清空。")
+        onSessionEvent?(L10n.tr("legacy.key_181"))
+    }
+
+    func clearCanvasSilently() {
+        shapes.removeAll(keepingCapacity: false)
+        previewShape = nil
     }
 
     func resetForNewSession() {
         shapes.removeAll(keepingCapacity: false)
         previewShape = nil
+        isDismissingWithAnimation = false
+        activeDismissalStyle = nil
+        dismissalAnimationStartedAt = 0
     }
 
     func cancelCurrentInteraction() {
         previewShape = nil
+    }
+
+    var hasDrawableContent: Bool {
+        !shapes.isEmpty || previewShape != nil
+    }
+
+    func beginDismissalAnimation() -> DrawDismissalAnimationStyle? {
+        guard hasDrawableContent else { return nil }
+        guard !isDismissingWithAnimation else { return activeDismissalStyle }
+
+        let style = resolvedDismissalStyle()
+        isDismissingWithAnimation = true
+        activeDismissalStyle = style
+        dismissalAnimationStartedAt = CACurrentMediaTime()
+        previewShape = nil
+        return style
+    }
+
+    func completeDismissalAnimation(clearCanvas: Bool) {
+        if clearCanvas {
+            clearCanvasSilently()
+            onSessionEvent?(L10n.tr("legacy.key_181"))
+        }
+        isDismissingWithAnimation = false
+        activeDismissalStyle = nil
+        dismissalAnimationStartedAt = 0
     }
 
     private func shapeType(for tool: ScreenDrawTool) -> ScreenDrawShapeType? {
@@ -129,5 +180,27 @@ final class ScreenDrawSessionStore: ObservableObject {
             total += hypot(current.x - previous.x, current.y - previous.y)
         }
         return total
+    }
+
+    private func resolvedDismissalStyle() -> DrawDismissalAnimationStyle {
+        switch dismissalAnimationMode {
+        case .fixed:
+            lastDismissalStyle = dismissalAnimationFixedStyle
+            return dismissalAnimationFixedStyle
+        case .random:
+            let all = DrawDismissalAnimationStyle.allCases
+            if all.count <= 1 {
+                let fallback = dismissalAnimationFixedStyle
+                lastDismissalStyle = fallback
+                return fallback
+            }
+
+            var candidate = all.randomElement() ?? dismissalAnimationFixedStyle
+            if candidate == lastDismissalStyle, let different = all.first(where: { $0 != candidate }) {
+                candidate = different
+            }
+            lastDismissalStyle = candidate
+            return candidate
+        }
     }
 }

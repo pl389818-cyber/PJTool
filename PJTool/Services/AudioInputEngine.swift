@@ -49,7 +49,7 @@ final class AudioInputEngine: NSObject, ObservableObject {
             let status = AVCaptureDevice.authorizationStatus(for: .audio)
             DispatchQueue.main.async {
                 self.authorizationStatus = status
-                self.infoMessage = granted ? nil : "麦克风权限未授权，无法开始音频采集。"
+                self.infoMessage = granted ? nil : L10n.tr("legacy.key_229")
                 self.refreshSources()
                 if granted {
                     self.startMonitoringIfNeeded()
@@ -92,7 +92,7 @@ final class AudioInputEngine: NSObject, ObservableObject {
 
         guard let selectedSourceID else {
             isMonitoring = false
-            infoMessage = "未发现可用麦克风输入源。"
+            infoMessage = L10n.tr("legacy.key_159")
             return
         }
 
@@ -130,7 +130,7 @@ final class AudioInputEngine: NSObject, ObservableObject {
                 guard let self else { return }
                 self.refreshSources()
                 if let device = notification.object as? AVCaptureDevice, device.hasMediaType(.audio) {
-                    self.infoMessage = "检测到新的音频设备：\(device.localizedName)"
+                    self.infoMessage = L10n.f("fmt.audio.new_device_detected", device.localizedName)
                 }
             }
         )
@@ -147,7 +147,7 @@ final class AudioInputEngine: NSObject, ObservableObject {
                     return
                 }
                 if device.uniqueID == self.selectedSourceID {
-                    self.infoMessage = "当前麦克风已断开，正在自动回退。"
+                    self.infoMessage = L10n.tr("legacy.key_108")
                 }
                 self.refreshSources()
             }
@@ -160,7 +160,7 @@ final class AudioInputEngine: NSObject, ObservableObject {
 
         guard !discovered.isEmpty else {
             selectedSourceID = nil
-            infoMessage = "未发现可用麦克风输入源。"
+            infoMessage = L10n.tr("legacy.key_159")
             if isMonitoring {
                 stopMonitoring()
             }
@@ -174,7 +174,7 @@ final class AudioInputEngine: NSObject, ObservableObject {
 
         if let fallback = preferredFallbackSource(in: discovered) {
             selectedSourceID = fallback.id
-            infoMessage = "已自动切换到：\(fallback.name)"
+            infoMessage = L10n.f("fmt.audio.auto_switched_to", fallback.name)
             if isMonitoring {
                 rebuildCaptureSession(with: fallback.id)
             }
@@ -188,7 +188,7 @@ final class AudioInputEngine: NSObject, ObservableObject {
 
             guard let device = Self.fetchAudioDevices().first(where: { $0.uniqueID == sourceID }) else {
                 DispatchQueue.main.async {
-                    self.infoMessage = "所选麦克风不可用，正在尝试回退。"
+                    self.infoMessage = L10n.tr("legacy.key_120")
                 }
                 self.refreshSources()
                 return
@@ -216,7 +216,7 @@ final class AudioInputEngine: NSObject, ObservableObject {
                 }
             } catch {
                 DispatchQueue.main.async {
-                    self.infoMessage = "初始化麦克风失败：\(error.localizedDescription)"
+                    self.infoMessage = L10n.f("fmt.audio.monitor_init_failed", error.localizedDescription)
                 }
             }
         }

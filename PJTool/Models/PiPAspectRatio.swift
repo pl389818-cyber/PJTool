@@ -9,11 +9,22 @@ import CoreGraphics
 import Foundation
 
 enum PiPAspectRatio: String, Codable, CaseIterable, Identifiable {
-    case auto = "自动"
+    case auto = "auto"
     case sixteenByNine = "16:9"
     case fourByThree = "4:3"
 
     var id: String { rawValue }
+
+    var displayTitle: String {
+        switch self {
+        case .auto:
+            return L10n.tr("legacy.key_194")
+        case .sixteenByNine:
+            return "16:9"
+        case .fourByThree:
+            return "4:3"
+        }
+    }
 
     var widthOverHeight: CGFloat {
         switch self {

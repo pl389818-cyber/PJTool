@@ -87,7 +87,7 @@ final class CameraEngine: NSObject, ObservableObject {
 
     func requestCameraAccess(onResolved: (() -> Void)? = nil) {
         guard Bundle.main.object(forInfoDictionaryKey: "NSCameraUsageDescription") != nil else {
-            infoMessage = "缺少 NSCameraUsageDescription，无法请求摄像头权限。"
+            infoMessage = L10n.tr("legacy.nscamerausagedescription")
             authorizationStatus = AVCaptureDevice.authorizationStatus(for: .video)
             onResolved?()
             return
@@ -102,7 +102,7 @@ final class CameraEngine: NSObject, ObservableObject {
             let status = AVCaptureDevice.authorizationStatus(for: .video)
             DispatchQueue.main.async {
                 self.authorizationStatus = status
-                self.infoMessage = granted ? "摄像头权限已授权，正在刷新设备..." : "摄像头权限未授权。"
+                self.infoMessage = granted ? L10n.tr("legacy.key_138") : L10n.tr("legacy.key_140")
                 self.refreshSources()
                 onResolved?()
             }
@@ -123,7 +123,7 @@ final class CameraEngine: NSObject, ObservableObject {
                 if granted {
                     self.refreshAudioSources()
                 } else {
-                    self.infoMessage = "麦克风权限未授权（仅影响 PiP 监听与摄像头音轨）。"
+                    self.infoMessage = L10n.tr("legacy.pip_28")
                 }
                 onResolved?()
             }
@@ -186,7 +186,7 @@ final class CameraEngine: NSObject, ObservableObject {
         guard selectedSourceID != id else { return }
         selectedSourceID = id
         if let source = sources.first(where: { $0.id == id }) {
-            infoMessage = "当前 PiP 摄像头：\(source.name)"
+            infoMessage = L10n.f("fmt.pip.current_camera", source.name)
         } else {
             infoMessage = nil
         }
@@ -202,7 +202,7 @@ final class CameraEngine: NSObject, ObservableObject {
         guard selectedAudioSourceID != id else { return }
         selectedAudioSourceID = id
         if let source = audioSources.first(where: { $0.id == id }) {
-            infoMessage = "当前 PiP 麦克风：\(source.name)"
+            infoMessage = L10n.f("fmt.pip.current_microphone", source.name)
         } else {
             infoMessage = nil
         }
@@ -222,7 +222,7 @@ final class CameraEngine: NSObject, ObservableObject {
         if !isPreviewAudioPlaybackEnabled, !nextConfig.isPreviewMuted {
             nextConfig.isPreviewMuted = true
             if !hasWarnedPreviewAudioPlaybackUnavailable {
-                infoMessage = "当前沙盒模式暂不支持 PiP 监听回放，已保持静音；电平监测与录制不受影响。"
+                infoMessage = L10n.tr("legacy.pip_18")
                 hasWarnedPreviewAudioPlaybackUnavailable = true
             }
         }
@@ -291,7 +291,7 @@ final class CameraEngine: NSObject, ObservableObject {
         if let audioID = snapshot.audioDeviceID {
             let availableAudioIDs = Set(Self.fetchAudioDevices().map(\.uniqueID))
             if !availableAudioIDs.contains(audioID) {
-                infoMessage = "所选 PiP 麦克风离线，已降级为无摄像头音频输入。"
+                infoMessage = L10n.tr("legacy.pip_21")
             }
         }
 
@@ -318,7 +318,7 @@ final class CameraEngine: NSObject, ObservableObject {
                     DispatchQueue.main.async {
                         self.isRecording = false
                         self.sessionSnapshot = nil
-                        self.infoMessage = "摄像头连接异常，已降级为仅屏幕录制。"
+                        self.infoMessage = L10n.tr("legacy.key_146")
                         self.startContinuation?.resume(throwing: CameraError.noActiveConnection)
                         self.startContinuation = nil
                     }
@@ -359,9 +359,9 @@ final class CameraEngine: NSObject, ObservableObject {
                 guard let self else { return }
                 if let device = note.object as? AVCaptureDevice {
                     if device.hasMediaType(.video) {
-                        self.infoMessage = "检测到新摄像头：\(device.localizedName)"
+                        self.infoMessage = L10n.f("fmt.pip.new_camera_detected", device.localizedName)
                     } else if device.hasMediaType(.audio) {
-                        self.infoMessage = "检测到新音频设备：\(device.localizedName)"
+                        self.infoMessage = L10n.f("fmt.pip.new_audio_device_detected", device.localizedName)
                     }
                 }
                 self.refreshSources()
@@ -386,9 +386,9 @@ final class CameraEngine: NSObject, ObservableObject {
                 guard let device = note.object as? AVCaptureDevice else { return }
 
                 if device.uniqueID == self.selectedSourceID {
-                    self.infoMessage = "当前 PiP 摄像头断开，已自动回退。"
+                    self.infoMessage = L10n.tr("legacy.pip_15")
                 } else if device.uniqueID == self.selectedAudioSourceID {
-                    self.infoMessage = "当前 PiP 麦克风断开，已自动回退。"
+                    self.infoMessage = L10n.tr("legacy.pip_16")
                 }
             }
         )
@@ -431,16 +431,16 @@ final class CameraEngine: NSObject, ObservableObject {
 
         switch authorizationStatus {
         case .notDetermined:
-            infoMessage = "尚未授予摄像头权限，请先授权后再刷新设备。"
+            infoMessage = L10n.tr("legacy.key_64")
         case .denied:
-            infoMessage = "摄像头权限已被拒绝，请到系统设置 > 隐私与安全性 > 摄像头中允许 PJTool。"
+            infoMessage = L10n.tr("legacy.pjtool_5")
         case .restricted:
-            infoMessage = "摄像头权限受系统限制，当前无法访问摄像头。"
+            infoMessage = L10n.tr("legacy.key_137")
         case .authorized:
             if discovered.isEmpty {
-                infoMessage = "当前未发现任何摄像头设备，请检查内建摄像头、外接摄像头或 Continuity Camera 是否可用。"
+                infoMessage = L10n.tr("legacy.continuity_camera")
             } else if discovered.allSatisfy({ !$0.isAvailable }) {
-                infoMessage = "已识别到摄像头条目，但它们当前均处于离线状态。"
+                infoMessage = L10n.tr("legacy.key_92")
             } else if let selectedSourceID,
                       let selected = discovered.first(where: { $0.id == selectedSourceID }),
                       selected.isAvailable {
@@ -477,7 +477,7 @@ final class CameraEngine: NSObject, ObservableObject {
     ) {
         guard let sourceID = effectiveVideoSourceID() else {
             if includeMovieOutput {
-                infoMessage = "摄像头设备不可用，PiP 已降级为仅屏幕录制。"
+                infoMessage = L10n.tr("legacy.pip_24")
             }
             return
         }
@@ -497,7 +497,7 @@ final class CameraEngine: NSObject, ObservableObject {
         let audioDevice = Self.fetchAudioDevices().first(where: { $0.uniqueID == selectedAudioID })
         if includeAudioInput && audioDevice == nil {
             if !didWarnAudioFallback {
-                infoMessage = "所选 PiP 麦克风离线，当前会话已降级为无摄像头音频。"
+                infoMessage = L10n.tr("legacy.pip_22")
                 didWarnAudioFallback = true
             }
         }
@@ -574,7 +574,7 @@ final class CameraEngine: NSObject, ObservableObject {
                 }
             } catch {
                 DispatchQueue.main.async {
-                    self.infoMessage = "摄像头会话初始化失败，已自动回退：\(error.localizedDescription)"
+                    self.infoMessage = L10n.f("fmt.pip.session_init_failed", error.localizedDescription)
                     if self.isRecording {
                         self.sessionSnapshot = nil
                         self.refreshSources()
@@ -634,8 +634,8 @@ final class CameraEngine: NSObject, ObservableObject {
         }
         if !didWarnVideoFallback {
             infoMessage = includeMovieOutput
-                ? "当前 PiP 摄像头不可用，已自动回退为仅屏幕录制。"
-                : "所选摄像头不可用，等待自动回退。"
+                ? L10n.tr("legacy.pip_14")
+                : L10n.tr("legacy.key_119")
             didWarnVideoFallback = true
         }
     }
@@ -830,13 +830,13 @@ extension CameraEngine {
         var errorDescription: String? {
             switch self {
             case .notAuthorized:
-                return "未授权摄像头权限。"
+                return L10n.tr("legacy.key_163")
             case .noCamera:
-                return "未找到可用摄像头。"
+                return L10n.tr("legacy.key_162")
             case .noActiveConnection:
-                return "摄像头连接不可用。"
+                return L10n.tr("legacy.key_145")
             case .notRecording:
-                return "摄像头当前未在录制。"
+                return L10n.tr("legacy.key_135")
             }
         }
     }

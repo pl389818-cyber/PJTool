@@ -12,32 +12,37 @@ enum SettingsSection: String, CaseIterable, Identifiable {
     case pipCamera
     case screenDrawing
     case videoCutting
+    case appSettings
 
     var id: String { rawValue }
 
     var title: String {
         switch self {
         case .recording:
-            return "录屏"
+            return L10n.tr("section.recording.title")
         case .pipCamera:
-            return "PiP 摄像"
+            return L10n.tr("section.pipCamera.title")
         case .screenDrawing:
-            return "屏幕画图"
+            return L10n.tr("section.screenDrawing.title")
         case .videoCutting:
-            return "视频剪切"
+            return L10n.tr("section.videoCutting.title")
+        case .appSettings:
+            return L10n.tr("section.settings.title")
         }
     }
 
     var subtitle: String {
         switch self {
         case .recording:
-            return "主屏录制"
+            return L10n.tr("section.recording.subtitle")
         case .pipCamera:
-            return "设备与预览"
+            return L10n.tr("section.pipCamera.subtitle")
         case .screenDrawing:
-            return "透明画布工具条"
+            return L10n.tr("section.screenDrawing.subtitle")
         case .videoCutting:
-            return "智能裁剪弹窗"
+            return L10n.tr("section.videoCutting.subtitle")
+        case .appSettings:
+            return L10n.tr("section.settings.subtitle")
         }
     }
 
@@ -51,6 +56,8 @@ enum SettingsSection: String, CaseIterable, Identifiable {
             return "pencil.and.scribble"
         case .videoCutting:
             return "scissors"
+        case .appSettings:
+            return "gearshape"
         }
     }
 }

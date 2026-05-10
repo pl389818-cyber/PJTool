@@ -23,23 +23,23 @@ enum VideoCuttingAudioEQPreset: String, CaseIterable, Identifiable, Codable {
     var title: String {
         switch self {
         case .balanced:
-            return "平缓"
+            return L10n.tr("legacy.key_95")
         case .vocalBoost:
-            return "人声增强"
+            return L10n.tr("legacy.key_7")
         case .musicBoost:
-            return "音乐增强"
+            return L10n.tr("legacy.key_219")
         case .loudness:
-            return "响度"
+            return L10n.tr("legacy.key_38")
         case .humReduction:
-            return "嗡嗡声减弱"
+            return L10n.tr("legacy.key_39")
         case .bassBoost:
-            return "低音增强"
+            return L10n.tr("legacy.key_9")
         case .bassCut:
-            return "低音减弱"
+            return L10n.tr("legacy.key_8")
         case .trebleBoost:
-            return "高音增强"
+            return L10n.tr("legacy.key_227")
         case .trebleCut:
-            return "高音减弱"
+            return L10n.tr("legacy.key_226")
         }
     }
 }

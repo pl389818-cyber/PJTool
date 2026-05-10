@@ -14,7 +14,7 @@ import ScreenCaptureKit
 @MainActor
 final class ScreenRecorderEngine: NSObject, ObservableObject {
     @Published private(set) var state: RecordingState = .idle
-    @Published private(set) var statusMessage: String = "待机"
+    @Published private(set) var statusMessage: String = L10n.tr("legacy.key_115")
     @Published private(set) var lastOutputURL: URL?
     @Published private(set) var lastArtifact: RecordingArtifact?
 
@@ -57,7 +57,7 @@ final class ScreenRecorderEngine: NSObject, ObservableObject {
             _ = try? await cameraEngine.stopRecording()
         }
         state = .preparing
-        statusMessage = "准备录屏..."
+        statusMessage = L10n.tr("legacy.key_21")
         currentRequest = request
         lastArtifact = nil
 
@@ -102,7 +102,7 @@ final class ScreenRecorderEngine: NSObject, ObservableObject {
                 } catch {
                     cameraEngine.onProcessingSample = nil
                     currentFaceKeyframes = []
-                    statusMessage = "摄像头接入异常，已自动降级为仅屏幕录制。"
+                    statusMessage = L10n.tr("legacy.key_136")
                 }
             }
 
@@ -118,17 +118,17 @@ final class ScreenRecorderEngine: NSObject, ObservableObject {
             includesPiPWindowInScreenCapture = streamBundle.includesPiPWindowInScreenCapture
             hasRecordingOutputStarted = false
 
-            statusMessage = "等待系统开始录屏..."
+            statusMessage = L10n.tr("legacy.key_190")
             try await streamBundle.stream.startCapture()
             try await waitForRecordingStart()
             state = .recording
-            let recordingStatus = cameraTrackEnabled ? "录屏中（分轨录制）" : "录屏中（仅屏幕轨）"
+            let recordingStatus = cameraTrackEnabled ? L10n.tr("legacy.key_114") : L10n.tr("legacy.key_113")
             let withMic = request.microphoneDeviceID != nil
-            let inputStatus = withMic ? "麦克风：开启" : "麦克风：关闭"
-            let pipCaptureStatus = includesPiPWindowInScreenCapture ? "屏幕含 PiP 小窗" : "屏幕不含 PiP 小窗"
+            let inputStatus = withMic ? L10n.tr("legacy.key_231") : L10n.tr("legacy.key_230")
+            let pipCaptureStatus = includesPiPWindowInScreenCapture ? L10n.tr("legacy.pip_11") : L10n.tr("legacy.pip_10")
             statusMessage = streamBundle.warnsAppWindowExclusion
-                ? "\(recordingStatus)，\(inputStatus)，\(pipCaptureStatus)，录屏控制窗可能进入画面。"
-                : "\(recordingStatus)，\(inputStatus)，\(pipCaptureStatus)"
+                ? L10n.f("fmt.recording.status_with_warning", recordingStatus, inputStatus, pipCaptureStatus)
+                : L10n.f("fmt.recording.status", recordingStatus, inputStatus, pipCaptureStatus)
         } catch {
             cancelPendingContinuations(with: error)
             if cameraEngine.isRecording {
@@ -136,8 +136,8 @@ final class ScreenRecorderEngine: NSObject, ObservableObject {
             }
             cameraEngine.stopPreview()
             cleanupTemporaryState()
-            state = .failed(error.localizedDescription)
-            statusMessage = "启动失败：\(error.localizedDescription)"
+            state = .failed(presentableErrorMessage(error))
+            statusMessage = L10n.f("fmt.recording.start_failed", presentableErrorMessage(error))
         }
     }
 
@@ -145,7 +145,7 @@ final class ScreenRecorderEngine: NSObject, ObservableObject {
         guard !state.isBusy else { return }
         guard stream != nil else { return }
         state = .stopping
-        statusMessage = "停止录制..."
+        statusMessage = L10n.tr("legacy.key_14")
 
         let layout = currentRequest?.pipLayout ?? .default
         cameraEngine.onProcessingSample = nil
@@ -183,7 +183,7 @@ final class ScreenRecorderEngine: NSObject, ObservableObject {
                 currentFaceKeyframes = []
             }
 
-            let screenURL = try ensureURL(screenRawURL, name: "屏幕轨")
+            let screenURL = try ensureURL(screenRawURL, name: L10n.tr("legacy.key_79"))
             let mergedURL = try makeMergedURL()
             let finalURL = try await compositionEngine.mergeScreenAndCamera(
                 screenURL: screenURL,
@@ -202,8 +202,8 @@ final class ScreenRecorderEngine: NSObject, ObservableObject {
             lastArtifact = artifact
             lastOutputURL = finalURL
             statusMessage = stopScreenCaptureTimedOut
-                ? "录制完成：已保存成片（停止阶段触发超时兜底）"
-                : "录制完成：已保存成片"
+                ? L10n.tr("legacy.key_110")
+                : L10n.tr("legacy.key_109")
             state = .idle
             cleanupTemporaryState()
         } catch {
@@ -211,8 +211,8 @@ final class ScreenRecorderEngine: NSObject, ObservableObject {
                 _ = try? await cameraEngine.stopRecording()
             }
             cameraEngine.stopPreview()
-            state = .failed(error.localizedDescription)
-            statusMessage = "停止失败：\(error.localizedDescription)"
+            state = .failed(presentableErrorMessage(error))
+            statusMessage = L10n.f("fmt.recording.stop_failed", presentableErrorMessage(error))
             cleanupTemporaryState()
         }
     }
@@ -235,7 +235,7 @@ final class ScreenRecorderEngine: NSObject, ObservableObject {
             try await stream.updateContentFilter(filterContext.filter)
             includesPiPWindowInScreenCapture = filterContext.includesPiPWindowInScreenCapture
         } catch {
-            statusMessage = "录屏中：更新 PiP 小窗捕获失败（\(error.localizedDescription)）"
+            statusMessage = L10n.f("fmt.recording.update_pip_capture_failed", presentableErrorMessage(error))
         }
     }
 
@@ -391,7 +391,7 @@ final class ScreenRecorderEngine: NSObject, ObservableObject {
                 throw RecorderError.startTimedOut
             }
 
-            let result = try await group.next()
+            let result: Void? = try await group.next()
             group.cancelAll()
             if let result {
                 return result
@@ -493,6 +493,13 @@ final class ScreenRecorderEngine: NSObject, ObservableObject {
         resumeRecordingStartContinuation(with: .failure(error))
         resumeScreenStopContinuation(with: .failure(error))
     }
+
+    private func presentableErrorMessage(_ error: Error) -> String {
+        if let recorderError = error as? RecorderError {
+            return recorderError.displayMessage
+        }
+        return error.localizedDescription
+    }
 }
 
 extension ScreenRecorderEngine: SCStreamDelegate {
@@ -501,7 +508,7 @@ extension ScreenRecorderEngine: SCStreamDelegate {
             guard let self else { return }
             self.cancelPendingContinuations(with: error)
             self.state = .failed(error.localizedDescription)
-            self.statusMessage = "录屏异常停止：\(error.localizedDescription)"
+            self.statusMessage = L10n.f("fmt.recording.unexpected_stop", error.localizedDescription)
         }
     }
 }
@@ -553,22 +560,23 @@ extension ScreenRecorderEngine {
         let includesPiPWindowInScreenCapture: Bool
     }
 
-    enum RecorderError: LocalizedError {
+    enum RecorderError: Error {
         case noDisplay
         case missingIntermediate(String)
         case startTimedOut
         case stopTimedOut
 
-        var errorDescription: String? {
+        @MainActor
+        var displayMessage: String {
             switch self {
             case .noDisplay:
-                return "没有可用显示器，无法启动录屏。"
+                return L10n.tr("legacy.key_173")
             case let .missingIntermediate(name):
-                return "缺少中间文件：\(name)"
+                return L10n.f("fmt.recording.missing_intermediate", name)
             case .startTimedOut:
-                return "系统未在预期时间内开始录屏，请检查屏幕录制权限与当前显示器状态。"
+                return L10n.tr("legacy.key_192")
             case .stopTimedOut:
-                return "停止录屏超时。"
+                return L10n.tr("legacy.key_16")
             }
         }
     }

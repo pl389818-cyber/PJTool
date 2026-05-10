@@ -103,7 +103,7 @@ final class ScreenDrawToolbarWindowController: NSObject {
             backing: .buffered,
             defer: false
         )
-        panel.title = "屏幕画图工具条"
+        panel.title = L10n.tr("legacy.key_68")
         panel.isMovableByWindowBackground = true
         panel.isFloatingPanel = true
         panel.hidesOnDeactivate = false
@@ -426,7 +426,7 @@ private struct ScreenDrawToolbarView: View {
 
     private var closeDotButton: some View {
         CloseDotButton(action: onCloseRequested)
-            .help("关闭屏幕画图")
+            .help(L10n.tr("legacy.key_19"))
     }
 
     private func colorButton(_ preset: DrawColorPreset) -> some View {

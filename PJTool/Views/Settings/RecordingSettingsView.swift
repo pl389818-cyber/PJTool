@@ -15,7 +15,7 @@ struct RecordingSettingsView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
-            sectionHeader("录屏", subtitle: "主屏录制、录制控制与录音输入")
+            sectionHeader(L10n.tr("legacy.key_112"), subtitle: L10n.tr("legacy.key_5"))
 
             recordingControlCard
             permissionStatusCard
@@ -37,7 +37,7 @@ struct RecordingSettingsView: View {
                 .disabled(actionButtonDisabled)
 
                 if let outputURL = appCoordinator.recorder.lastOutputURL {
-                    Button("打开成片") {
+                    Button(L10n.tr("legacy.key_123")) {
                         NSWorkspace.shared.activateFileViewerSelecting([outputURL])
                     }
                     .buttonStyle(.bordered)
@@ -59,12 +59,12 @@ struct RecordingSettingsView: View {
 
     private var actionButtonTitle: String {
         if appCoordinator.recorderState.isRecording {
-            return "停止录屏"
+            return L10n.tr("legacy.key_15")
         }
         if appCoordinator.isRecordingArmed {
-            return "等待小相机开始..."
+            return L10n.tr("legacy.key_189")
         }
-        return "弹出录屏小相机"
+        return L10n.tr("legacy.key_102")
     }
 
     private var actionButtonDisabled: Bool {
@@ -77,18 +77,18 @@ struct RecordingSettingsView: View {
     private var permissionStatusCard: some View {
         card {
             VStack(alignment: .leading, spacing: 6) {
-                statusRow("麦克风", isAudioAuthorized, audioPermissionText)
-                statusRow("摄像头", isCameraAuthorized, cameraPermissionText)
+                statusRow(L10n.tr("legacy.key_228"), isAudioAuthorized, audioPermissionText)
+                statusRow(L10n.tr("legacy.key_134"), isCameraAuthorized, cameraPermissionText)
             }
         }
     }
 
     private var microphoneCard: some View {
         card {
-            Text("录制麦克风")
+            Text(L10n.tr("legacy.key_111"))
                 .font(.headline)
 
-            Picker("输入设备", selection: audioSelectionBinding) {
+            Picker(L10n.tr("legacy.key_205"), selection: audioSelectionBinding) {
                 ForEach(appCoordinator.audioEngine.sources) { source in
                     let label = source.badgeText.isEmpty ? source.name : "\(source.name) (\(source.badgeText))"
                     Text(label).tag(source.id)
@@ -98,9 +98,9 @@ struct RecordingSettingsView: View {
             .disabled(!isAudioAuthorized || appCoordinator.audioEngine.sources.isEmpty)
 
             HStack(spacing: 12) {
-                Button("刷新设备") { appCoordinator.audioEngine.refreshSources() }
+                Button(L10n.tr("legacy.key_31")) { appCoordinator.audioEngine.refreshSources() }
 
-                Button(appCoordinator.audioEngine.isMonitoring ? "停止监听" : "开始监听") {
+                Button(appCoordinator.audioEngine.isMonitoring ? L10n.tr("legacy.key_17") : L10n.tr("legacy.key_99")) {
                     if appCoordinator.audioEngine.isMonitoring {
                         appCoordinator.audioEngine.stopMonitoring()
                     } else {
@@ -110,18 +110,18 @@ struct RecordingSettingsView: View {
                 .disabled(!isAudioAuthorized || appCoordinator.audioEngine.sources.isEmpty)
 
                 if !isAudioAuthorized {
-                    Button("请求麦克风权限") { appCoordinator.audioEngine.requestMicrophoneAccess() }
+                    Button(L10n.tr("legacy.key_204")) { appCoordinator.audioEngine.requestMicrophoneAccess() }
                 }
             }
 
             AudioLevelMeterView(level: appCoordinator.audioEngine.level)
                 .frame(height: 12)
-            Text("输入电平：\(Int(appCoordinator.audioEngine.level * 100))")
+            Text(L10n.f("fmt.input.level", Int(appCoordinator.audioEngine.level * 100)))
                 .font(.footnote)
                 .foregroundStyle(.secondary)
 
             if let infoMessage = appCoordinator.audioEngine.infoMessage, !infoMessage.isEmpty {
-                Text("设备状态：\(infoMessage)")
+                Text(L10n.f("fmt.device.status", infoMessage))
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             }
@@ -138,21 +138,21 @@ struct RecordingSettingsView: View {
 
     private var audioPermissionText: String {
         switch appCoordinator.audioEngine.authorizationStatus {
-        case .authorized: return "已授权"
-        case .notDetermined: return "未请求"
-        case .denied: return "已拒绝"
-        case .restricted: return "受限制"
-        @unknown default: return "未知"
+        case .authorized: return L10n.tr("legacy.key_90")
+        case .notDetermined: return L10n.tr("legacy.key_166")
+        case .denied: return L10n.tr("legacy.key_89")
+        case .restricted: return L10n.tr("legacy.key_36")
+        @unknown default: return L10n.tr("legacy.key_164")
         }
     }
 
     private var cameraPermissionText: String {
         switch appCoordinator.pipPreviewRuntime.authorizationStatus {
-        case .authorized: return "已授权"
-        case .notDetermined: return "未请求"
-        case .denied: return "已拒绝"
-        case .restricted: return "受限制"
-        @unknown default: return "未知"
+        case .authorized: return L10n.tr("legacy.key_90")
+        case .notDetermined: return L10n.tr("legacy.key_166")
+        case .denied: return L10n.tr("legacy.key_89")
+        case .restricted: return L10n.tr("legacy.key_36")
+        @unknown default: return L10n.tr("legacy.key_164")
         }
     }
 

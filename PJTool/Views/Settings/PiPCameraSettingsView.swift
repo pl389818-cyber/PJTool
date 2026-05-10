@@ -22,15 +22,18 @@ struct PiPCameraSettingsView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
-            sectionHeader("PiP 摄像", subtitle: "原生悬浮预览、设备选择、麦克风监听与窗口比例")
+            sectionHeader(L10n.tr("legacy.pip_3"), subtitle: L10n.tr("legacy.key_34"))
             pipTopActionRow
 
             card {
                 HStack(alignment: .top, spacing: 12) {
                     VStack(alignment: .leading, spacing: 4) {
-                        Text("预览控制台")
+                        Text(L10n.tr("legacy.key_222"))
                             .font(.headline)
                         Text(previewConsoleSummary)
+                            .font(.footnote)
+                            .foregroundStyle(.secondary)
+                        Text(L10n.tr("pip.hotkey.tip"))
                             .font(.footnote)
                             .foregroundStyle(.secondary)
                     }
@@ -40,10 +43,10 @@ struct PiPCameraSettingsView: View {
             }
 
             card {
-                Text("设备选择")
+                Text(L10n.tr("legacy.key_199"))
                     .font(.headline)
 
-                Picker("摄像头设备", selection: cameraSelectionBinding) {
+                Picker(L10n.tr("legacy.key_142"), selection: cameraSelectionBinding) {
                     ForEach(pipRuntime.sources) { source in
                         let label = source.badgeText.isEmpty ? source.name : "\(source.name) (\(source.badgeText))"
                         Text(label).tag(source.id)
@@ -52,7 +55,7 @@ struct PiPCameraSettingsView: View {
                 .pickerStyle(.menu)
                 .disabled(!isCameraAuthorized || pipRuntime.sources.isEmpty)
 
-                Picker("PiP 麦克风", selection: cameraAudioSelectionBinding) {
+                Picker(L10n.tr("legacy.pip_9"), selection: cameraAudioSelectionBinding) {
                     ForEach(pipRuntime.audioSources) { source in
                         let label = source.badgeText.isEmpty ? source.name : "\(source.name) (\(source.badgeText))"
                         Text(label).tag(source.id)
@@ -66,18 +69,18 @@ struct PiPCameraSettingsView: View {
                     .foregroundStyle(.secondary)
 
                 HStack(spacing: 12) {
-                    Button("刷新设备") {
+                    Button(L10n.tr("legacy.key_31")) {
                         pipRuntime.refreshSources()
                         pipRuntime.refreshAudioSources()
                     }
                     if !isCameraAuthorized {
-                        Button("请求摄像头权限") { pipRuntime.requestCameraAccess() }
+                        Button(L10n.tr("legacy.key_203")) { pipRuntime.requestCameraAccess() }
                     }
                     if !isCameraAudioAuthorized {
-                        Button("请求 PiP 麦克风权限") { pipRuntime.requestMicrophoneAccess() }
+                        Button(L10n.tr("legacy.pip_27")) { pipRuntime.requestMicrophoneAccess() }
                     }
-                    Button("打开系统隐私设置") { openPrivacySettings() }
-                    Button(showingDiagnostics ? "诊断中..." : "运行应用内诊断") {
+                    Button(L10n.tr("legacy.key_125")) { openPrivacySettings() }
+                    Button(showingDiagnostics ? L10n.tr("legacy.key_200") : L10n.tr("legacy.key_208")) {
                         runInAppDiagnostics()
                     }
                     .disabled(showingDiagnostics)
@@ -89,13 +92,13 @@ struct PiPCameraSettingsView: View {
 
                 if pipRuntime.sources.isEmpty {
                     statusBanner(
-                        title: isCameraAuthorized ? "未发现摄像头设备" : "摄像头权限未就绪",
+                        title: isCameraAuthorized ? L10n.tr("legacy.key_160") : L10n.tr("legacy.key_139"),
                         detail: cameraEmptyStateText
                     )
                 } else if pipRuntime.sources.allSatisfy({ !$0.isAvailable }) {
                     statusBanner(
-                        title: "摄像头设备均离线",
-                        detail: "已枚举到摄像头条目，但当前都不可用。请检查是否被其他应用占用，或重新连接外设 / iPhone Continuity Camera。"
+                        title: L10n.tr("legacy.key_143"),
+                        detail: L10n.tr("legacy.iphone_continuity_camera")
                     )
                 }
 
@@ -107,16 +110,16 @@ struct PiPCameraSettingsView: View {
                         .foregroundStyle(.secondary)
                 }
 
-                Text("当前状态：\(appCoordinator.pipStatusMessage)")
+                Text(L10n.f("fmt.pip.current_status", appCoordinator.pipStatusMessage))
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             }
 
             card {
-                Text("窗口比例与自动放缩")
+                Text(L10n.tr("legacy.key_187"))
                     .font(.headline)
 
-                Toggle("选中置顶", isOn: Binding(
+                Toggle(L10n.tr("legacy.key_212"), isOn: Binding(
                     get: { appCoordinator.pipWindowConfig.isAlwaysOnTop },
                     set: { newValue in
                         var next = appCoordinator.pipWindowConfig
@@ -136,7 +139,7 @@ struct PiPCameraSettingsView: View {
                     ))
                     .labelsHidden()
 
-                    Text("PiP 摄像标题栏")
+                    Text(L10n.tr("legacy.pip_4"))
                         .font(.subheadline.weight(.medium))
                     TextField(
                         PiPWindowConfig.defaultWindowTitle,
@@ -153,7 +156,7 @@ struct PiPCameraSettingsView: View {
                     .frame(maxWidth: .infinity)
                 }
 
-                Picker("边框样式", selection: Binding(
+                Picker(L10n.tr("legacy.key_207"), selection: Binding(
                     get: { appCoordinator.pipWindowConfig.frameStyle },
                     set: { newValue in
                         var next = appCoordinator.pipWindowConfig
@@ -162,40 +165,48 @@ struct PiPCameraSettingsView: View {
                     }
                 )) {
                     ForEach(PiPWindowFrameStyle.allCases, id: \.self) { style in
-                        Text(style.rawValue).tag(style)
+                        Text(style.displayTitle).tag(style)
                     }
                 }
                 .pickerStyle(.segmented)
 
-                Picker("画面比例", selection: Binding(
+                Picker(L10n.tr("legacy.key_184"), selection: Binding(
                     get: { appCoordinator.pipAspectRatio },
                     set: { appCoordinator.pipAspectRatio = $0 }
                 )) {
                     ForEach(PiPAspectRatio.allCases) { ratio in
-                        Text(ratio.rawValue).tag(ratio)
+                        Text(ratio.displayTitle).tag(ratio)
                     }
                 }
                 .pickerStyle(.segmented)
 
-                Text("当前布局：x \(appCoordinator.pipLayout.normalizedRect.minX, specifier: "%.2f") · y \(appCoordinator.pipLayout.normalizedRect.minY, specifier: "%.2f") · w \(appCoordinator.pipLayout.normalizedRect.width, specifier: "%.2f") · h \(appCoordinator.pipLayout.normalizedRect.height, specifier: "%.2f")")
+                Text(
+                    L10n.f(
+                        "fmt.pip.current_layout",
+                        appCoordinator.pipLayout.normalizedRect.minX,
+                        appCoordinator.pipLayout.normalizedRect.minY,
+                        appCoordinator.pipLayout.normalizedRect.width,
+                        appCoordinator.pipLayout.normalizedRect.height
+                    )
+                )
                     .font(.footnote)
                     .foregroundStyle(.secondary)
-                Text("当前标题：\(appCoordinator.pipWindowConfig.resolvedWindowTitle)")
+                Text(L10n.f("fmt.pip.current_title", appCoordinator.pipWindowConfig.resolvedWindowTitle))
                     .font(.footnote)
                     .foregroundStyle(.secondary)
-                Text("当前边框：\(appCoordinator.pipWindowConfig.frameStyle.rawValue)")
+                Text(L10n.f("fmt.pip.current_frame", appCoordinator.pipWindowConfig.frameStyle.displayTitle))
                     .font(.footnote)
                     .foregroundStyle(.secondary)
-                Text("窗口默认以 240x240 弹出，后续可直接拖拽边缘或滚轮自由缩放。")
+                Text(L10n.tr("legacy.k_240x240"))
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             }
 
             card {
-                Text("PiP 预览监听")
+                Text(L10n.tr("legacy.pip_8"))
                     .font(.headline)
 
-                Toggle("预览监听静音", isOn: Binding(
+                Toggle(L10n.tr("legacy.key_223"), isOn: Binding(
                     get: { appCoordinator.pipAudioPreviewConfig.isPreviewMuted },
                     set: { newValue in
                         var next = appCoordinator.pipAudioPreviewConfig
@@ -205,7 +216,7 @@ struct PiPCameraSettingsView: View {
                 ))
 
                 HStack(spacing: 10) {
-                    Text("预览音量")
+                    Text(L10n.tr("legacy.key_224"))
                     Slider(value: Binding(
                         get: { appCoordinator.pipAudioPreviewConfig.previewVolume },
                         set: { newValue in
@@ -223,13 +234,19 @@ struct PiPCameraSettingsView: View {
                 AudioLevelMeterView(level: pipRuntime.previewAudioLevel)
                     .frame(height: 12)
 
-                Text("监听状态：\(appCoordinator.pipAudioPreviewConfig.isPreviewMuted ? "静音（沙盒模式仅电平）" : "监听中") · Level \(Int(pipRuntime.previewAudioLevel * 100))")
+                Text(
+                    L10n.f(
+                        "legacy.pip_status_line_with_level",
+                        appCoordinator.pipAudioPreviewConfig.isPreviewMuted ? L10n.tr("legacy.key_218") : L10n.tr("legacy.key_185"),
+                        Int(pipRuntime.previewAudioLevel * 100)
+                    )
+                )
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             }
 
             if let infoMessage = pipRuntime.infoMessage, !infoMessage.isEmpty {
-                Text("设备状态：\(infoMessage)")
+                Text(L10n.f("fmt.device.status", infoMessage))
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             }
@@ -253,20 +270,20 @@ struct PiPCameraSettingsView: View {
     private var pipTopActionRow: some View {
         HStack(spacing: 12) {
             VStack(alignment: .leading, spacing: 4) {
-                Text("桌面悬浮预览")
+                Text(L10n.tr("legacy.key_168"))
                     .font(.title3.weight(.semibold))
-                Text("弹出原生前置 PiP 窗口，在桌面工作流中保持可见。")
+                Text(L10n.tr("legacy.pip_13"))
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             }
             Spacer(minLength: 0)
             if appCoordinator.isPiPPreviewVisible {
-                Button("收起 PiP 摄像") {
+                Button(L10n.tr("legacy.pip_25")) {
                     appCoordinator.hidePiPPreview()
                 }
                 .buttonStyle(.bordered)
             } else {
-                Button("弹出 PiP 摄像") {
+                Button(L10n.tr("legacy.pip_12")) {
                     appCoordinator.activatePiPPreview()
                 }
                 .buttonStyle(.borderedProminent)
@@ -278,13 +295,13 @@ struct PiPCameraSettingsView: View {
         let label: String
         let tint: Color
         if appCoordinator.isPiPPreviewVisible {
-            label = "预览中"
+            label = L10n.tr("legacy.key_221")
             tint = .green
         } else if appCoordinator.enableCameraPiP {
-            label = "已就绪"
+            label = L10n.tr("legacy.key_86")
             tint = .blue
         } else {
-            label = "未弹出"
+            label = L10n.tr("legacy.key_161")
             tint = .secondary
         }
 
@@ -301,22 +318,22 @@ struct PiPCameraSettingsView: View {
 
     private var previewConsoleSummary: String {
         if appCoordinator.isPiPPreviewVisible {
-            return "悬浮预览已显示，可继续切换设备、比例和监听。"
+            return L10n.tr("legacy.key_118")
         }
         if appCoordinator.enableCameraPiP {
-            return "PiP 已就绪，再次点击右上角可重新弹出悬浮预览。"
+            return L10n.tr("legacy.pip")
         }
-        return "当前未显示悬浮预览。点击右上角会自动启用并弹出 PiP 摄像。"
+        return L10n.tr("legacy.pip_17")
     }
 
     private var selectedDeviceSummary: String {
         let selectedCamera = pipRuntime.sources.first(where: {
             $0.id == pipRuntime.selectedSourceID
-        })?.name ?? "未选择"
+        })?.name ?? L10n.tr("legacy.key_167")
         let selectedMic = pipRuntime.audioSources.first(where: {
             $0.id == pipRuntime.selectedAudioSourceID
-        })?.name ?? "未选择"
-        return "当前摄像头：\(selectedCamera) · 当前 PiP 麦克风：\(selectedMic)"
+        })?.name ?? L10n.tr("legacy.key_167")
+        return L10n.f("fmt.pip.current_device_summary", selectedCamera, selectedMic)
     }
 
     private var needsPermissionRecovery: Bool {
@@ -328,15 +345,15 @@ struct PiPCameraSettingsView: View {
     @ViewBuilder
     private var permissionRecoveryGuide: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text("恢复步骤")
+            Text(L10n.tr("legacy.key_117"))
                 .font(.subheadline.weight(.semibold))
-            Text("1. 先点“请求摄像头权限”和“请求 PiP 麦克风权限”。")
+            Text(L10n.tr("legacy.k_1_pip"))
                 .font(.footnote)
                 .foregroundStyle(.secondary)
-            Text("2. 若系统拒绝，点“打开系统隐私设置”手动允许 PJTool。")
+            Text(L10n.tr("legacy.k_2_pjtool"))
                 .font(.footnote)
                 .foregroundStyle(.secondary)
-            Text("3. 回到应用后点“刷新设备”或“运行设备诊断”确认设备可见。")
+            Text(L10n.tr("legacy.k_3_2"))
                 .font(.footnote)
                 .foregroundStyle(.secondary)
         }
@@ -363,15 +380,15 @@ struct PiPCameraSettingsView: View {
     private var cameraEmptyStateText: String {
         switch pipRuntime.authorizationStatus {
         case .notDetermined:
-            return "应用尚未获得摄像头权限。点击“请求摄像头权限”后，再执行一次“刷新设备”。"
+            return L10n.tr("legacy.key_97")
         case .denied:
-            return "系统已拒绝摄像头访问。请到系统设置 > 隐私与安全性 > 摄像头中开启 PJTool。"
+            return L10n.tr("legacy.pjtool_6")
         case .restricted:
-            return "当前环境限制了摄像头访问，应用无法枚举任何 PiP 摄像头。"
+            return L10n.tr("legacy.pip_19")
         case .authorized:
-            return "权限已正常，但当前没有枚举到设备。已补充 macOS 的外接/Continuity 发现逻辑；如果仍为空，请检查设备是否真的出现在系统相机列表中。"
+            return L10n.tr("legacy.macos_continuity")
         @unknown default:
-            return "摄像头状态未知，请刷新设备或重启应用后再试。"
+            return L10n.tr("legacy.key_141")
         }
     }
 
@@ -424,28 +441,47 @@ struct PiPCameraSettingsView: View {
     @ViewBuilder
     private var diagnosticSummary: some View {
         VStack(alignment: .leading, spacing: 5) {
-            Text("设备诊断")
+            Text(L10n.tr("legacy.key_198"))
                 .font(.subheadline.weight(.semibold))
 
-            Text("视频授权：\(authText(for: pipRuntime.authorizationStatus))")
+            Text(L10n.f("fmt.pip.diag.video_auth", authText(for: pipRuntime.authorizationStatus)))
                 .font(.footnote)
                 .foregroundStyle(.secondary)
-            Text("视频枚举：\(pipRuntime.lastVideoEnumeratedCount)（可用 \(pipRuntime.lastVideoAvailableCount)）")
+            Text(L10n.f("fmt.pip.diag.video_enum", pipRuntime.lastVideoEnumeratedCount, pipRuntime.lastVideoAvailableCount))
                 .font(.footnote)
                 .foregroundStyle(.secondary)
-            Text("视频发现源：Discovery \(pipRuntime.lastVideoDiscoveryCount) · LegacyFallback \(yesNo(pipRuntime.lastVideoUsedLegacyFallback)) · Default并入 \(yesNo(pipRuntime.lastVideoIncludedSystemDefault))")
+            Text(
+                L10n.f(
+                    "fmt.pip.diag.video_discovery",
+                    pipRuntime.lastVideoDiscoveryCount,
+                    yesNo(pipRuntime.lastVideoUsedLegacyFallback),
+                    yesNo(pipRuntime.lastVideoIncludedSystemDefault)
+                )
+            )
                 .font(.footnote)
                 .foregroundStyle(.secondary)
-            Text("音频授权：\(authText(for: pipRuntime.microphoneAuthorizationStatus))")
+            Text(L10n.f("fmt.pip.diag.audio_auth", authText(for: pipRuntime.microphoneAuthorizationStatus)))
                 .font(.footnote)
                 .foregroundStyle(.secondary)
-            Text("音频枚举：\(pipRuntime.lastAudioEnumeratedCount)（可用 \(pipRuntime.lastAudioAvailableCount)）")
+            Text(L10n.f("fmt.pip.diag.audio_enum", pipRuntime.lastAudioEnumeratedCount, pipRuntime.lastAudioAvailableCount))
                 .font(.footnote)
                 .foregroundStyle(.secondary)
-            Text("音频发现源：Discovery \(pipRuntime.lastAudioDiscoveryCount) · LegacyFallback \(yesNo(pipRuntime.lastAudioUsedLegacyFallback))")
+            Text(
+                L10n.f(
+                    "fmt.pip.diag.audio_discovery",
+                    pipRuntime.lastAudioDiscoveryCount,
+                    yesNo(pipRuntime.lastAudioUsedLegacyFallback)
+                )
+            )
                 .font(.footnote)
                 .foregroundStyle(.secondary)
-            Text("最后刷新：视频 \(timestampText(pipRuntime.lastVideoRefreshAt)) · 音频 \(timestampText(pipRuntime.lastAudioRefreshAt))")
+            Text(
+                L10n.f(
+                    "fmt.pip.diag.last_refresh",
+                    timestampText(pipRuntime.lastVideoRefreshAt),
+                    timestampText(pipRuntime.lastAudioRefreshAt)
+                )
+            )
                 .font(.footnote)
                 .foregroundStyle(.secondary)
         }
@@ -461,7 +497,7 @@ struct PiPCameraSettingsView: View {
 
     private func runInAppDiagnostics() {
         showingDiagnostics = true
-        diagnosticFeedback = "正在运行设备诊断..."
+        diagnosticFeedback = L10n.tr("legacy.key_171")
         pipRuntime.refreshSources()
         pipRuntime.refreshAudioSources()
 
@@ -486,16 +522,25 @@ struct PiPCameraSettingsView: View {
             && videoTotal > 0
             && audioTotal > 0
         let result = pass ? "PASS" : "BLOCKED"
-        return "应用内诊断 \(result) · videoAuth=\(videoAuth) audioAuth=\(audioAuth) · video \(videoAvailable)/\(videoTotal) · audio \(audioAvailable)/\(audioTotal)"
+        return L10n.f(
+            "fmt.pip.diag.summary",
+            result,
+            videoAuth,
+            audioAuth,
+            videoAvailable,
+            videoTotal,
+            audioAvailable,
+            audioTotal
+        )
     }
 
     private func authText(for status: AVAuthorizationStatus) -> String {
         switch status {
-        case .authorized: return "已授权"
-        case .notDetermined: return "未请求"
-        case .denied: return "已拒绝"
-        case .restricted: return "受限制"
-        @unknown default: return "未知"
+        case .authorized: return L10n.tr("legacy.key_90")
+        case .notDetermined: return L10n.tr("legacy.key_166")
+        case .denied: return L10n.tr("legacy.key_89")
+        case .restricted: return L10n.tr("legacy.key_36")
+        @unknown default: return L10n.tr("legacy.key_164")
         }
     }
 

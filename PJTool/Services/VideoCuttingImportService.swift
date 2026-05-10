@@ -18,13 +18,13 @@ enum VideoCuttingImportError: LocalizedError {
     var errorDescription: String? {
         switch self {
         case .unsupportedDropPayload:
-            return "拖入失败：不支持的拖拽内容，请拖入 .mp4 或 .mov 文件。"
+            return L10n.tr("legacy.mp4_mov_2")
         case .resolveDroppedFileFailed:
-            return "拖入失败：无法解析拖入文件。"
+            return L10n.tr("legacy.key_132")
         case .importedFileNotReachable:
-            return "导入失败：视频文件不可访问。"
+            return L10n.tr("legacy.key_53")
         case .copyImportedFileFailed:
-            return "导入失败：无法复制视频文件到临时目录。"
+            return L10n.tr("legacy.key_50")
         }
     }
 }

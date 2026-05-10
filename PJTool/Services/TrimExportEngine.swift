@@ -176,15 +176,15 @@ extension TrimExportEngine {
         var errorDescription: String? {
             switch self {
             case .missingVideoTrack:
-                return "源视频没有可用视频轨道。"
+                return L10n.tr("legacy.key_175")
             case .compositionTrackFailed:
-                return "创建合成轨道失败。"
+                return L10n.tr("legacy.key_22")
             case .exportSessionFailed:
-                return "创建导出会话失败。"
+                return L10n.tr("legacy.key_23")
             case .exportFailed:
-                return "剪切导出失败。"
+                return L10n.tr("legacy.key_32")
             case .exportCancelled:
-                return "剪切导出已取消。"
+                return L10n.tr("legacy.key_33")
             }
         }
     }

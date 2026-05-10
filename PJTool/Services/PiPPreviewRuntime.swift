@@ -86,7 +86,7 @@ final class PiPPreviewRuntime: NSObject, ObservableObject {
                     return
                 }
                 self.authorizationStatus = status
-                self.infoMessage = granted ? "摄像头权限已授权，正在刷新设备..." : "摄像头权限未授权。"
+                self.infoMessage = granted ? L10n.tr("legacy.key_138") : L10n.tr("legacy.key_140")
                 self.refreshSources()
                 onResolved?()
             }
@@ -104,7 +104,7 @@ final class PiPPreviewRuntime: NSObject, ObservableObject {
                 if granted {
                     self.refreshAudioSources()
                 } else {
-                    self.infoMessage = "麦克风权限未授权（仅影响 PiP 监听与摄像头音轨）。"
+                    self.infoMessage = L10n.tr("legacy.pip_28")
                 }
                 onResolved?()
             }
@@ -165,7 +165,7 @@ final class PiPPreviewRuntime: NSObject, ObservableObject {
         guard selectedSourceID != id else { return }
         selectedSourceID = id
         if let source = sources.first(where: { $0.id == id }) {
-            infoMessage = "当前 PiP 摄像头：\(source.name)"
+            infoMessage = L10n.f("fmt.pip.current_camera", source.name)
         } else {
             infoMessage = nil
         }
@@ -178,7 +178,7 @@ final class PiPPreviewRuntime: NSObject, ObservableObject {
         guard selectedAudioSourceID != id else { return }
         selectedAudioSourceID = id
         if let source = audioSources.first(where: { $0.id == id }) {
-            infoMessage = "当前 PiP 麦克风：\(source.name)"
+            infoMessage = L10n.f("fmt.pip.current_microphone", source.name)
         } else {
             infoMessage = nil
         }
@@ -241,9 +241,9 @@ final class PiPPreviewRuntime: NSObject, ObservableObject {
                 guard let self else { return }
                 if let device = note.object as? AVCaptureDevice {
                     if device.hasMediaType(.video) {
-                        self.infoMessage = "检测到新摄像头：\(device.localizedName)"
+                        self.infoMessage = L10n.f("fmt.pip.new_camera_detected", device.localizedName)
                     } else if device.hasMediaType(.audio) {
-                        self.infoMessage = "检测到新音频设备：\(device.localizedName)"
+                        self.infoMessage = L10n.f("fmt.pip.new_audio_device_detected", device.localizedName)
                     }
                 }
                 self.refreshSources()
@@ -270,9 +270,9 @@ final class PiPPreviewRuntime: NSObject, ObservableObject {
                     return
                 }
                 if device.uniqueID == self.selectedSourceID {
-                    self.infoMessage = "当前 PiP 摄像头断开，已自动回退。"
+                    self.infoMessage = L10n.tr("legacy.pip_15")
                 } else if device.uniqueID == self.selectedAudioSourceID {
-                    self.infoMessage = "当前 PiP 麦克风断开，已自动回退。"
+                    self.infoMessage = L10n.tr("legacy.pip_16")
                 }
                 self.refreshSources()
                 self.refreshAudioSources()
@@ -297,7 +297,7 @@ final class PiPPreviewRuntime: NSObject, ObservableObject {
 
     private func rebuildPreviewSession(forceRestartRunningSession: Bool) {
         guard let sourceID = effectiveVideoSourceID() else {
-            infoMessage = "所选摄像头不可用，等待自动回退。"
+            infoMessage = L10n.tr("legacy.key_119")
             return
         }
 
@@ -383,7 +383,7 @@ final class PiPPreviewRuntime: NSObject, ObservableObject {
                 }
             } catch {
                 DispatchQueue.main.async {
-                    self.infoMessage = "摄像头会话初始化失败，已自动回退：\(error.localizedDescription)"
+                    self.infoMessage = L10n.f("fmt.pip.session_init_failed", error.localizedDescription)
                     self.refreshSources()
                     self.refreshAudioSources()
                 }
@@ -440,16 +440,16 @@ final class PiPPreviewRuntime: NSObject, ObservableObject {
     private func updateVideoAvailabilityMessage(using discovered: [CameraSource]) {
         switch authorizationStatus {
         case .notDetermined:
-            infoMessage = "尚未授予摄像头权限，请先授权后再刷新设备。"
+            infoMessage = L10n.tr("legacy.key_64")
         case .denied:
-            infoMessage = "摄像头权限已被拒绝，请到系统设置 > 隐私与安全性 > 摄像头中允许 PJTool。"
+            infoMessage = L10n.tr("legacy.pjtool_5")
         case .restricted:
-            infoMessage = "摄像头权限受系统限制，当前无法访问摄像头。"
+            infoMessage = L10n.tr("legacy.key_137")
         case .authorized:
             if discovered.isEmpty {
-                infoMessage = "当前未发现任何摄像头设备，请检查内建摄像头、外接摄像头或 Continuity Camera 是否可用。"
+                infoMessage = L10n.tr("legacy.continuity_camera")
             } else if discovered.allSatisfy({ !$0.isAvailable }) {
-                infoMessage = "已识别到摄像头条目，但它们当前均处于离线状态。"
+                infoMessage = L10n.tr("legacy.key_92")
             } else if let selectedSourceID,
                       let selected = discovered.first(where: { $0.id == selectedSourceID }),
                       selected.isAvailable {
@@ -520,7 +520,7 @@ extension PiPPreviewRuntime: AVCaptureVideoDataOutputSampleBufferDelegate, AVCap
                    !self.isPreviewAudioPlaybackEnabled,
                    !self.hasWarnedPreviewAudioPlaybackUnavailable {
                     self.hasWarnedPreviewAudioPlaybackUnavailable = true
-                    self.infoMessage = "当前运行环境不支持 PiP 监听回放，已切换为仅电平显示。"
+                    self.infoMessage = L10n.tr("legacy.pip_20")
                 }
             }
         }

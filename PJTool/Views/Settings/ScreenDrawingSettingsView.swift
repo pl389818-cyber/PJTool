@@ -12,7 +12,7 @@ struct ScreenDrawingSettingsView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
-            sectionHeader("屏幕画图", subtitle: "独立透明画布，极简四工具 + 快捷键驱动")
+            sectionHeader(L10n.tr("legacy.key_66"), subtitle: L10n.tr("legacy.key_177"))
 
             card {
                 HStack(spacing: 12) {
@@ -25,7 +25,7 @@ struct ScreenDrawingSettingsView: View {
                     }
                     .buttonStyle(.borderedProminent)
 
-                    Button("清空画布 (⌘⌥C)") {
+                    Button(L10n.tr("legacy.c_2")) {
                         appCoordinator.clearScreenDrawCanvas()
                     }
                     .buttonStyle(.bordered)
@@ -44,40 +44,31 @@ struct ScreenDrawingSettingsView: View {
             }
 
             card {
-                Text("快捷键")
+                Text(L10n.tr("legacy.key_116"))
                     .font(.headline)
                 Group {
-                    Text("颜色快捷选中")
+                    Text(L10n.tr("legacy.key_225"))
                         .font(.subheadline.weight(.semibold))
-                    Text("⌃⌥ + 1~5：快速切换 1 红 / 2 黄 / 3 绿 / 4 蓝 / 5 黑")
+                    Text(L10n.tr("legacy.k_1_5_1_2_3_4_5"))
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                 }
 
                 Group {
-                    Text("工具快捷选中")
+                    Text(L10n.tr("legacy.key_81"))
                         .font(.subheadline.weight(.semibold))
-                    Text("⌘⌥ + 1~6：线 / 箭头 / 方框 / 圆形 / 错 / 对")
+                    Text(L10n.tr("legacy.k_1_6"))
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                 }
 
                 Group {
-                    Text("画布与显示控制")
+                    Text(L10n.tr("legacy.key_178"))
                         .font(.subheadline.weight(.semibold))
-                    Text("⌘⌥ + C：清空当前画布")
+                    Text(L10n.tr("legacy.x"))
                         .font(.footnote)
                         .foregroundStyle(.secondary)
-                    Text("⌘⌥ + H：收起屏幕画图")
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                    Text("⌘⌥ + S：展示屏幕画图")
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                    Text("⌘⌥ + D：关闭画布交互（鼠标穿透）")
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                    Text("⌘⌥ + A：开启画布交互（可继续绘制）")
+                    Text(L10n.tr("legacy.a"))
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                 }
@@ -86,8 +77,8 @@ struct ScreenDrawingSettingsView: View {
 
                 Label(
                     appCoordinator.isDrawGlobalHotkeysEnabled
-                        ? "当前全局快捷键已启用，可在 PJTool 后台直接触发。"
-                        : "当前降级为前台快捷键，请先激活 PJTool 再触发。",
+                        ? L10n.tr("legacy.pjtool_3")
+                        : L10n.tr("legacy.pjtool_4"),
                     systemImage: appCoordinator.isDrawGlobalHotkeysEnabled ? "globe" : "exclamationmark.triangle"
                 )
                 .font(.footnote)
@@ -95,25 +86,11 @@ struct ScreenDrawingSettingsView: View {
             }
 
             card {
-                Text("工具能力")
-                    .font(.headline)
-                Text("颜色：1 红 / 2 黄 / 3 绿 / 4 蓝 / 5 黑")
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-                Text("图形：画线 / 箭头线 / 方框 / 圆形 / 错 / 对")
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-                Text("说明：已移除文本、撤销重做、按住 Option 才能绘制等旧能力。")
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-            }
-
-            card {
-                Text("笔迹调校")
+                Text(L10n.tr("legacy.key_188"))
                     .font(.headline)
 
                 HStack(spacing: 12) {
-                    Text("手绘强度")
+                    Text(L10n.tr("legacy.key_121"))
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                     Slider(
@@ -129,7 +106,7 @@ struct ScreenDrawingSettingsView: View {
                 }
 
                 Picker(
-                    "对/错风格",
+                    L10n.tr("legacy.key_48"),
                     selection: Binding(
                         get: { appCoordinator.drawMarkStyle },
                         set: { appCoordinator.setDrawMarkStyle($0) }
@@ -142,21 +119,61 @@ struct ScreenDrawingSettingsView: View {
                 .pickerStyle(.segmented)
 
                 HStack(spacing: 12) {
-                    Button("导出画布 PNG（透明）") {
+                    Button(L10n.tr("legacy.png_2")) {
                         appCoordinator.exportScreenDrawCanvasAsPNG()
                     }
                     .buttonStyle(.borderedProminent)
 
-                    Text("支持透明背景导出")
+                    Text(L10n.tr("legacy.key_147"))
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                 }
+            }
+
+            card {
+                Text(L10n.tr("draw.dismiss.title"))
+                    .font(.headline)
+                Text(L10n.tr("draw.dismiss.subtitle"))
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+
+                Picker(
+                    L10n.tr("draw.dismiss.mode.label"),
+                    selection: Binding(
+                        get: { appCoordinator.drawDismissalAnimationMode },
+                        set: { appCoordinator.drawDismissalAnimationMode = $0 }
+                    )
+                ) {
+                    ForEach(DrawDismissalAnimationMode.allCases) { mode in
+                        Text(mode.title).tag(mode)
+                    }
+                }
+                .pickerStyle(.segmented)
+
+                if appCoordinator.drawDismissalAnimationMode == .fixed {
+                    Picker(
+                        L10n.tr("draw.dismiss.style.label"),
+                        selection: Binding(
+                            get: { appCoordinator.drawDismissalAnimationFixedStyle },
+                            set: { appCoordinator.drawDismissalAnimationFixedStyle = $0 }
+                        )
+                    ) {
+                        ForEach(DrawDismissalAnimationStyle.allCases) { style in
+                            Text(style.title).tag(style)
+                        }
+                    }
+                    .pickerStyle(.menu)
+                }
+
+                Text(L10n.tr("draw.dismiss.hint"))
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
             }
         }
     }
 
     private var topActionTitle: String {
-        appCoordinator.isDrawOverlayVisible ? "收起屏幕画图" : "弹出屏幕画图"
+        appCoordinator.isDrawOverlayVisible ? L10n.tr("legacy.key_148") : L10n.tr("legacy.key_101")
     }
 
     @ViewBuilder

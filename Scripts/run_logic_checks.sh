@@ -8,6 +8,8 @@ RUNNER_BIN="$TMP_DIR/logic_checks"
 
 swiftc -parse-as-library \
   -module-cache-path "$TMP_DIR/swift-module-cache" \
+  "$ROOT_DIR/PJTool/Services/L10n.swift" \
+  "$ROOT_DIR/PJTool/Models/AppLanguage.swift" \
   "$ROOT_DIR/PJTool/Models/PiPAspectRatio.swift" \
   "$ROOT_DIR/PJTool/Models/PiPLayoutState.swift" \
   "$ROOT_DIR/PJTool/Models/PiPGeometry.swift" \

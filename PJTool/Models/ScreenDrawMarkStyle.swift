@@ -16,9 +16,9 @@ enum ScreenDrawMarkStyle: String, CaseIterable, Identifiable {
     var title: String {
         switch self {
         case .rounded:
-            return "圆润"
+            return L10n.tr("legacy.key_43")
         case .crisp:
-            return "利落"
+            return L10n.tr("legacy.key_30")
         }
     }
 }

@@ -19,7 +19,7 @@ final class VideoCuttingViewModel: ObservableObject {
     @Published var keepEndText: String = "10"
     @Published var deleteRanges: [CutRange] = []
     @Published var selectedDeleteRangeID: UUID?
-    @Published var statusMessage: String = "请导入视频开始剪切。"
+    @Published var statusMessage: String = L10n.tr("legacy.key_202")
     @Published var isExporting = false
     @Published var exportURL: URL?
     @Published var selectedAspectPreset: VideoCuttingAspectPreset = .adaptive
@@ -127,7 +127,7 @@ final class VideoCuttingViewModel: ObservableObject {
         switch result {
         case let .success(urls):
             guard let selectedURL = urls.first else {
-                statusMessage = "导入失败：未选择文件。"
+                statusMessage = L10n.tr("legacy.key_52")
                 return
             }
             do {
@@ -137,12 +137,12 @@ final class VideoCuttingViewModel: ObservableObject {
                 statusMessage = error.localizedDescription
             }
         case let .failure(error):
-            statusMessage = "导入失败：\(error.localizedDescription)"
+            statusMessage = L10n.f("fmt.video.import_failed", error.localizedDescription)
         }
     }
 
     func handleImportPanelCancellation() {
-        statusMessage = "已取消导入。"
+        statusMessage = L10n.tr("legacy.key_84")
     }
 
     func handleDrop(providers: [NSItemProvider]) {
@@ -159,12 +159,12 @@ final class VideoCuttingViewModel: ObservableObject {
 
     func applyQuickKeepRangeInput() {
         guard hasSource else {
-            statusMessage = "请先导入视频。"
+            statusMessage = L10n.tr("legacy.key_201")
             return
         }
 
         guard let start = Double(keepStartText), let end = Double(keepEndText) else {
-            statusMessage = "保留区间格式无效，请输入数字秒数。"
+            statusMessage = L10n.tr("legacy.key_11")
             return
         }
 
@@ -174,7 +174,7 @@ final class VideoCuttingViewModel: ObservableObject {
         let upper = max(snappedStart, snappedEnd)
 
         guard upper > lower else {
-            statusMessage = "保留区间无效：开始和结束不能相同。"
+            statusMessage = L10n.tr("legacy.key_10")
             return
         }
 
@@ -188,25 +188,25 @@ final class VideoCuttingViewModel: ObservableObject {
 
         keepStartText = formatSecondsForInput(lower)
         keepEndText = formatSecondsForInput(upper)
-        applyDeleteRangeEdit(ranges, preferSelection: nil, editMessage: "已应用保留区间。")
+        applyDeleteRangeEdit(ranges, preferSelection: nil, editMessage: L10n.tr("legacy.key_87"))
     }
 
     func addDeleteRangeAtPlayhead() {
         guard hasSource else {
-            statusMessage = "请先导入视频。"
+            statusMessage = L10n.tr("legacy.key_201")
             return
         }
         let start = snapToFrame(playbackPosition)
         let defaultLength = max(frameDurationSeconds * 15, 0.5)
         let end = snapToFrame(min(sourceDuration, start + defaultLength))
         guard end > start else {
-            statusMessage = "新增区间失败：当前可编辑范围不足。"
+            statusMessage = L10n.tr("legacy.key_150")
             return
         }
         var updated = deleteRanges
         let range = makeCutRange(start: start, end: end)
         updated.append(range)
-        applyDeleteRangeEdit(updated, preferSelection: range.id, editMessage: "已新增删除区间。")
+        applyDeleteRangeEdit(updated, preferSelection: range.id, editMessage: L10n.tr("legacy.key_91"))
     }
 
     func updateDeleteRange(id: UUID, start: Double? = nil, end: Double? = nil) {
@@ -225,7 +225,7 @@ final class VideoCuttingViewModel: ObservableObject {
 
     func removeDeleteRange(id: UUID) {
         let updated = deleteRanges.filter { $0.id != id }
-        applyDeleteRangeEdit(updated, preferSelection: selectedDeleteRangeID, editMessage: "已删除区间。")
+        applyDeleteRangeEdit(updated, preferSelection: selectedDeleteRangeID, editMessage: L10n.tr("legacy.key_83"))
     }
 
     func removeSelectedDeleteRange() {
@@ -235,24 +235,24 @@ final class VideoCuttingViewModel: ObservableObject {
 
     func deleteSelectedRangeAndReload() {
         guard let sourceURL else {
-            statusMessage = "删除失败：请先导入视频。"
+            statusMessage = L10n.tr("legacy.key_26")
             return
         }
         guard let selectedDeleteRange else {
-            statusMessage = "删除失败：请先选中一个区间。"
+            statusMessage = L10n.tr("legacy.key_27")
             return
         }
 
         let normalized = normalizeDeleteRanges([selectedDeleteRange])
         guard let selectedRange = normalized.first else {
-            statusMessage = "删除失败：选中区间无效。"
+            statusMessage = L10n.tr("legacy.key_28")
             return
         }
 
         let sourceDuration = makeDurationTime()
         let keepRanges = trimEngine.keepRanges(from: [selectedRange], sourceDuration: sourceDuration)
         guard !keepRanges.isEmpty else {
-            statusMessage = "删除失败：选中区间覆盖全片。"
+            statusMessage = L10n.tr("legacy.key_29")
             return
         }
 
@@ -260,7 +260,7 @@ final class VideoCuttingViewModel: ObservableObject {
         do {
             outputURL = try makeInlineTrimOutputURL(for: sourceURL, suffix: "cut")
         } catch {
-            statusMessage = "删除失败：无法创建临时裁切文件。"
+            statusMessage = L10n.tr("legacy.key_25")
             return
         }
 
@@ -271,15 +271,15 @@ final class VideoCuttingViewModel: ObservableObject {
         )
 
         isExporting = true
-        statusMessage = "正在删除选中区间..."
+        statusMessage = L10n.tr("legacy.key_170")
         Task {
             defer { isExporting = false }
             do {
                 let exported = try await trimEngine.export(project: project, outputURL: outputURL)
                 loadVideo(url: exported)
-                statusMessage = "已删除选中区间并重新载入：\(exported.lastPathComponent)"
+                statusMessage = L10n.f("fmt.video.delete_selected_reloaded", exported.lastPathComponent)
             } catch {
-                statusMessage = "删除失败：\(error.localizedDescription)"
+                statusMessage = L10n.f("fmt.video.delete_failed", error.localizedDescription)
             }
         }
     }
@@ -300,12 +300,12 @@ final class VideoCuttingViewModel: ObservableObject {
 
     func exportTrimmedVideo() {
         guard let sourceURL else {
-            statusMessage = "导出失败：请先导入视频。"
+            statusMessage = L10n.tr("legacy.key_62")
             return
         }
 
         guard let outputURL = exportService.pickOutputURL(suggestedName: suggestedOutputName(for: sourceURL)) else {
-            statusMessage = "已取消导出。"
+            statusMessage = L10n.tr("legacy.key_85")
             return
         }
 
@@ -320,9 +320,9 @@ final class VideoCuttingViewModel: ObservableObject {
 
         isExporting = true
         if hasAudioTrack {
-            statusMessage = "导出中..."
+            statusMessage = L10n.tr("legacy.key_56")
         } else {
-            statusMessage = "导出中（源视频无音轨，已跳过声音处理）..."
+            statusMessage = L10n.tr("legacy.key_57")
         }
         Task {
             defer { isExporting = false }
@@ -333,12 +333,16 @@ final class VideoCuttingViewModel: ObservableObject {
                     keeping: [sourceURL, exported]
                 )
                 if removedTempFiles > 0 {
-                    statusMessage = "导出完成：\(exported.lastPathComponent)（已清理 \(removedTempFiles) 个临时文件）"
+                    statusMessage = L10n.f(
+                        "fmt.video.export_done_with_cleanup",
+                        exported.lastPathComponent,
+                        removedTempFiles
+                    )
                 } else {
-                    statusMessage = "导出完成：\(exported.lastPathComponent)"
+                    statusMessage = L10n.f("fmt.video.export_done", exported.lastPathComponent)
                 }
             } catch {
-                statusMessage = "导出失败：\(error.localizedDescription)"
+                statusMessage = L10n.f("fmt.video.export_failed", error.localizedDescription)
             }
         }
     }
@@ -387,11 +391,11 @@ final class VideoCuttingViewModel: ObservableObject {
 
     func executeCropAndReload() {
         guard let sourceURL else {
-            statusMessage = "执行裁切失败：请先导入视频。"
+            statusMessage = L10n.tr("legacy.key_129")
             return
         }
         guard canExecuteCrop else {
-            statusMessage = isCropNoOp ? "当前无可裁切变化。" : "执行裁切失败：裁切参数无效。"
+            statusMessage = isCropNoOp ? L10n.tr("legacy.key_104") : L10n.tr("legacy.key_128")
             return
         }
 
@@ -399,7 +403,7 @@ final class VideoCuttingViewModel: ObservableObject {
         do {
             outputURL = try makeInlineTrimOutputURL(for: sourceURL, suffix: "crop")
         } catch {
-            statusMessage = "执行裁切失败：无法创建临时文件。"
+            statusMessage = L10n.tr("legacy.key_127")
             return
         }
 
@@ -413,15 +417,15 @@ final class VideoCuttingViewModel: ObservableObject {
         )
 
         isApplyingCrop = true
-        statusMessage = "已应用画面裁切，正在重新载入..."
+        statusMessage = L10n.tr("legacy.key_88")
         Task {
             defer { isApplyingCrop = false }
             do {
                 let exported = try await composeExportEngine.export(project: project)
                 loadVideo(url: exported)
-                statusMessage = "已执行画面裁切并重新载入：\(exported.lastPathComponent)"
+                statusMessage = L10n.f("fmt.video.crop_reloaded", exported.lastPathComponent)
             } catch {
-                statusMessage = "执行裁切失败：\(error.localizedDescription)"
+                statusMessage = L10n.f("fmt.video.crop_failed", error.localizedDescription)
             }
         }
     }
@@ -430,7 +434,7 @@ final class VideoCuttingViewModel: ObservableObject {
         guard hasSource else { return }
         cropRectNormalized = .full
         if showStatus {
-            statusMessage = "已重置裁切框。"
+            statusMessage = L10n.tr("legacy.key_94")
         }
     }
 
@@ -557,14 +561,14 @@ final class VideoCuttingViewModel: ObservableObject {
 
     private func loadVideo(url: URL) {
         guard importService.isSupportedVideo(url: url) else {
-            statusMessage = "导入失败：仅支持 .mp4 / .mov 视频。"
+            statusMessage = L10n.tr("legacy.mp4_mov")
             return
         }
 
         let asset = AVAsset(url: url)
         let duration = max(0, asset.duration.seconds)
         guard duration > 0 else {
-            statusMessage = "导入失败：无法读取视频时长。"
+            statusMessage = L10n.tr("legacy.key_51")
             return
         }
 
@@ -586,9 +590,9 @@ final class VideoCuttingViewModel: ObservableObject {
         player.seek(to: .zero, toleranceBefore: .zero, toleranceAfter: .zero)
         isPlaying = false
         if hasAudioTrack {
-            statusMessage = "已导入：\(url.lastPathComponent)"
+            statusMessage = L10n.f("fmt.video.imported", url.lastPathComponent)
         } else {
-            statusMessage = "已导入：\(url.lastPathComponent)（源视频无音频轨道）"
+            statusMessage = L10n.f("fmt.video.imported_no_audio_track", url.lastPathComponent)
         }
     }
 
@@ -599,19 +603,19 @@ final class VideoCuttingViewModel: ObservableObject {
 
         let keepRanges = trimEngine.keepRanges(from: normalized, sourceDuration: makeDurationTime())
         if keepRanges.isEmpty {
-            statusMessage = "无可导出内容：删除区间覆盖全片。"
+            statusMessage = L10n.tr("legacy.key_153")
             return
         }
 
         if normalized.isEmpty {
-            statusMessage = "当前未删除任何区间，导出将保留完整视频。"
+            statusMessage = L10n.tr("legacy.key_105")
             return
         }
 
         if let editMessage {
-            statusMessage = "\(editMessage) 当前 \(normalized.count) 段删除区间。"
+            statusMessage = L10n.f("fmt.video.edit_message_with_delete_count", editMessage, normalized.count)
         } else {
-            statusMessage = "已更新删除区间：\(normalized.count) 段。"
+            statusMessage = L10n.f("fmt.video.delete_ranges_updated", normalized.count)
         }
     }
 
@@ -773,7 +777,7 @@ final class VideoCuttingViewModel: ObservableObject {
                 config: audioProcessingConfig
             )
         } catch {
-            statusMessage = "音频预览处理失败，已回退原音轨：\(error.localizedDescription)"
+            statusMessage = L10n.f("fmt.video.audio_preview_processing_failed", error.localizedDescription)
         }
         return item
     }
@@ -818,9 +822,9 @@ final class VideoCuttingViewModel: ObservableObject {
                 if let error = notification.userInfo?[AVPlayerItemFailedToPlayToEndTimeErrorKey] as? Error {
                     message = error.localizedDescription
                 } else {
-                    message = "未知错误"
+                    message = L10n.tr("legacy.key_165")
                 }
-                self.statusMessage = "播放失败：\(message)"
+                self.statusMessage = L10n.f("fmt.video.playback_failed", message)
             }
             .store(in: &cancellables)
     }

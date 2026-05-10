@@ -476,7 +476,7 @@ extension VideoCuttingAudioProcessingEngine {
         var errorDescription: String? {
             switch self {
             case let .createTapFailed(status):
-                return "创建音频处理链失败：\(status)"
+                return L10n.f("fmt.video.audio_chain_create_failed", status)
             }
         }
     }

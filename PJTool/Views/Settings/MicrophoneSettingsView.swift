@@ -14,10 +14,10 @@ struct MicrophoneSettingsView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
-            sectionHeader("麦克风", subtitle: "输入设备、监听与电平")
+            sectionHeader(L10n.tr("legacy.key_228"), subtitle: L10n.tr("legacy.key_206"))
 
             card {
-                Picker("输入设备", selection: audioSelectionBinding) {
+                Picker(L10n.tr("legacy.key_205"), selection: audioSelectionBinding) {
                     ForEach(appCoordinator.audioEngine.sources) { source in
                         let label = source.badgeText.isEmpty ? source.name : "\(source.name) (\(source.badgeText))"
                         Text(label).tag(source.id)
@@ -27,9 +27,9 @@ struct MicrophoneSettingsView: View {
                 .disabled(!isAudioAuthorized || appCoordinator.audioEngine.sources.isEmpty)
 
                 HStack(spacing: 12) {
-                    Button("刷新设备") { appCoordinator.audioEngine.refreshSources() }
+                    Button(L10n.tr("legacy.key_31")) { appCoordinator.audioEngine.refreshSources() }
 
-                    Button(appCoordinator.audioEngine.isMonitoring ? "停止监控" : "开始监控") {
+                    Button(appCoordinator.audioEngine.isMonitoring ? L10n.tr("legacy.key_18") : L10n.tr("legacy.key_100")) {
                         if appCoordinator.audioEngine.isMonitoring {
                             appCoordinator.audioEngine.stopMonitoring()
                         } else {
@@ -39,19 +39,19 @@ struct MicrophoneSettingsView: View {
                     .disabled(!isAudioAuthorized || appCoordinator.audioEngine.sources.isEmpty)
 
                     if !isAudioAuthorized {
-                        Button("请求麦克风权限") { appCoordinator.audioEngine.requestMicrophoneAccess() }
+                        Button(L10n.tr("legacy.key_204")) { appCoordinator.audioEngine.requestMicrophoneAccess() }
                     }
                 }
 
                 AudioLevelMeterView(level: appCoordinator.audioEngine.level)
                     .frame(height: 12)
-                Text("输入电平：\(Int(appCoordinator.audioEngine.level * 100))")
+                Text(L10n.f("fmt.input.level", Int(appCoordinator.audioEngine.level * 100)))
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             }
 
             card {
-                Toggle("预览监听静音", isOn: Binding(
+                Toggle(L10n.tr("legacy.key_223"), isOn: Binding(
                     get: { appCoordinator.pipAudioPreviewConfig.isPreviewMuted },
                     set: { newValue in
                         var next = appCoordinator.pipAudioPreviewConfig
@@ -61,7 +61,7 @@ struct MicrophoneSettingsView: View {
                 ))
 
                 HStack(spacing: 10) {
-                    Text("预览音量")
+                    Text(L10n.tr("legacy.key_224"))
                     Slider(value: Binding(
                         get: { appCoordinator.pipAudioPreviewConfig.previewVolume },
                         set: { newValue in
@@ -78,7 +78,13 @@ struct MicrophoneSettingsView: View {
 
                 AudioLevelMeterView(level: appCoordinator.pipPreviewRuntime.previewAudioLevel)
                     .frame(height: 12)
-                Text("PiP 监听状态：\(appCoordinator.pipAudioPreviewConfig.isPreviewMuted ? "静音" : "监听中") · Level \(Int(appCoordinator.pipPreviewRuntime.previewAudioLevel * 100))")
+                Text(
+                    L10n.f(
+                        "legacy.pip_status_line_with_level",
+                        appCoordinator.pipAudioPreviewConfig.isPreviewMuted ? L10n.tr("legacy.key_217") : L10n.tr("legacy.key_185"),
+                        Int(appCoordinator.pipPreviewRuntime.previewAudioLevel * 100)
+                    )
+                )
                     .font(.footnote)
                     .foregroundStyle(.secondary)
             }

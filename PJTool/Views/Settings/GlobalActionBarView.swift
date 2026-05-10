@@ -24,7 +24,7 @@ struct GlobalActionBarView: View {
             .disabled(actionButtonDisabled)
 
             if let outputURL = appCoordinator.recorder.lastOutputURL {
-                Button("打开成片") {
+                Button(L10n.tr("legacy.key_123")) {
                     NSWorkspace.shared.activateFileViewerSelecting([outputURL])
                 }
                 .buttonStyle(.bordered)
@@ -52,12 +52,12 @@ struct GlobalActionBarView: View {
 
     private var actionButtonTitle: String {
         if appCoordinator.recorderState.isRecording {
-            return "停止录屏"
+            return L10n.tr("legacy.key_15")
         }
         if appCoordinator.isRecordingArmed {
-            return "等待小相机开始..."
+            return L10n.tr("legacy.key_189")
         }
-        return "弹出录屏小相机"
+        return L10n.tr("legacy.key_102")
     }
 
     private var actionButtonDisabled: Bool {

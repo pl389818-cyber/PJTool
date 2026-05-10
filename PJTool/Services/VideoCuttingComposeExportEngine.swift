@@ -210,23 +210,23 @@ extension VideoCuttingComposeExportEngine {
         var errorDescription: String? {
             switch self {
             case .missingVideoTrack:
-                return "源视频没有可用视频轨道。"
+                return L10n.tr("legacy.key_175")
             case .emptyKeepRanges:
-                return "没有可导出的保留区间。"
+                return L10n.tr("legacy.key_172")
             case .invalidCropRect:
-                return "裁切框无效。"
+                return L10n.tr("legacy.key_195")
             case .invalidRenderSize:
-                return "裁切输出尺寸无效。"
+                return L10n.tr("legacy.key_196")
             case .compositionTrackFailed:
-                return "创建合成轨道失败。"
+                return L10n.tr("legacy.key_22")
             case .exportSessionFailed:
-                return "创建导出会话失败。"
+                return L10n.tr("legacy.key_23")
             case let .audioProcessingFailed(message):
-                return "音频处理失败：\(message)"
+                return L10n.f("fmt.video.audio_processing_failed", message)
             case .exportFailed:
-                return "执行裁切导出失败。"
+                return L10n.tr("legacy.key_130")
             case .exportCancelled:
-                return "执行裁切已取消。"
+                return L10n.tr("legacy.key_131")
             }
         }
     }

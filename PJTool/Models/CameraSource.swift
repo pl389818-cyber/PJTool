@@ -41,7 +41,7 @@ nonisolated struct CameraSource: Identifiable, Hashable {
         isBuiltIn = device.deviceType == .builtInWideAngleCamera
             || lowered.contains("facetime")
             || lowered.contains("built-in")
-            || lowered.contains("内建")
+            || lowered.contains("internal")
         isContinuity = device.isContinuityCamera
             || lowered.contains("continuity")
             || lowered.contains("iphone")

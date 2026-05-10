@@ -26,10 +26,10 @@ final class CompositionExportEngine {
         let screenAsset = AVAsset(url: screenURL)
         let cameraAsset = AVAsset(url: cameraURL)
         guard let screenVideoTrack = screenAsset.tracks(withMediaType: .video).first else {
-            throw ExportError.missingVideoTrack("屏幕轨道缺失")
+            throw ExportError.missingVideoTrack(L10n.tr("legacy.key_80"))
         }
         guard let cameraVideoTrack = cameraAsset.tracks(withMediaType: .video).first else {
-            throw ExportError.missingVideoTrack("摄像头轨道缺失")
+            throw ExportError.missingVideoTrack(L10n.tr("legacy.key_144"))
         }
 
         let composition = AVMutableComposition()
@@ -115,7 +115,7 @@ final class CompositionExportEngine {
     func stitch(project: CompositionProject, outputURL: URL) async throws -> URL {
         let baseAsset = AVAsset(url: project.baseAssetURL)
         guard let baseVideoTrack = baseAsset.tracks(withMediaType: .video).first else {
-            throw ExportError.missingVideoTrack("主轨视频缺失")
+            throw ExportError.missingVideoTrack(L10n.tr("legacy.key_6"))
         }
 
         let renderSize = orientedSize(of: baseVideoTrack)
@@ -176,7 +176,9 @@ final class CompositionExportEngine {
 
             let insertAsset = AVAsset(url: insertion.assetURL)
             guard let insertVideoTrack = insertAsset.tracks(withMediaType: .video).first else {
-                throw ExportError.missingVideoTrack("插入片段缺少视频：\(insertion.assetURL.lastPathComponent)")
+                throw ExportError.missingVideoTrack(
+                    L10n.f("fmt.compose.insertion_missing_video", insertion.assetURL.lastPathComponent)
+                )
             }
             let insertRange = CMTimeRange(start: .zero, duration: insertAsset.duration)
             if insertRange.duration > .zero {
@@ -394,13 +396,13 @@ extension CompositionExportEngine {
             case let .missingVideoTrack(message):
                 return message
             case .compositionTrackFailed:
-                return "创建合成轨道失败。"
+                return L10n.tr("legacy.key_22")
             case .exportSessionFailed:
-                return "创建导出会话失败。"
+                return L10n.tr("legacy.key_23")
             case .exportFailed:
-                return "导出失败。"
+                return L10n.tr("legacy.key_58")
             case .exportCancelled:
-                return "导出已取消。"
+                return L10n.tr("legacy.key_63")
             }
         }
     }

@@ -8,6 +8,7 @@
 import AppKit
 import Combine
 import Foundation
+import QuartzCore
 
 @MainActor
 final class ScreenDrawCanvasWindowController: NSObject {
@@ -29,6 +30,7 @@ final class ScreenDrawCanvasWindowController: NSObject {
     ]
     private let sessionStore: ScreenDrawSessionStore
     private var isCanvasMouseTransparent = false
+    private var dismissalCompletionTask: Task<Void, Never>?
 
     var onVisibilityChanged: ((Bool) -> Void)?
     var onScreenRecoveryEvent: ((ScreenRecoveryEvent) -> Void)?
@@ -65,6 +67,10 @@ final class ScreenDrawCanvasWindowController: NSObject {
         !isCanvasMouseTransparent
     }
 
+    var hasDrawableContent: Bool {
+        sessionStore.hasDrawableContent
+    }
+
     @discardableResult
     func show(on screen: NSScreen?) -> Bool {
         let targetScreen = screen
@@ -89,14 +95,79 @@ final class ScreenDrawCanvasWindowController: NSObject {
     }
 
     func hide() {
+        dismissalCompletionTask?.cancel()
+        dismissalCompletionTask = nil
         sessionStore.cancelCurrentInteraction()
         panel?.orderOut(nil)
         onVisibilityChanged?(false)
     }
 
+    func hideWithDismissalAnimation(completion: (() -> Void)? = nil) {
+        guard isVisible else {
+            completion?()
+            return
+        }
+        guard sessionStore.hasDrawableContent else {
+            hide()
+            completion?()
+            return
+        }
+
+        guard sessionStore.beginDismissalAnimation() != nil else {
+            hide()
+            completion?()
+            return
+        }
+
+        panel?.ignoresMouseEvents = true
+        let duration = ScreenDrawDismissalAnimationConstants.duration
+        dismissalCompletionTask?.cancel()
+        dismissalCompletionTask = Task { @MainActor [weak self] in
+            try? await Task.sleep(nanoseconds: UInt64(duration * 1_000_000_000))
+            guard let self else { return }
+            self.sessionStore.completeDismissalAnimation(clearCanvas: true)
+            self.panel?.ignoresMouseEvents = self.isCanvasMouseTransparent
+            self.hide()
+            completion?()
+        }
+    }
+
+    func clearCanvasWithDismissalAnimation(completion: (() -> Void)? = nil) {
+        guard isVisible else {
+            sessionStore.clearCanvas()
+            completion?()
+            return
+        }
+        guard sessionStore.hasDrawableContent else {
+            sessionStore.clearCanvas()
+            completion?()
+            return
+        }
+
+        guard sessionStore.beginDismissalAnimation() != nil else {
+            completion?()
+            return
+        }
+
+        panel?.ignoresMouseEvents = true
+        let duration = ScreenDrawDismissalAnimationConstants.duration
+        dismissalCompletionTask?.cancel()
+        dismissalCompletionTask = Task { @MainActor [weak self] in
+            try? await Task.sleep(nanoseconds: UInt64(duration * 1_000_000_000))
+            guard let self else { return }
+            self.sessionStore.completeDismissalAnimation(clearCanvas: true)
+            self.panel?.ignoresMouseEvents = self.isCanvasMouseTransparent
+            completion?()
+        }
+    }
+
     func setCanvasInteractionEnabled(_ enabled: Bool) {
         isCanvasMouseTransparent = !enabled
-        panel?.ignoresMouseEvents = !enabled
+        if sessionStore.isDismissingWithAnimation {
+            panel?.ignoresMouseEvents = true
+        } else {
+            panel?.ignoresMouseEvents = !enabled
+        }
     }
 
     func snapshotImage() -> NSImage? {
@@ -113,7 +184,7 @@ final class ScreenDrawCanvasWindowController: NSObject {
             backing: .buffered,
             defer: false
         )
-        panel.title = "屏幕画图画布"
+        panel.title = L10n.tr("legacy.key_77")
         panel.isFloatingPanel = true
         panel.hidesOnDeactivate = false
         panel.becomesKeyOnlyIfNeeded = true
@@ -211,6 +282,7 @@ final class ScreenDrawCanvasWindowController: NSObject {
         guard let panel, panel.isVisible else { return }
         panel.level = .mainMenu
         panel.collectionBehavior = desiredCollectionBehavior
+        panel.ignoresMouseEvents = sessionStore.isDismissingWithAnimation ? true : isCanvasMouseTransparent
         refreshFrameForCurrentScreen()
         panel.orderFrontRegardless()
     }
@@ -298,6 +370,11 @@ private struct CanvasNotificationToken {
     let token: NSObjectProtocol
 }
 
+private enum ScreenDrawDismissalAnimationConstants {
+    static let duration: Double = 0.62
+    static let directionalFadeBand: CGFloat = 0.2
+}
+
 private final class ScreenDrawCanvasPanel: NSPanel {
     var onCloseRequested: (() -> Void)?
     var visibilityHandler: ((Bool) -> Void)?
@@ -339,6 +416,17 @@ private final class ScreenDrawCanvasView: NSView {
         NSColor.clear.setFill()
         dirtyRect.fill()
 
+        let animationProgress = dismissalAnimationProgress()
+        if sessionStore.isDismissingWithAnimation,
+           let style = sessionStore.activeDismissalStyle {
+            drawDismissalAnimatedShapes(
+                style: style,
+                progress: animationProgress,
+                in: dirtyRect
+            )
+            return
+        }
+
         for shape in sessionStore.shapes {
             draw(shape)
         }
@@ -378,6 +466,19 @@ private final class ScreenDrawCanvasView: NSView {
                 self?.needsDisplay = true
             }
             .store(in: &cancellables)
+
+        let ticker = Timer.publish(
+            every: 1.0 / 60.0,
+            on: .main,
+            in: .common
+        ).autoconnect()
+        ticker
+            .sink { [weak self] _ in
+                guard let self else { return }
+                guard self.sessionStore.isDismissingWithAnimation else { return }
+                self.needsDisplay = true
+            }
+            .store(in: &cancellables)
     }
 
     private func draw(_ shape: ScreenDrawShape) {
@@ -410,6 +511,227 @@ private final class ScreenDrawCanvasView: NSView {
         }
 
         path.stroke()
+    }
+
+    private func drawDismissalAnimatedShapes(
+        style: DrawDismissalAnimationStyle,
+        progress: CGFloat,
+        in dirtyRect: CGRect
+    ) {
+        let clamped = max(0, min(progress, 1))
+        switch style {
+        case .leftToRight, .rightToLeft, .topToBottom, .bottomToTop:
+            drawDirectionalDismissal(style: style, progress: clamped, in: dirtyRect)
+        case .shatterDrop:
+            drawShatterDropDismissal(progress: clamped)
+        }
+    }
+
+    private func drawDirectionalDismissal(
+        style: DrawDismissalAnimationStyle,
+        progress: CGFloat,
+        in dirtyRect: CGRect
+    ) {
+        let eased = smootherStep(progress)
+        let fadeBand = ScreenDrawDismissalAnimationConstants.directionalFadeBand
+        let sweep = -fadeBand + eased * (1 + fadeBand * 2)
+        let lower = sweep - fadeBand
+        let upper = sweep + fadeBand
+
+        guard let context = NSGraphicsContext.current?.cgContext,
+              let gradient = makeDirectionalMaskGradient(),
+              let start = directionalMaskPoint(
+                style: style,
+                normalizedPosition: lower,
+                in: dirtyRect
+              ),
+              let end = directionalMaskPoint(
+                style: style,
+                normalizedPosition: upper,
+                in: dirtyRect
+              ) else {
+            let fallbackAlpha = max(0, min(1, 1 - eased))
+            for shape in sessionStore.shapes {
+                draw(shape, alpha: fallbackAlpha)
+            }
+            return
+        }
+
+        context.saveGState()
+        context.beginTransparencyLayer(auxiliaryInfo: nil)
+        for shape in sessionStore.shapes {
+            draw(shape)
+        }
+        context.setBlendMode(.destinationIn)
+        context.drawLinearGradient(
+            gradient,
+            start: start,
+            end: end,
+            options: [.drawsBeforeStartLocation, .drawsAfterEndLocation]
+        )
+        context.endTransparencyLayer()
+        context.restoreGState()
+    }
+
+    private func drawShatterDropDismissal(progress: CGFloat) {
+        let eased = easeIn(progress)
+        let fragments = 16
+        for index in 0 ..< fragments {
+            let row = index / 4
+            let col = index % 4
+            let seed = fragmentSeed(index)
+            let jitterX = (seed - 0.5) * 38
+            let baseX = CGFloat(col) * 24 - 36 + jitterX * eased
+            let baseY = CGFloat(row) * 6 + 12
+            let dropDistance = (36 + CGFloat(row) * 12) * eased + pow(eased, 2) * 90
+            let alpha = max(0, 1 - eased * 1.05)
+
+            NSGraphicsContext.saveGraphicsState()
+            NSGraphicsContext.current?.cgContext.translateBy(
+                x: baseX,
+                y: dropDistance + baseY
+            )
+
+            for shape in sessionStore.shapes {
+                let fragmentRect = fragmentRectForShape(shape, index: index, fragments: fragments)
+                let clip = NSBezierPath(rect: fragmentRect)
+                clip.addClip()
+                draw(shape, alpha: alpha)
+            }
+            NSGraphicsContext.restoreGraphicsState()
+        }
+    }
+
+    private func fragmentRectForShape(_ shape: ScreenDrawShape, index: Int, fragments: Int) -> CGRect {
+        let bounds = shapeBounds(shape).insetBy(dx: -8, dy: -8)
+        guard bounds.width > 1, bounds.height > 1 else {
+            return bounds
+        }
+        let rowCount = 4
+        let columnCount = max(1, fragments / rowCount)
+        let row = index / columnCount
+        let col = index % columnCount
+        let width = bounds.width / CGFloat(columnCount)
+        let height = bounds.height / CGFloat(rowCount)
+        return CGRect(
+            x: bounds.minX + CGFloat(col) * width,
+            y: bounds.minY + CGFloat(row) * height,
+            width: width + 1,
+            height: height + 1
+        )
+    }
+
+    private func shapeBounds(_ shape: ScreenDrawShape) -> CGRect {
+        switch shape.type {
+        case .line, .arrow:
+            guard !shape.points.isEmpty else {
+                return CGRect(origin: shape.startPoint, size: .zero)
+            }
+            let xs = shape.points.map(\.x)
+            let ys = shape.points.map(\.y)
+            let minX = xs.min() ?? shape.startPoint.x
+            let maxX = xs.max() ?? shape.endPoint.x
+            let minY = ys.min() ?? shape.startPoint.y
+            let maxY = ys.max() ?? shape.endPoint.y
+            return CGRect(x: minX, y: minY, width: max(1, maxX - minX), height: max(1, maxY - minY))
+        case .rectangle, .ellipse, .cross, .check:
+            return rect(from: shape.startPoint, to: shape.endPoint)
+        }
+    }
+
+    private func draw(_ shape: ScreenDrawShape, alpha: CGFloat) {
+        let effectiveColor = shape.colorPreset.color.withAlphaComponent(alpha)
+        effectiveColor.setStroke()
+
+        let path = NSBezierPath()
+        path.lineCapStyle = .round
+        path.lineJoinStyle = .round
+        path.lineWidth = shape.lineWidth
+
+        switch shape.type {
+        case .line:
+            drawSmoothedTrail(shape.points, into: path)
+        case .arrow:
+            drawArrowTrail(shape, into: path)
+        case .rectangle:
+            path.appendRect(rect(from: shape.startPoint, to: shape.endPoint))
+        case .ellipse:
+            path.appendOval(in: rect(from: shape.startPoint, to: shape.endPoint))
+        case .cross:
+            drawCross(shape, into: path)
+        case .check:
+            drawCheck(shape, into: path)
+        }
+
+        path.stroke()
+    }
+
+    private func fragmentSeed(_ index: Int) -> CGFloat {
+        let value = abs((index * 97 + 13).hashValue % 1000)
+        return CGFloat(value) / 1000.0
+    }
+
+    private func dismissalAnimationProgress() -> CGFloat {
+        let startedAt = sessionStore.dismissalAnimationStartedAt
+        guard startedAt > 0 else { return 0 }
+        let elapsed = CACurrentMediaTime() - startedAt
+        let duration = ScreenDrawDismissalAnimationConstants.duration
+        guard duration > 0 else { return 1 }
+        return CGFloat(elapsed / duration)
+    }
+
+    private func easeIn(_ t: CGFloat) -> CGFloat {
+        let clamped = max(0, min(t, 1))
+        return clamped * clamped
+    }
+
+    private func smootherStep(_ t: CGFloat) -> CGFloat {
+        let clamped = max(0, min(t, 1))
+        return clamped * clamped * clamped * (clamped * (clamped * 6 - 15) + 10)
+    }
+
+    private func makeDirectionalMaskGradient() -> CGGradient? {
+        let colors = [
+            NSColor.white.withAlphaComponent(0).cgColor,
+            NSColor.white.withAlphaComponent(1).cgColor
+        ] as CFArray
+        let locations: [CGFloat] = [0, 1]
+        return CGGradient(
+            colorsSpace: CGColorSpace(name: CGColorSpace.sRGB) ?? CGColorSpaceCreateDeviceRGB(),
+            colors: colors,
+            locations: locations
+        )
+    }
+
+    private func directionalMaskPoint(
+        style: DrawDismissalAnimationStyle,
+        normalizedPosition: CGFloat,
+        in rect: CGRect
+    ) -> CGPoint? {
+        switch style {
+        case .leftToRight:
+            return CGPoint(
+                x: rect.minX + rect.width * normalizedPosition,
+                y: rect.midY
+            )
+        case .rightToLeft:
+            return CGPoint(
+                x: rect.maxX - rect.width * normalizedPosition,
+                y: rect.midY
+            )
+        case .topToBottom:
+            return CGPoint(
+                x: rect.midX,
+                y: rect.minY + rect.height * normalizedPosition
+            )
+        case .bottomToTop:
+            return CGPoint(
+                x: rect.midX,
+                y: rect.maxY - rect.height * normalizedPosition
+            )
+        case .shatterDrop:
+            return nil
+        }
     }
 
     private func drawArrowTrail(_ shape: ScreenDrawShape, into path: NSBezierPath) {

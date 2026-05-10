@@ -12,6 +12,7 @@ struct PJToolApp: App {
     private static let videoCuttingWindowID = "video-cutting-window"
     @StateObject private var appCoordinator = AppCoordinator()
     @StateObject private var videoCuttingViewModel = VideoCuttingViewModel()
+    @Environment(\.scenePhase) private var scenePhase
 
     var body: some Scene {
         WindowGroup("PJTool", id: "main-window") {
@@ -20,13 +21,15 @@ struct PJToolApp: App {
                 videoCuttingViewModel: videoCuttingViewModel,
                 videoCuttingWindowID: Self.videoCuttingWindowID
             )
+            .environment(\.locale, appCoordinator.appLocale)
         }
 
-        Window("智能裁剪", id: Self.videoCuttingWindowID) {
+        Window(L10n.tr("legacy.key_157"), id: Self.videoCuttingWindowID) {
             VideoCuttingModalView(
                 viewModel: videoCuttingViewModel,
                 windowID: Self.videoCuttingWindowID
             )
+            .environment(\.locale, appCoordinator.appLocale)
         }
         .defaultSize(width: 1320, height: 860)
         .defaultLaunchBehavior(.suppressed)
@@ -34,7 +37,7 @@ struct PJToolApp: App {
 
         MenuBarExtra {
             VStack(alignment: .leading, spacing: 8) {
-                Button(appCoordinator.recorderState.isRecording ? "停止录屏" : "开始录屏") {
+                Button(appCoordinator.recorderState.isRecording ? L10n.tr("legacy.key_15") : L10n.tr("legacy.key_98")) {
                     if appCoordinator.recorderState.isRecording {
                         appCoordinator.stopRecordingAndRestoreMonitoring()
                     } else {
@@ -45,18 +48,18 @@ struct PJToolApp: App {
 
                 Divider()
                 VStack(alignment: .leading, spacing: 4) {
-                    Text("录屏：\(appCoordinator.statusMessage)")
+                    Text(L10n.f("fmt.menu.recording_status", appCoordinator.statusMessage))
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                         .lineLimit(2)
-                    Text("PiP：\(appCoordinator.pipStatusMessage)")
+                    Text(L10n.f("fmt.menu.pip_status", appCoordinator.pipStatusMessage))
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                         .lineLimit(2)
                 }
 
                 Divider()
-                Button("显示主窗口") {
+                Button(L10n.tr("legacy.key_154")) {
                     NSApp.activate(ignoringOtherApps: true)
                     for window in NSApp.windows {
                         if window.isMiniaturized {
@@ -65,7 +68,7 @@ struct PJToolApp: App {
                         window.makeKeyAndOrderFront(nil)
                     }
                 }
-                Button("退出") {
+                Button(L10n.tr("legacy.key_209")) {
                     NSApp.terminate(nil)
                 }
             }
@@ -76,6 +79,10 @@ struct PJToolApp: App {
                 "PJTool",
                 systemImage: appCoordinator.recorderState.isRecording ? "record.circle.fill" : "record.circle"
             )
+        }
+        .onChange(of: scenePhase) { _, newPhase in
+            guard newPhase == .active else { return }
+            appCoordinator.refreshLanguageIfNeeded()
         }
     }
 }

@@ -16,8 +16,9 @@ struct SettingsSidebarView: View {
         VStack(alignment: .leading, spacing: 10) {
             header
             Divider()
-            navList
+            mainNavList
             Spacer(minLength: 0)
+            bottomSettingsEntry
         }
         .padding(.horizontal, 10)
         .padding(.top, 12)
@@ -29,9 +30,9 @@ struct SettingsSidebarView: View {
         HStack {
             if !isCollapsed {
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("设置")
+                    Text(L10n.tr("sidebar.header.title"))
                         .font(.headline)
-                    Text("PJTool Studio")
+                    Text(L10n.tr("sidebar.header.subtitle"))
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -47,25 +48,32 @@ struct SettingsSidebarView: View {
                 Image(systemName: isCollapsed ? "sidebar.leading" : "sidebar.left")
             }
             .buttonStyle(.plain)
-            .help(isCollapsed ? "展开侧栏" : "折叠侧栏")
+            .help(isCollapsed ? L10n.tr("sidebar.expand") : L10n.tr("sidebar.collapse"))
         }
     }
 
-    private var navList: some View {
+    private var mainNavList: some View {
         VStack(spacing: 6) {
-            ForEach(orderedSections) { section in
+            ForEach(orderedMainSections) { section in
                 sidebarRow(section: section)
             }
         }
     }
 
-    private var orderedSections: [SettingsSection] {
+    private var orderedMainSections: [SettingsSection] {
         [
             .recording,
             .pipCamera,
             .screenDrawing,
             .videoCutting
         ]
+    }
+
+    private var bottomSettingsEntry: some View {
+        VStack(spacing: 6) {
+            Divider()
+            sidebarRow(section: .appSettings)
+        }
     }
 
     private func sidebarRow(section: SettingsSection) -> some View {
