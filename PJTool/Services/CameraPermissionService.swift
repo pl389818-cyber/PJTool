@@ -2,7 +2,7 @@
 //  CameraPermissionService.swift
 //  PJTool
 //
-//  Created by Codex on 2026/5/1.
+//  Created by PJ Lee + Ai on 2026/5/1.
 //
 
 @preconcurrency import AVFoundation

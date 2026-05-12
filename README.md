@@ -1,117 +1,93 @@
 # PJTool
 
-PJTool is a macOS utility suite with three fixed modules:
+PJTool is a macOS utility suite with four fixed modules:
 
-- Recording
-- PiP Camera
-- Video Processing
+1. Recording
+2. PiP Camera
+3. Screen Drawing
+4. Video Cutting
 
-The current product direction keeps the existing recording and video-processing semantics intact while aligning:
+For implementation constraints and product rules, see:
 
-- PiP Camera with a native macOS floating camera utility
-- Recording with a QuickTime-style whole-screen recorder for the primary display
+- [SPEC.md](/Users/jamie/CodexAi/pjtool/SPEC.md)
+- [AGENTS.md](/Users/jamie/CodexAi/pjtool/AGENTS.md)
 
-See [SPEC.md](/Users/jamie/CodexAi/pjtool/PJTool/SPEC.md) and [AGENTS.md](/Users/jamie/CodexAi/pjtool/PJTool/AGENTS.md) for the latest product and implementation constraints.
+## Module Overview
 
-## Modules
+### 1) Recording
 
-### Recording
+- QuickTime-style primary-display full-screen recording
+- Region recording is intentionally removed
+- Main window auto-hides after recording starts
+- Uses a dedicated floating recording controller for stop action
+- Restores main window on normal stop, startup failure, or unexpected stop
 
-- Records the macOS primary display only
-- Does not support region capture, selection rectangles, or fixed dashed capture frames
-- Hides the main window immediately after recording starts
-- Uses a separate floating controller for stop actions instead of reusing the PiP window
-- Restores the main window after normal stop, startup failure, or unexpected termination
-- Keeps recording microphone selection and live monitoring inside the Recording module
-- Tries to exclude PJTool windows from ScreenCaptureKit capture and shows a readable warning if exclusion fails
+### 2) PiP Camera
 
-### PiP Camera
+- Independent floating camera utility (not a recording side panel)
+- Always-on-top preview across Spaces/full-screen contexts
+- Manual video/audio device selection (including Continuity Camera when available)
+- Preview mute and real-time microphone level feedback
+- Aspect ratio: `Auto / 16:9 / 4:3`
+- Global hotkey: `⌘⌥P` (toggle show/hide)
 
-- Independent floating camera tool, not a recording side panel
-- Designed as a control console for low-latency, stable desktop picture-in-picture preview
-- Supports always-on-top preview across Spaces and full-screen contexts
-- Supports manual video and audio device selection, including iPhone Continuity when available
-- Supports preview mute and real-time microphone level monitoring
-- Supports `Auto`, `16:9`, and `4:3` aspect ratios
-- Keeps height stable when switching between `16:9` and `4:3`
-- Uses `Auto` sizing to prioritize visibility and dragability on screen
-- Starts disabled by default with `enableCameraPiP = false`
-- Does not automatically open preview on cold launch
-- Uses `bootstrap()` only for device refresh and state sync, not automatic preview startup
+### 3) Screen Drawing
 
-The PiP page intentionally does not include:
+- Decoupled drawing module with floating toolbar + transparent canvas
+- 6 tools: line, arrow, rectangle, ellipse, cross, check
+- 5 color presets: `1 red / 2 yellow / 3 green / 4 blue / 5 black`
+- Unified dismissal animation pipeline for clear/hide
+- Animation modes: `Random` or `Fixed`
+- Fixed effects: `Scatter & Fall`, `Left→Right`, `Right→Left`, `Top→Bottom`, `Bottom→Top`
 
-- recording
-- export
-- speech transcription
+Current drawing hotkeys:
 
-### Video Processing
+- `⌃⌥1~5`: select color presets
+- `⌘⌥1~6`: select drawing tools
+- `⌘⌃S`: toggle drawing overlay show/hide
+- `⌘⌃X`: toggle canvas passthrough/drawing interaction
 
-- Preserves timeline-insertion stitching semantics rather than overlay composition
-- Supports inserting imported clips at arbitrary timestamps
-- Supports multi-range trim using a delete-segment model
-- Supports export and validation reports
+### 4) Video Cutting
 
-## UI and State Rules
+- Popup-based smart cutting workflow
+- Drag-and-drop or file import for `.mp4/.mov`
+- Timeline trimming, multi-range deletion, crop, audio denoise/EQ, export
+- Keeps pause state after import/reload (no forced autoplay)
 
-- The left sidebar launches at `200 px`
-- Startup must force the default sidebar width instead of restoring stale split-view widths
-- The sidebar can be resized, but not below `200 px`
-- Recording status is written only to `statusMessage`
-- PiP status is written only to `pipStatusMessage`
-- PiP actions must not overwrite the main recording status
-- The menu bar can present Recording and PiP states at the same time
+## State Isolation Rules
+
+- Recording writes only `statusMessage`
+- PiP writes only `pipStatusMessage`
+- Screen Drawing writes only `drawStatusMessage`
+- PiP and Screen Drawing actions must not override recording status text
 
 ## Permissions
 
-PJTool may request access to:
+PJTool may request:
 
 - Screen Recording
 - Camera
 - Microphone
 
-The app should not fail silently when permissions are missing, no compatible devices are available, or a selected device goes offline.
+If global hotkeys are unavailable due to system constraints, the app falls back to foreground handling with readable status guidance.
 
-## Implementation Expectations
+## Build & Checks
 
-- PiP window behavior should include `canJoinAllSpaces`, `fullScreenAuxiliary`, and `moveToActiveSpace`
-- PiP preview should use `orderFrontRegardless` as a fallback after Space or app-activation changes
-- Device discovery should prefer `AVCaptureDevice.DiscoverySession` and fall back to the legacy API when needed
-- Offline devices should fail gracefully, fall back when possible, and present a readable status to the user
-
-## Tech Stack
-
-- SwiftUI for the main console UI
-- AppKit for floating window and panel behavior
-- AVFoundation for camera and audio device handling
-- ScreenCaptureKit for display recording
-
-## Repository Layout
-
-```text
-.
-├── AGENTS.md
-├── PJTool.xcodeproj
-├── PJTool/        # App source
-├── Scripts/       # Logic checks and smoke scripts
-└── SPEC.md
-```
-
-## Build and Checks
-
-Run the minimum required checks from the repository root:
+From `/Users/jamie/CodexAi/pjtool/PJTool`:
 
 ```bash
 xcodebuild -project PJTool.xcodeproj -scheme PJTool -destination 'platform=macOS' build
 Scripts/run_logic_checks.sh
 ```
 
-Additional validation helpers are available in `Scripts/`, including `run_validation_smoke.sh`, `run_pipeline_smoke.sh`, and `run_device_diagnostics.sh`.
+## Repo Layout
 
-## Contributor Notes
-
-- Preserve the three-module product boundary
-- Do not turn PiP Camera into a recording settings page
-- Do not reintroduce region capture
-- Do not change video stitching from timeline insertion to overlay semantics
-- Keep documentation aligned with the latest `SPEC.md` and `AGENTS.md`
+```text
+├── 
+└── PJTool/
+    ├── AGENTS.md
+    ├── SPEC.md
+    ├── PJTool.xcodeproj
+    ├── PJTool/
+    └── Scripts/
+```

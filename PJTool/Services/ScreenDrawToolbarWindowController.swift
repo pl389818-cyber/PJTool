@@ -2,7 +2,7 @@
 //  ScreenDrawToolbarWindowController.swift
 //  PJTool
 //
-//  Created by Codex on 2026/5/6.
+//  Created by PJ Lee + Ai on 2026/5/6.
 //
 
 import AppKit

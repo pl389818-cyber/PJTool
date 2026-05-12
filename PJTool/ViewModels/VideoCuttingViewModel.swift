@@ -2,7 +2,7 @@
 //  VideoCuttingViewModel.swift
 //  PJTool
 //
-//  Created by Codex on 2026/5/4.
+//  Created by PJ Lee + Ai on 2026/5/4.
 //
 
 import AVFoundation
@@ -38,9 +38,14 @@ final class VideoCuttingViewModel: ObservableObject {
     @Published var selectedAudioEQPreset: VideoCuttingAudioEQPreset = .balanced
     @Published private(set) var hasAudioTrack = false
     @Published private(set) var isApplyingAudioPreview = false
+    @Published private(set) var isPreparingFFmpeg = false
+    @Published private(set) var isFFmpegReady = false
+    @Published private(set) var isUsingBuiltinComposeFallback = false
+    @Published private(set) var ffmpegStatusMessage: String = ""
 
     private let trimEngine: TrimExportEngine
     private let composeExportEngine = VideoCuttingComposeExportEngine()
+    private let ffmpegExportEngine = VideoCuttingFFmpegExportEngine()
     private let audioProcessingEngine = VideoCuttingAudioProcessingEngine()
     private let importService = VideoCuttingImportService()
     private let trimService = VideoCuttingTrimService()
@@ -86,7 +91,7 @@ final class VideoCuttingViewModel: ObservableObject {
     }
 
     var isBusy: Bool {
-        isExporting || isApplyingCrop
+        isExporting || isApplyingCrop || isPreparingFFmpeg
     }
 
     var audioProcessingConfig: VideoCuttingAudioProcessingConfig {
@@ -99,6 +104,18 @@ final class VideoCuttingViewModel: ObservableObject {
 
     var hasSource: Bool {
         sourceURL != nil
+    }
+
+    var ffmpegPermissionStateText: String {
+        if isPreparingFFmpeg {
+            return L10n.tr("ffmpeg.permission.status.preparing")
+        }
+        if isUsingBuiltinComposeFallback {
+            return L10n.tr("ffmpeg.permission.status.fallback")
+        }
+        return isFFmpegReady
+            ? L10n.tr("ffmpeg.permission.status.ready")
+            : L10n.tr("ffmpeg.permission.status.not_ready")
     }
 
     var selectedDeleteRange: CutRange? {
@@ -121,6 +138,23 @@ final class VideoCuttingViewModel: ObservableObject {
 
     func importByPanel() {
         isImportPanelPresented = true
+    }
+
+    func requestFFmpegPermissionFromMenu() {
+        guard !isPreparingFFmpeg else { return }
+        Task {
+            await prepareFFmpegIfNeeded(force: true)
+            if isFFmpegReady {
+                statusMessage = L10n.tr("ffmpeg.permission.request.success")
+            } else if isUsingBuiltinComposeFallback {
+                statusMessage = L10n.tr("ffmpeg.permission.request.fallback")
+            } else {
+                statusMessage = L10n.f(
+                    "fmt.ffmpeg.permission_request_failed",
+                    L10n.tr("ffmpeg.permission.status.not_ready")
+                )
+            }
+        }
     }
 
     func handleImportPanelResult(_ result: Result<[URL], Error>) {
@@ -264,18 +298,18 @@ final class VideoCuttingViewModel: ObservableObject {
             return
         }
 
-        let project = trimService.makeProject(
-            sourceURL: sourceURL,
-            sourceDuration: sourceDuration,
-            deleteRanges: [selectedRange]
-        )
-
         isExporting = true
         statusMessage = L10n.tr("legacy.key_170")
         Task {
             defer { isExporting = false }
             do {
-                let exported = try await trimEngine.export(project: project, outputURL: outputURL)
+                let exported = try await runFFmpegExport(
+                    sourceURL: sourceURL,
+                    keepRanges: keepRanges,
+                    cropRectNormalized: .full,
+                    outputURL: outputURL,
+                    applyAudioProcessing: false
+                )
                 loadVideo(url: exported)
                 statusMessage = L10n.f("fmt.video.delete_selected_reloaded", exported.lastPathComponent)
             } catch {
@@ -309,15 +343,6 @@ final class VideoCuttingViewModel: ObservableObject {
             return
         }
 
-        let project = VideoCuttingComposeProject(
-            sourceURL: sourceURL,
-            deleteRanges: [],
-            cropRectNormalized: .full,
-            targetAspectPreset: .adaptive,
-            audioProcessingConfig: audioProcessingConfig,
-            outputURL: outputURL
-        )
-
         isExporting = true
         if hasAudioTrack {
             statusMessage = L10n.tr("legacy.key_56")
@@ -327,7 +352,13 @@ final class VideoCuttingViewModel: ObservableObject {
         Task {
             defer { isExporting = false }
             do {
-                let exported = try await composeExportEngine.export(project: project)
+                let exported = try await runFFmpegExport(
+                    sourceURL: sourceURL,
+                    keepRanges: [CMTimeRange(start: .zero, duration: makeDurationTime())],
+                    cropRectNormalized: .full,
+                    outputURL: outputURL,
+                    applyAudioProcessing: true
+                )
                 exportURL = exported
                 let removedTempFiles = cleanupHistoricalTemporaryFilesAfterExport(
                     keeping: [sourceURL, exported]
@@ -407,21 +438,25 @@ final class VideoCuttingViewModel: ObservableObject {
             return
         }
 
-        let project = VideoCuttingComposeProject(
-            sourceURL: sourceURL,
-            deleteRanges: normalizeDeleteRanges(deleteRanges),
-            cropRectNormalized: VideoCropRect(normalizedCropRect),
-            targetAspectPreset: selectedAspectPreset,
-            audioProcessingConfig: audioProcessingConfig,
-            outputURL: outputURL
-        )
+        let normalizedDeleteRanges = normalizeDeleteRanges(deleteRanges)
+        let keepRanges = trimEngine.keepRanges(from: normalizedDeleteRanges, sourceDuration: makeDurationTime())
+        guard !keepRanges.isEmpty else {
+            statusMessage = L10n.tr("legacy.key_153")
+            return
+        }
 
         isApplyingCrop = true
         statusMessage = L10n.tr("legacy.key_88")
         Task {
             defer { isApplyingCrop = false }
             do {
-                let exported = try await composeExportEngine.export(project: project)
+                let exported = try await runFFmpegExport(
+                    sourceURL: sourceURL,
+                    keepRanges: keepRanges,
+                    cropRectNormalized: VideoCropRect(normalizedCropRect),
+                    outputURL: outputURL,
+                    applyAudioProcessing: true
+                )
                 loadVideo(url: exported)
                 statusMessage = L10n.f("fmt.video.crop_reloaded", exported.lastPathComponent)
             } catch {
@@ -780,6 +815,136 @@ final class VideoCuttingViewModel: ObservableObject {
             statusMessage = L10n.f("fmt.video.audio_preview_processing_failed", error.localizedDescription)
         }
         return item
+    }
+
+    private func runFFmpegExport(
+        sourceURL: URL,
+        keepRanges: [CMTimeRange],
+        cropRectNormalized: VideoCropRect,
+        outputURL: URL,
+        applyAudioProcessing: Bool
+    ) async throws -> URL {
+        await prepareFFmpegIfNeeded()
+        if isFFmpegReady {
+            let project = VideoCuttingFFmpegProject(
+                sourceURL: sourceURL,
+                keepRanges: keepRanges,
+                cropRectNormalized: cropRectNormalized,
+                audioProcessingConfig: applyAudioProcessing ? audioProcessingConfig : VideoCuttingAudioProcessingConfig(
+                    noiseReductionEnabled: false,
+                    noiseReductionPercent: 0,
+                    eqPreset: .balanced
+                ),
+                outputURL: outputURL,
+                hasAudioTrack: applyAudioProcessing && hasAudioTrack
+            )
+            do {
+                return try await ffmpegExportEngine.export(project: project) { [weak self] ratio in
+                    Task { @MainActor [weak self] in
+                        guard let self else { return }
+                        self.ffmpegStatusMessage = L10n.f("fmt.ffmpeg.progress", Int((ratio * 100).rounded()))
+                    }
+                }
+            } catch {
+                self.isFFmpegReady = false
+                self.isUsingBuiltinComposeFallback = true
+                self.ffmpegStatusMessage = L10n.f("fmt.ffmpeg.fallback_active", error.localizedDescription)
+            }
+        }
+
+        return try await runBuiltinComposeFallbackExport(
+            sourceURL: sourceURL,
+            keepRanges: keepRanges,
+            cropRectNormalized: cropRectNormalized,
+            outputURL: outputURL,
+            applyAudioProcessing: applyAudioProcessing
+        )
+    }
+
+    private func prepareFFmpegIfNeeded(force: Bool = false) async {
+        if (isFFmpegReady || isUsingBuiltinComposeFallback), !force {
+            return
+        }
+        isPreparingFFmpeg = true
+        defer { isPreparingFFmpeg = false }
+        do {
+            try ffmpegExportEngine.ensureToolsReady()
+            isFFmpegReady = true
+            isUsingBuiltinComposeFallback = false
+            ffmpegStatusMessage = L10n.tr("legacy.ffmpeg.ready")
+        } catch {
+            isFFmpegReady = false
+            isUsingBuiltinComposeFallback = true
+            ffmpegStatusMessage = L10n.f("fmt.ffmpeg.fallback_active", error.localizedDescription)
+        }
+    }
+
+    private func runBuiltinComposeFallbackExport(
+        sourceURL: URL,
+        keepRanges: [CMTimeRange],
+        cropRectNormalized: VideoCropRect,
+        outputURL: URL,
+        applyAudioProcessing: Bool
+    ) async throws -> URL {
+        let deleteRanges = deleteRangesFromKeepRanges(keepRanges, sourceDuration: sourceDuration)
+        let composeProject = VideoCuttingComposeProject(
+            sourceURL: sourceURL,
+            deleteRanges: deleteRanges,
+            cropRectNormalized: cropRectNormalized,
+            targetAspectPreset: selectedAspectPreset,
+            audioProcessingConfig: applyAudioProcessing
+                ? audioProcessingConfig
+                : VideoCuttingAudioProcessingConfig(
+                    noiseReductionEnabled: false,
+                    noiseReductionPercent: 0,
+                    eqPreset: .balanced
+                ),
+            outputURL: outputURL
+        )
+        return try await composeExportEngine.export(project: composeProject)
+    }
+
+    private func deleteRangesFromKeepRanges(_ keepRanges: [CMTimeRange], sourceDuration: Double) -> [CutRange] {
+        let total = max(0, sourceDuration)
+        guard total > 0 else { return [] }
+        let normalized = keepRanges
+            .compactMap { range -> (start: Double, end: Double)? in
+                let rawStart = max(0, range.start.seconds)
+                let rawEnd = max(rawStart, (range.start + range.duration).seconds)
+                let start = min(total, rawStart)
+                let end = min(total, rawEnd)
+                guard end - start > 0.0005 else { return nil }
+                return (start, end)
+            }
+            .sorted { $0.start < $1.start }
+
+        guard !normalized.isEmpty else { return [CutRange(start: makeTime(0), end: makeTime(total))] }
+        var merged: [(start: Double, end: Double)] = []
+        for item in normalized {
+            guard var last = merged.last else {
+                merged.append(item)
+                continue
+            }
+            if item.start <= last.end + 0.0005 {
+                last.end = max(last.end, item.end)
+                merged[merged.count - 1] = last
+            } else {
+                merged.append(item)
+            }
+        }
+
+        var cursor = 0.0
+        var deletes: [CutRange] = []
+        for item in merged {
+            if item.start - cursor > 0.0005 {
+                deletes.append(CutRange(start: makeTime(cursor), end: makeTime(item.start)))
+            }
+            cursor = max(cursor, item.end)
+        }
+        if total - cursor > 0.0005 {
+            deletes.append(CutRange(start: makeTime(cursor), end: makeTime(total)))
+        }
+        return deletes
     }
 
     private func configurePlayerObservers() {

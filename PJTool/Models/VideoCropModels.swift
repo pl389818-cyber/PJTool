@@ -2,7 +2,7 @@
 //  VideoCropModels.swift
 //  PJTool
 //
-//  Created by Codex on 2026/5/5.
+//  Created by PJ Lee + Ai on 2026/5/5.
 //
 
 import CoreGraphics

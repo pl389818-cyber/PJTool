@@ -2,7 +2,7 @@
 //  VideoCuttingAspectPreset.swift
 //  PJTool
 //
-//  Created by Codex on 2026/5/4.
+//  Created by PJ Lee + Ai on 2026/5/4.
 //
 
 import Foundation

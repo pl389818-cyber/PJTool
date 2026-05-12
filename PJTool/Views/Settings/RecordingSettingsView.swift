@@ -2,7 +2,7 @@
 //  RecordingSettingsView.swift
 //  PJTool
 //
-//  Created by Codex on 2026/4/30.
+//  Created by PJ Lee + Ai on 2026/4/30.
 //
 
 import AVFoundation

@@ -126,17 +126,36 @@ struct ContentView: View {
     }
 
     private var videoCuttingEntryView: some View {
-        VStack(alignment: .leading, spacing: 10) {
-            Text(L10n.tr("legacy.key_197"))
-                .font(.title3.weight(.semibold))
-            Text(L10n.tr("legacy.key_93"))
-                .font(.callout)
-                .foregroundStyle(.secondary)
-            Button(L10n.tr("legacy.key_124")) {
-                hasUserOpenedVideoCutting = true
-                openVideoCuttingWindow()
+        HStack(alignment: .top, spacing: 14) {
+            VStack(alignment: .leading, spacing: 10) {
+                Text(L10n.tr("legacy.key_197"))
+                    .font(.title3.weight(.semibold))
+                Text(L10n.tr("legacy.key_93"))
+                    .font(.callout)
+                    .foregroundStyle(.secondary)
+                Button(L10n.tr("legacy.key_124")) {
+                    hasUserOpenedVideoCutting = true
+                    openVideoCuttingWindow()
+                }
+                .buttonStyle(.borderedProminent)
+
+                Button(L10n.tr("ffmpeg.permission.menu.button")) {
+                    videoCuttingViewModel.requestFFmpegPermissionFromMenu()
+                }
+                .buttonStyle(.bordered)
+                .disabled(videoCuttingViewModel.isPreparingFFmpeg)
+
+                Text(L10n.tr("ffmpeg.permission.explain"))
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+
+                Text(videoCuttingViewModel.ffmpegPermissionStateText)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                    .lineLimit(1)
             }
-            .buttonStyle(.borderedProminent)
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
         .padding(14)
         .background(
