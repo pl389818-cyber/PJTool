@@ -1,6 +1,17 @@
+# 忽略以 . 开头的本地隐藏文件（如编辑器/系统缓存）
 .*
+# 保留仓库中的 .gitignore 文件本身
 !.gitignore
+# macOS Finder 生成的目录缓存文件
 .DS_Store
+# 本地环境变量文件（避免提交敏感配置）
 .env
+# 本地维护的协作文档副本（不纳入版本库）
 AGENTS.md
 SPEC.md
+# 第三方 ffmpeg 资源目录（按当前仓库策略忽略）
+/PJTool/ThirdParty/ffmpeg
+# 第三方 yt-dlp 资源目录（按当前仓库策略忽略）
+/PJTool/ThirdParty/yt-dlp
+# 规格文档目录（按当前仓库策略忽略）
+/spec

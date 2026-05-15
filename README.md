@@ -80,6 +80,18 @@ Scripts/run_build.sh
 Scripts/run_logic_checks.sh
 ```
 
+Fresh build (remove old build output first):
+
+```bash
+Scripts/run_build.sh --fresh
+```
+
+Fresh build and launch the newly built app directly:
+
+```bash
+Scripts/run_build.sh --fresh --run
+```
+
 ## Repo Layout
 
 ```text

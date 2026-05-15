@@ -85,14 +85,11 @@
 "legacy.key_56" = "Exporting...";
 "legacy.key_57" = "Exporting (source video has no audio track, audio processing skipped)...";
 "legacy.key_58" = "Export failed.";
-"legacy.png" = "Export failed: PNG encoding failed.";
-"legacy.key_59" = "Export failed: current canvas unavailable.";
 "legacy.key_60" = "Export failed: cannot create bitmap data.";
 "legacy.key_61" = "Export failed: cannot render current canvas.";
 "legacy.key_62" = "Export failed: import video first.";
 "legacy.exported_lastpathcomponent_removedtempfiles" = "Export complete: \(exported.lastPathComponent) (cleaned \(removedTempFiles) temp files)";
 "legacy.key_63" = "Export canceled.";
-"legacy.png_2" = "Export Canvas PNG (Transparent)";
 "legacy.key_64" = "Camera permission not granted yet. Authorize first, then refresh devices.";
 "legacy.pip_10" = "Screen excludes PiP window";
 "legacy.pip_11" = "Screen includes PiP window";
@@ -332,8 +329,8 @@
 "fmt.compose.insertion_missing_video" = "Inserted segment is missing video: %@";
 "fmt.device.status" = "Device status: %@";
 "fmt.draw.color_changed" = "Color switched: %@";
-"fmt.draw.export_failed" = "Export failed: %@";
-"fmt.draw.export_success" = "Export succeeded: %@";
+"fmt.draw.capture_saved" = "Capture saved: %@";
+"fmt.draw.capture_failed" = "Capture failed: %@";
 "fmt.draw.intensity" = "Hand-drawn intensity: %d%%";
 "fmt.draw.mark_style_changed" = "Mark style switched: %@";
 "fmt.draw.shape_added" = "Added %@ (color %@)";
@@ -430,6 +427,16 @@
 "draw.dismiss.style.bottom_to_top" = "Bottom → Top";
 "draw.dismiss.hint" = "Random rotates across effects; Fixed keeps your selected dismissal effect consistently.";
 "draw.dismiss.start" = "Playing canvas dismissal animation...";
+"draw.capture.title" = "Capture On Hide";
+"draw.capture.toggle" = "Enable Capture When Hiding Canvas";
+"draw.capture.hint" = "When enabled, each hide action saves one composed PNG (screen background + annotations, toolbar excluded) and keeps only the latest 3 days.";
+"draw.capture.open_dir" = "Open Capture Folder";
+"draw.capture.error.screen_unavailable" = "Capture failed: no available screen.";
+"draw.capture.error.permission" = "Capture failed: screen recording permission is not granted.";
+"draw.capture.error.capture_failed" = "Capture failed: unable to read screen image.";
+"draw.capture.error.canvas_unavailable" = "Capture failed: current canvas is unavailable.";
+"draw.capture.error.bitmap_failed" = "Capture failed: unable to create bitmap data.";
+"draw.capture.error.png_failed" = "Capture failed: PNG encoding failed.";
 "pip.hotkey.registered.status" = "PiP global hotkey is ready: Cmd+Opt+P.";
 "pip.hotkey.fallback.status" = "PiP global hotkey unavailable: activate PJTool before using Cmd+Opt+P.";
 

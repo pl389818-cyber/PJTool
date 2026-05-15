@@ -85,14 +85,11 @@
 "legacy.key_56" = "导出中...";
 "legacy.key_57" = "导出中（源视频无音轨，已跳过声音处理）...";
 "legacy.key_58" = "导出失败。";
-"legacy.png" = "导出失败：PNG 编码失败。";
-"legacy.key_59" = "导出失败：当前画布不可用。";
 "legacy.key_60" = "导出失败：无法创建位图数据。";
 "legacy.key_61" = "导出失败：无法渲染当前画布。";
 "legacy.key_62" = "导出失败：请先导入视频。";
 "legacy.exported_lastpathcomponent_removedtempfiles" = "导出完成：\\(exported.lastPathComponent)（已清理 \\(removedTempFiles) 个临时文件）";
 "legacy.key_63" = "导出已取消。";
-"legacy.png_2" = "导出画布 PNG（透明）";
 "legacy.key_64" = "尚未授予摄像头权限，请先授权后再刷新设备。";
 "legacy.pip_10" = "屏幕不含 PiP 小窗";
 "legacy.pip_11" = "屏幕含 PiP 小窗";
@@ -332,8 +329,8 @@
 "fmt.compose.insertion_missing_video" = "插入片段缺少视频：%@";
 "fmt.device.status" = "设备状态：%@";
 "fmt.draw.color_changed" = "颜色已切换：%@";
-"fmt.draw.export_failed" = "导出失败：%@";
-"fmt.draw.export_success" = "导出成功：%@";
+"fmt.draw.capture_saved" = "已保存截图：%@";
+"fmt.draw.capture_failed" = "截图失败：%@";
 "fmt.draw.intensity" = "手绘强度：%d%%";
 "fmt.draw.mark_style_changed" = "对/错风格已切换：%@";
 "fmt.draw.shape_added" = "已添加%@（颜色 %@）";
@@ -430,6 +427,16 @@
 "draw.dismiss.style.bottom_to_top" = "下→上";
 "draw.dismiss.hint" = "随机模式会在各效果间轮换；固定模式会持续使用你选定的退场效果。";
 "draw.dismiss.start" = "画布退场动画播放中...";
+"draw.capture.title" = "关闭截图";
+"draw.capture.toggle" = "开启画布关闭截图";
+"draw.capture.hint" = "开启后，每次收起画图都会自动保存一张“屏幕背景+标注合成”PNG（不含工具条），并仅保留最近3天。";
+"draw.capture.open_dir" = "打开截图目录";
+"draw.capture.error.screen_unavailable" = "截图失败：当前无可用屏幕。";
+"draw.capture.error.permission" = "截图失败：未授予屏幕录制权限。";
+"draw.capture.error.capture_failed" = "截图失败：无法获取屏幕图像。";
+"draw.capture.error.canvas_unavailable" = "截图失败：当前画布不可用。";
+"draw.capture.error.bitmap_failed" = "截图失败：无法创建位图数据。";
+"draw.capture.error.png_failed" = "截图失败：PNG 编码失败。";
 "pip.hotkey.registered.status" = "PiP 全局热键已就绪：⌘⌥P。";
 "pip.hotkey.fallback.status" = "PiP 全局热键不可用：请先激活 PJTool 后再用 ⌘⌥P。";
 

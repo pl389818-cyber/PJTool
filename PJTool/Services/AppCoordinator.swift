@@ -16,6 +16,7 @@ final class AppCoordinator: ObservableObject {
     private static let languageOptionDefaultsKey = "pjtool.appLanguage.option"
     private static let drawDismissalAnimationModeDefaultsKey = "pjtool.draw.dismissal.animation.mode"
     private static let drawDismissalAnimationFixedStyleDefaultsKey = "pjtool.draw.dismissal.animation.fixedStyle"
+    private static let drawAutoCaptureOnCloseEnabledDefaultsKey = "pjtool.draw.autoCaptureOnClose.enabled"
     private static let pipHotkeyRegisteredStatusKey = "pip.hotkey.registered.status"
     private static let pipHotkeyFallbackStatusKey = "pip.hotkey.fallback.status"
     @Published private(set) var isRecordingArmed = false
@@ -71,6 +72,12 @@ final class AppCoordinator: ObservableObject {
     @Published private(set) var isDrawCanvasInteractionEnabled = true
     @Published private(set) var isDrawGlobalHotkeysEnabled = false
     @Published private(set) var isPiPGlobalHotkeysEnabled = false
+    @Published var isDrawAutoCaptureOnCloseEnabled = false {
+        didSet {
+            guard isDrawAutoCaptureOnCloseEnabled != oldValue else { return }
+            persistDrawAutoCaptureOnCloseEnabled()
+        }
+    }
     @Published var drawDismissalAnimationMode: DrawDismissalAnimationMode = .random {
         didSet {
             guard drawDismissalAnimationMode != oldValue else { return }
@@ -97,7 +104,7 @@ final class AppCoordinator: ObservableObject {
 
     private let screenDrawHotkeyService: ScreenDrawHotkeyService
     private let pipHotkeyService: PiPHotkeyService
-    private let screenDrawExportService = ScreenDrawExportService()
+    private let screenDrawAutoCaptureService = ScreenDrawAutoCaptureService()
     private var cancellables: Set<AnyCancellable> = []
     private var shouldRestoreMainWindowAfterRecording = false
     private var drawSystemDefinedMonitor: Any?
@@ -221,6 +228,7 @@ final class AppCoordinator: ObservableObject {
         }
 
         loadPersistedDrawDismissalAnimationPreferences()
+        loadPersistedDrawAutoCaptureOnCloseEnabled()
         loadPersistedLanguageOption()
         resolveLanguage()
         bindState()
@@ -373,6 +381,14 @@ final class AppCoordinator: ObservableObject {
     func hideScreenDrawOverlay() {
         pendingDrawCaptureRefreshTask?.cancel()
         pendingDrawCaptureRefreshTask = nil
+        let shouldAutoCapture = isDrawAutoCaptureOnCloseEnabled && screenDrawCanvasController.hasDrawableContent
+        let captureCanvasImage = shouldAutoCapture ? screenDrawCanvasController.snapshotImage() : nil
+        let targetScreen = screenDrawCanvasController.currentScreen
+            ?? activeScreenByPointer()
+            ?? NSApp.keyWindow?.screen
+            ?? NSApp.mainWindow?.screen
+            ?? NSScreen.main
+            ?? NSScreen.screens.first
         screenDrawToolbarController.hide()
         if screenDrawCanvasController.hasDrawableContent {
             drawStatusMessage = L10n.tr("draw.dismiss.start")
@@ -380,7 +396,14 @@ final class AppCoordinator: ObservableObject {
         screenDrawCanvasController.hideWithDismissalAnimation { [weak self] in
             guard let self else { return }
             self.isDrawOverlayVisible = false
-            self.drawStatusMessage = L10n.tr("legacy.key_69")
+            if shouldAutoCapture {
+                self.captureScreenDrawCompositeIfNeeded(
+                    screen: targetScreen,
+                    canvasImage: captureCanvasImage
+                )
+            } else {
+                self.drawStatusMessage = L10n.tr("legacy.key_69")
+            }
             self.refreshRecordingWindowCaptureIfNeeded()
         }
     }
@@ -405,22 +428,12 @@ final class AppCoordinator: ObservableObject {
         drawStatusMessage = L10n.f("fmt.draw.mark_style_changed", style.title)
     }
 
-    func exportScreenDrawCanvasAsPNG() {
+    func openScreenDrawAutoCaptureDirectory() {
         do {
-            guard let image = screenDrawCanvasController.snapshotImage() else {
-                drawStatusMessage = L10n.tr("legacy.key_59")
-                return
-            }
-            let outputURL = try screenDrawExportService.pickOutputURL()
-            try screenDrawExportService.writeTransparentPNG(from: image, to: outputURL)
-            drawStatusMessage = L10n.f("fmt.draw.export_success", outputURL.lastPathComponent)
-            NSWorkspace.shared.activateFileViewerSelecting([outputURL])
+            let directory = try PJToolOutputDirectoryPolicy.prepareScreenDrawAutoCaptureDirectory()
+            NSWorkspace.shared.activateFileViewerSelecting([directory])
         } catch {
-            if let exportError = error as? ScreenDrawExportError, case .cancelled = exportError {
-                drawStatusMessage = exportError.errorDescription ?? L10n.tr("legacy.key_85")
-                return
-            }
-            drawStatusMessage = L10n.f("fmt.draw.export_failed", error.localizedDescription)
+            drawStatusMessage = L10n.f("fmt.draw.capture_failed", error.localizedDescription)
         }
     }
 
@@ -807,6 +820,12 @@ final class AppCoordinator: ObservableObject {
         screenDrawCanvasController.drawSessionStore.dismissalAnimationFixedStyle = drawDismissalAnimationFixedStyle
     }
 
+    private func loadPersistedDrawAutoCaptureOnCloseEnabled() {
+        isDrawAutoCaptureOnCloseEnabled = UserDefaults.standard.bool(
+            forKey: Self.drawAutoCaptureOnCloseEnabledDefaultsKey
+        )
+    }
+
     private func persistDrawDismissalAnimationMode() {
         UserDefaults.standard.set(
             drawDismissalAnimationMode.rawValue,
@@ -819,6 +838,37 @@ final class AppCoordinator: ObservableObject {
             drawDismissalAnimationFixedStyle.rawValue,
             forKey: Self.drawDismissalAnimationFixedStyleDefaultsKey
         )
+    }
+
+    private func persistDrawAutoCaptureOnCloseEnabled() {
+        UserDefaults.standard.set(
+            isDrawAutoCaptureOnCloseEnabled,
+            forKey: Self.drawAutoCaptureOnCloseEnabledDefaultsKey
+        )
+    }
+
+    private func captureScreenDrawCompositeIfNeeded(screen: NSScreen?, canvasImage: NSImage?) {
+        guard let canvasImage else {
+            drawStatusMessage = L10n.tr("draw.capture.error.canvas_unavailable")
+            return
+        }
+        Task { @MainActor [weak self] in
+            guard let self else { return }
+            do {
+                let outputURL = try await screenDrawAutoCaptureService.captureAndSave(
+                    screen: screen,
+                    canvasImage: canvasImage
+                )
+                drawStatusMessage = L10n.f("fmt.draw.capture_saved", outputURL.lastPathComponent)
+            } catch {
+                if let captureError = error as? ScreenDrawAutoCaptureError,
+                   case .screenCapturePermissionDenied = captureError {
+                    drawStatusMessage = captureError.errorDescription ?? L10n.tr("draw.capture.error.permission")
+                    return
+                }
+                drawStatusMessage = L10n.f("fmt.draw.capture_failed", error.localizedDescription)
+            }
+        }
     }
 
     private func resolveLanguage() {

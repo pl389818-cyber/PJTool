@@ -16,6 +16,7 @@ struct ScreenDrawingSettingsView: View {
             actionCard
             shortcutsCard
             strokeCard
+            captureCard
             dismissalCard
         }
     }
@@ -184,17 +185,24 @@ struct ScreenDrawingSettingsView: View {
                 }
             }
             .pickerStyle(.segmented)
+        }
+    }
 
-            HStack(spacing: 12) {
-                Button(L10n.tr("legacy.png_2")) {
-                    appCoordinator.exportScreenDrawCanvasAsPNG()
-                }
-                .buttonStyle(.borderedProminent)
+    private var captureCard: some View {
+        card(title: L10n.tr("draw.capture.title"), icon: "camera.viewfinder") {
+            Toggle(L10n.tr("draw.capture.toggle"), isOn: Binding(
+                get: { appCoordinator.isDrawAutoCaptureOnCloseEnabled },
+                set: { appCoordinator.isDrawAutoCaptureOnCloseEnabled = $0 }
+            ))
 
-                Text(L10n.tr("legacy.key_147"))
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
+            Text(L10n.tr("draw.capture.hint"))
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+
+            Button(L10n.tr("draw.capture.open_dir")) {
+                appCoordinator.openScreenDrawAutoCaptureDirectory()
             }
+            .buttonStyle(.bordered)
         }
     }
 

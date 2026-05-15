@@ -71,6 +71,13 @@ final class ScreenDrawCanvasWindowController: NSObject {
         sessionStore.hasDrawableContent
     }
 
+    var currentScreen: NSScreen? {
+        hostScreen
+            ?? panel?.screen
+            ?? NSScreen.main
+            ?? NSScreen.screens.first
+    }
+
     @discardableResult
     func show(on screen: NSScreen?) -> Bool {
         let targetScreen = screen
@@ -932,15 +939,14 @@ private final class ScreenDrawCanvasView: NSView {
     func exportSnapshotImage() -> NSImage? {
         let bounds = self.bounds
         guard bounds.width > 1, bounds.height > 1 else { return nil }
-        let image = NSImage(size: bounds.size)
-        image.lockFocus()
-        defer { image.unlockFocus() }
-        NSColor.clear.setFill()
-        NSBezierPath(rect: NSRect(origin: .zero, size: bounds.size)).fill()
-
-        for shape in sessionStore.shapes {
-            draw(shape)
+        guard let bitmapRep = bitmapImageRepForCachingDisplay(in: bounds) else {
+            return nil
         }
+        bitmapRep.size = bounds.size
+        cacheDisplay(in: bounds, to: bitmapRep)
+
+        let image = NSImage(size: bounds.size)
+        image.addRepresentation(bitmapRep)
         return image
     }
 }

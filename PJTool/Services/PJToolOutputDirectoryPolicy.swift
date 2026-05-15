@@ -13,6 +13,7 @@ struct PJToolOutputDirectoryPolicy {
     private static let videoCutsFolderName = "VideoCuts"
     private static let audioExtractFolderName = "AudioExtract"
     private static let screenDrawFolderName = "ScreenDraw"
+    private static let screenDrawAutoCapturesFolderName = "AutoCaptures"
 
     private static let videoCutsLastDirectoryDefaultsKey = "pjtool.output.video_cuts.last_directory"
     private static let screenDrawLastDirectoryDefaultsKey = "pjtool.output.screen_draw.last_directory"
@@ -59,6 +60,19 @@ struct PJToolOutputDirectoryPolicy {
 
     static func rememberScreenDrawDirectory(from exportedFileURL: URL) {
         rememberDirectory(forKey: screenDrawLastDirectoryDefaultsKey, from: exportedFileURL)
+    }
+
+    static func preferredScreenDrawAutoCaptureDirectory() -> URL {
+        // Auto-capture output must be deterministic and sandbox-safe.
+        // Do not inherit the remembered manual export directory, which may
+        // point outside the Pictures entitlement scope.
+        defaultScreenDrawDirectory().appendingPathComponent(screenDrawAutoCapturesFolderName, isDirectory: true)
+    }
+
+    static func prepareScreenDrawAutoCaptureDirectory() throws -> URL {
+        let directory = preferredScreenDrawAutoCaptureDirectory()
+        try ensureDirectoryExists(directory)
+        return directory
     }
 
     private static func defaultVideoCutsDirectory() -> URL {
