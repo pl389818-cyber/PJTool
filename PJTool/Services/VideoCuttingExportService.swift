@@ -15,8 +15,13 @@ struct VideoCuttingExportService {
         panel.canCreateDirectories = true
         panel.allowedContentTypes = [.mpeg4Movie]
         panel.nameFieldStringValue = suggestedName
+        panel.directoryURL = try? PJToolOutputDirectoryPolicy.prepareVideoCutsDirectory()
         let response = panel.runModal()
-        return response == .OK ? panel.url : nil
+        guard response == .OK, let url = panel.url else {
+            return nil
+        }
+        PJToolOutputDirectoryPolicy.rememberVideoCutsDirectory(from: url)
+        return url
     }
 
     func revealInFinder(_ url: URL) {

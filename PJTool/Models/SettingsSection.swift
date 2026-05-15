@@ -12,6 +12,7 @@ enum SettingsSection: String, CaseIterable, Identifiable {
     case pipCamera
     case screenDrawing
     case videoCutting
+    case audioExtract
     case appSettings
 
     var id: String { rawValue }
@@ -26,6 +27,8 @@ enum SettingsSection: String, CaseIterable, Identifiable {
             return L10n.tr("section.screenDrawing.title")
         case .videoCutting:
             return L10n.tr("section.videoCutting.title")
+        case .audioExtract:
+            return L10n.tr("section.audioExtract.title")
         case .appSettings:
             return L10n.tr("section.settings.title")
         }
@@ -41,6 +44,8 @@ enum SettingsSection: String, CaseIterable, Identifiable {
             return L10n.tr("section.screenDrawing.subtitle")
         case .videoCutting:
             return L10n.tr("section.videoCutting.subtitle")
+        case .audioExtract:
+            return L10n.tr("section.audioExtract.subtitle")
         case .appSettings:
             return L10n.tr("section.settings.subtitle")
         }
@@ -56,6 +61,8 @@ enum SettingsSection: String, CaseIterable, Identifiable {
             return "pencil.and.scribble"
         case .videoCutting:
             return "scissors"
+        case .audioExtract:
+            return "waveform.badge.mic"
         case .appSettings:
             return "gearshape"
         }

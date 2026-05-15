@@ -419,10 +419,7 @@ final class ScreenRecorderEngine: NSObject, ObservableObject {
     }
 
     private func makeMergedURL() throws -> URL {
-        let folder = FileManager.default.homeDirectoryForCurrentUser
-            .appendingPathComponent("Movies", isDirectory: true)
-            .appendingPathComponent("PJTool", isDirectory: true)
-        try FileManager.default.createDirectory(at: folder, withIntermediateDirectories: true)
+        let folder = try PJToolOutputDirectoryPolicy.recordingsDirectory()
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyyMMdd-HHmmss"
         return folder.appendingPathComponent("PJTool-\(formatter.string(from: Date())).mp4")

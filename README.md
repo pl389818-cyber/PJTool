@@ -76,7 +76,7 @@ If global hotkeys are unavailable due to system constraints, the app falls back 
 From `/Users/jamie/CodexAi/pjtool/PJTool`:
 
 ```bash
-xcodebuild -project PJTool.xcodeproj -scheme PJTool -destination 'platform=macOS' build
+Scripts/run_build.sh
 Scripts/run_logic_checks.sh
 ```
 

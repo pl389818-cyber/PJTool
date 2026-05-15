@@ -50,7 +50,7 @@ struct VideoCuttingAudioProcessingConfig: Equatable, Codable {
     var eqPreset: VideoCuttingAudioEQPreset
 
     static let `default` = VideoCuttingAudioProcessingConfig(
-        noiseReductionEnabled: true,
+        noiseReductionEnabled: false,
         noiseReductionPercent: 50,
         eqPreset: .balanced
     )

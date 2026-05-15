@@ -35,10 +35,12 @@ struct ScreenDrawExportService {
         panel.canCreateDirectories = true
         panel.allowedContentTypes = [.png]
         panel.nameFieldStringValue = "screen_draw_\(timestamp()).png"
+        panel.directoryURL = try? PJToolOutputDirectoryPolicy.prepareScreenDrawDirectory()
         let response = panel.runModal()
         guard response == .OK, let url = panel.url else {
             throw ScreenDrawExportError.cancelled
         }
+        PJToolOutputDirectoryPolicy.rememberScreenDrawDirectory(from: url)
         return url
     }
 
@@ -61,4 +63,3 @@ struct ScreenDrawExportService {
         return formatter.string(from: Date())
     }
 }
-

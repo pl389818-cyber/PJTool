@@ -12,7 +12,6 @@ import SwiftUI
 struct PiPCameraSettingsView: View {
     @ObservedObject var appCoordinator: AppCoordinator
     @ObservedObject private var pipRuntime: PiPPreviewRuntime
-    @State private var diagnosticFeedback: String?
     @State private var showingDiagnostics = false
 
     init(appCoordinator: AppCoordinator) {
@@ -21,235 +20,305 @@ struct PiPCameraSettingsView: View {
     }
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            sectionHeader(L10n.tr("legacy.pip_3"), subtitle: L10n.tr("legacy.key_34"))
-            pipTopActionRow
+        VStack(alignment: .leading, spacing: 16) {
+            heroBanner
+            previewCard
+            deviceCard
+            windowCard
+            audioMonitorCard
 
-            card {
-                HStack(alignment: .top, spacing: 12) {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text(L10n.tr("legacy.key_222"))
-                            .font(.headline)
-                        Text(previewConsoleSummary)
-                            .font(.footnote)
-                            .foregroundStyle(.secondary)
-                        Text(L10n.tr("pip.hotkey.tip"))
-                            .font(.footnote)
-                            .foregroundStyle(.secondary)
-                    }
-                    Spacer(minLength: 12)
-                    previewStateBadge
-                }
-            }
-
-            card {
-                Text(L10n.tr("legacy.key_199"))
-                    .font(.headline)
-
-                Picker(L10n.tr("legacy.key_142"), selection: cameraSelectionBinding) {
-                    ForEach(pipRuntime.sources) { source in
-                        let label = source.badgeText.isEmpty ? source.name : "\(source.name) (\(source.badgeText))"
-                        Text(label).tag(source.id)
-                    }
-                }
-                .pickerStyle(.menu)
-                .disabled(!isCameraAuthorized || pipRuntime.sources.isEmpty)
-
-                Picker(L10n.tr("legacy.pip_9"), selection: cameraAudioSelectionBinding) {
-                    ForEach(pipRuntime.audioSources) { source in
-                        let label = source.badgeText.isEmpty ? source.name : "\(source.name) (\(source.badgeText))"
-                        Text(label).tag(source.id)
-                    }
-                }
-                .pickerStyle(.menu)
-                .disabled(!isCameraAudioAuthorized || pipRuntime.audioSources.isEmpty)
-
-                Text(selectedDeviceSummary)
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-
-                HStack(spacing: 12) {
-                    Button(L10n.tr("legacy.key_31")) {
-                        pipRuntime.refreshSources()
-                        pipRuntime.refreshAudioSources()
-                    }
-                    if !isCameraAuthorized {
-                        Button(L10n.tr("legacy.key_203")) { pipRuntime.requestCameraAccess() }
-                    }
-                    if !isCameraAudioAuthorized {
-                        Button(L10n.tr("legacy.pip_27")) { pipRuntime.requestMicrophoneAccess() }
-                    }
-                    Button(L10n.tr("legacy.key_125")) { openPrivacySettings() }
-                    Button(showingDiagnostics ? L10n.tr("legacy.key_200") : L10n.tr("legacy.key_208")) {
-                        runInAppDiagnostics()
-                    }
-                    .disabled(showingDiagnostics)
-                }
-
-                if needsPermissionRecovery {
-                    permissionRecoveryGuide
-                }
-
-                if pipRuntime.sources.isEmpty {
-                    statusBanner(
-                        title: isCameraAuthorized ? L10n.tr("legacy.key_160") : L10n.tr("legacy.key_139"),
-                        detail: cameraEmptyStateText
-                    )
-                } else if pipRuntime.sources.allSatisfy({ !$0.isAvailable }) {
-                    statusBanner(
-                        title: L10n.tr("legacy.key_143"),
-                        detail: L10n.tr("legacy.iphone_continuity_camera")
-                    )
-                }
-
-                diagnosticSummary
-
-                if let diagnosticFeedback, !diagnosticFeedback.isEmpty {
-                    Text(diagnosticFeedback)
+            if let infoMessage = pipRuntime.infoMessage, !infoMessage.isEmpty {
+                card(title: L10n.tr("legacy.key_31"), icon: "info.circle") {
+                    Text(L10n.f("fmt.device.status", infoMessage))
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                 }
-
-                Text(L10n.f("fmt.pip.current_status", appCoordinator.pipStatusMessage))
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
             }
+        }
+    }
 
-            card {
-                Text(L10n.tr("legacy.key_187"))
-                    .font(.headline)
-
-                Toggle(L10n.tr("legacy.key_212"), isOn: Binding(
-                    get: { appCoordinator.pipWindowConfig.isAlwaysOnTop },
-                    set: { newValue in
-                        var next = appCoordinator.pipWindowConfig
-                        next.isAlwaysOnTop = newValue
-                        appCoordinator.pipWindowConfig = next
-                    }
-                ))
-
-                HStack(alignment: .center, spacing: 10) {
-                    Toggle("", isOn: Binding(
-                        get: { appCoordinator.pipWindowConfig.isTitleBarVisible },
-                        set: { newValue in
-                            var next = appCoordinator.pipWindowConfig
-                            next.isTitleBarVisible = newValue
-                            appCoordinator.pipWindowConfig = next
-                        }
-                    ))
-                    .labelsHidden()
-
-                    Text(L10n.tr("legacy.pip_4"))
-                        .font(.subheadline.weight(.medium))
-                    TextField(
-                        PiPWindowConfig.defaultWindowTitle,
-                        text: Binding(
-                            get: { appCoordinator.pipWindowConfig.windowTitle },
-                            set: { newValue in
-                                var next = appCoordinator.pipWindowConfig
-                                next.windowTitle = newValue
-                                appCoordinator.pipWindowConfig = next
-                            }
+    private var heroBanner: some View {
+        HStack(alignment: .center, spacing: 14) {
+            ZStack {
+                Circle()
+                    .fill(
+                        LinearGradient(
+                            colors: [Color.cyan.opacity(0.9), Color.blue.opacity(0.75)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
                         )
                     )
-                    .textFieldStyle(.roundedBorder)
-                    .frame(maxWidth: .infinity)
-                }
+                    .frame(width: 44, height: 44)
 
-                Picker(L10n.tr("legacy.key_207"), selection: Binding(
-                    get: { appCoordinator.pipWindowConfig.frameStyle },
+                Image(systemName: "video.badge.waveform")
+                    .font(.system(size: 20, weight: .semibold))
+                    .foregroundStyle(.white)
+            }
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text(L10n.tr("section.pipCamera.title"))
+                    .font(.system(size: 25, weight: .bold, design: .rounded))
+                Text(L10n.tr("section.pipCamera.subtitle"))
+                    .font(.callout.weight(.medium))
+                    .foregroundStyle(Color.white.opacity(0.85))
+            }
+
+            Spacer(minLength: 10)
+            statusChip
+        }
+        .padding(16)
+        .background(
+            LinearGradient(
+                colors: [Color(red: 0.11, green: 0.55, blue: 0.73), Color(red: 0.17, green: 0.24, blue: 0.62)],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .stroke(Color.white.opacity(0.18), lineWidth: 1)
+        )
+        .shadow(color: Color.black.opacity(0.12), radius: 10, y: 6)
+    }
+
+    private var statusChip: some View {
+        HStack(spacing: 6) {
+            Circle()
+                .fill(statusColor)
+                .frame(width: 8, height: 8)
+            Text(appCoordinator.pipStatusMessage)
+                .font(.caption.weight(.semibold))
+                .lineLimit(1)
+        }
+        .foregroundStyle(.white)
+        .padding(.horizontal, 10)
+        .padding(.vertical, 6)
+        .background(Color.black.opacity(0.24))
+        .clipShape(Capsule())
+    }
+
+    private var previewCard: some View {
+        card(title: L10n.tr("legacy.key_222"), icon: "display") {
+            HStack(alignment: .top, spacing: 12) {
+                VStack(alignment: .leading, spacing: 6) {
+                    Text(previewConsoleSummary)
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                    Text(L10n.tr("pip.hotkey.tip"))
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                }
+                Spacer(minLength: 12)
+                previewStateBadge
+            }
+
+            HStack(spacing: 12) {
+                if appCoordinator.isPiPPreviewVisible {
+                    Button(L10n.tr("legacy.pip_25")) {
+                        appCoordinator.hidePiPPreview()
+                    }
+                    .buttonStyle(.bordered)
+                } else {
+                    Button(L10n.tr("legacy.pip_12")) {
+                        appCoordinator.activatePiPPreview()
+                    }
+                    .buttonStyle(.borderedProminent)
+                }
+            }
+        }
+    }
+
+    private var deviceCard: some View {
+        card(title: L10n.tr("legacy.key_199"), icon: "camera") {
+            Picker(L10n.tr("legacy.key_142"), selection: cameraSelectionBinding) {
+                ForEach(pipRuntime.sources) { source in
+                    let label = source.badgeText.isEmpty ? source.name : "\(source.name) (\(source.badgeText))"
+                    Text(label).tag(source.id)
+                }
+            }
+            .pickerStyle(.menu)
+            .disabled(!isCameraAuthorized || pipRuntime.sources.isEmpty)
+
+            Picker(L10n.tr("legacy.pip_9"), selection: cameraAudioSelectionBinding) {
+                ForEach(pipRuntime.audioSources) { source in
+                    let label = source.badgeText.isEmpty ? source.name : "\(source.name) (\(source.badgeText))"
+                    Text(label).tag(source.id)
+                }
+            }
+            .pickerStyle(.menu)
+            .disabled(!isCameraAudioAuthorized || pipRuntime.audioSources.isEmpty)
+
+            Text(selectedDeviceSummary)
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+
+            HStack(spacing: 12) {
+                Button(L10n.tr("legacy.key_31")) {
+                    pipRuntime.refreshSources()
+                    pipRuntime.refreshAudioSources()
+                }
+                if !isCameraAuthorized {
+                    Button(L10n.tr("legacy.key_203")) { pipRuntime.requestCameraAccess() }
+                }
+                if !isCameraAudioAuthorized {
+                    Button(L10n.tr("legacy.pip_27")) { pipRuntime.requestMicrophoneAccess() }
+                }
+                Button(L10n.tr("legacy.key_125")) { openPrivacySettings() }
+                Button(showingDiagnostics ? L10n.tr("legacy.key_200") : L10n.tr("legacy.key_208")) {
+                    runInAppDiagnostics()
+                }
+                .disabled(showingDiagnostics)
+            }
+
+            if needsPermissionRecovery {
+                permissionRecoveryGuide
+            }
+
+            if pipRuntime.sources.isEmpty {
+                statusBanner(
+                    title: isCameraAuthorized ? L10n.tr("legacy.key_160") : L10n.tr("legacy.key_139"),
+                    detail: cameraEmptyStateText
+                )
+            } else if pipRuntime.sources.allSatisfy({ !$0.isAvailable }) {
+                statusBanner(
+                    title: L10n.tr("legacy.key_143"),
+                    detail: L10n.tr("legacy.iphone_continuity_camera")
+                )
+            }
+
+            Text(L10n.f("fmt.pip.current_status", appCoordinator.pipStatusMessage))
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+        }
+    }
+
+    private var windowCard: some View {
+        card(title: L10n.tr("legacy.key_187"), icon: "rectangle.on.rectangle") {
+            Toggle(L10n.tr("legacy.key_212"), isOn: Binding(
+                get: { appCoordinator.pipWindowConfig.isAlwaysOnTop },
+                set: { newValue in
+                    var next = appCoordinator.pipWindowConfig
+                    next.isAlwaysOnTop = newValue
+                    appCoordinator.pipWindowConfig = next
+                }
+            ))
+
+            HStack(alignment: .center, spacing: 10) {
+                Toggle(isOn: Binding(
+                    get: { appCoordinator.pipWindowConfig.isTitleBarVisible },
                     set: { newValue in
                         var next = appCoordinator.pipWindowConfig
-                        next.frameStyle = newValue
+                        next.isTitleBarVisible = newValue
                         appCoordinator.pipWindowConfig = next
                     }
                 )) {
-                    ForEach(PiPWindowFrameStyle.allCases, id: \.self) { style in
-                        Text(style.displayTitle).tag(style)
-                    }
+                    Text(L10n.tr("legacy.pip_4"))
+                        .font(.body.weight(.medium))
                 }
-                .pickerStyle(.segmented)
+                .toggleStyle(.checkbox)
 
-                Picker(L10n.tr("legacy.key_184"), selection: Binding(
-                    get: { appCoordinator.pipAspectRatio },
-                    set: { appCoordinator.pipAspectRatio = $0 }
-                )) {
-                    ForEach(PiPAspectRatio.allCases) { ratio in
-                        Text(ratio.displayTitle).tag(ratio)
-                    }
-                }
-                .pickerStyle(.segmented)
-
-                Text(
-                    L10n.f(
-                        "fmt.pip.current_layout",
-                        appCoordinator.pipLayout.normalizedRect.minX,
-                        appCoordinator.pipLayout.normalizedRect.minY,
-                        appCoordinator.pipLayout.normalizedRect.width,
-                        appCoordinator.pipLayout.normalizedRect.height
+                TextField(
+                    PiPWindowConfig.defaultWindowTitle,
+                    text: Binding(
+                        get: { appCoordinator.pipWindowConfig.windowTitle },
+                        set: { newValue in
+                            var next = appCoordinator.pipWindowConfig
+                            next.windowTitle = newValue
+                            appCoordinator.pipWindowConfig = next
+                        }
                     )
                 )
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-                Text(L10n.f("fmt.pip.current_title", appCoordinator.pipWindowConfig.resolvedWindowTitle))
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-                Text(L10n.f("fmt.pip.current_frame", appCoordinator.pipWindowConfig.frameStyle.displayTitle))
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-                Text(L10n.tr("legacy.k_240x240"))
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
+                .textFieldStyle(.roundedBorder)
+                .frame(maxWidth: .infinity)
             }
 
-            card {
-                Text(L10n.tr("legacy.pip_8"))
-                    .font(.headline)
+            Picker(L10n.tr("legacy.key_207"), selection: Binding(
+                get: { appCoordinator.pipWindowConfig.frameStyle },
+                set: { newValue in
+                    var next = appCoordinator.pipWindowConfig
+                    next.frameStyle = newValue
+                    appCoordinator.pipWindowConfig = next
+                }
+            )) {
+                ForEach(PiPWindowFrameStyle.allCases, id: \.self) { style in
+                    Text(style.displayTitle).tag(style)
+                }
+            }
+            .pickerStyle(.segmented)
 
-                Toggle(L10n.tr("legacy.key_223"), isOn: Binding(
-                    get: { appCoordinator.pipAudioPreviewConfig.isPreviewMuted },
+            Picker(L10n.tr("legacy.key_184"), selection: Binding(
+                get: { appCoordinator.pipAspectRatio },
+                set: { appCoordinator.pipAspectRatio = $0 }
+            )) {
+                ForEach(PiPAspectRatio.allCases) { ratio in
+                    Text(ratio.displayTitle).tag(ratio)
+                }
+            }
+            .pickerStyle(.segmented)
+
+            Text(
+                L10n.f(
+                    "fmt.pip.current_layout",
+                    appCoordinator.pipLayout.normalizedRect.minX,
+                    appCoordinator.pipLayout.normalizedRect.minY,
+                    appCoordinator.pipLayout.normalizedRect.width,
+                    appCoordinator.pipLayout.normalizedRect.height
+                )
+            )
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+            Text(L10n.f("fmt.pip.current_title", appCoordinator.pipWindowConfig.resolvedWindowTitle))
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+            Text(L10n.f("fmt.pip.current_frame", appCoordinator.pipWindowConfig.frameStyle.displayTitle))
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+            Text(L10n.tr("legacy.k_240x240"))
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+        }
+    }
+
+    private var audioMonitorCard: some View {
+        card(title: L10n.tr("legacy.pip_8"), icon: "waveform") {
+            Toggle(L10n.tr("legacy.key_223"), isOn: Binding(
+                get: { appCoordinator.pipAudioPreviewConfig.isPreviewMuted },
+                set: { newValue in
+                    var next = appCoordinator.pipAudioPreviewConfig
+                    next.isPreviewMuted = newValue
+                    appCoordinator.pipAudioPreviewConfig = next
+                }
+            ))
+
+            HStack(spacing: 10) {
+                Text(L10n.tr("legacy.key_224"))
+                Slider(value: Binding(
+                    get: { appCoordinator.pipAudioPreviewConfig.previewVolume },
                     set: { newValue in
                         var next = appCoordinator.pipAudioPreviewConfig
-                        next.isPreviewMuted = newValue
+                        next.previewVolume = newValue
                         appCoordinator.pipAudioPreviewConfig = next
                     }
-                ))
+                ), in: 0...1)
+                Text("\(Int(appCoordinator.pipAudioPreviewConfig.clampedVolume * 100))")
+                    .frame(width: 38, alignment: .trailing)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
 
-                HStack(spacing: 10) {
-                    Text(L10n.tr("legacy.key_224"))
-                    Slider(value: Binding(
-                        get: { appCoordinator.pipAudioPreviewConfig.previewVolume },
-                        set: { newValue in
-                            var next = appCoordinator.pipAudioPreviewConfig
-                            next.previewVolume = newValue
-                            appCoordinator.pipAudioPreviewConfig = next
-                        }
-                    ), in: 0...1)
-                    Text("\(Int(appCoordinator.pipAudioPreviewConfig.clampedVolume * 100))")
-                        .frame(width: 38, alignment: .trailing)
-                        .font(.caption)
-                        .foregroundStyle(.secondary)
-                }
+            AudioLevelMeterView(level: pipRuntime.previewAudioLevel)
+                .frame(height: 12)
 
-                AudioLevelMeterView(level: pipRuntime.previewAudioLevel)
-                    .frame(height: 12)
-
-                Text(
-                    L10n.f(
-                        "legacy.pip_status_line_with_level",
-                        appCoordinator.pipAudioPreviewConfig.isPreviewMuted ? L10n.tr("legacy.key_218") : L10n.tr("legacy.key_185"),
-                        Int(pipRuntime.previewAudioLevel * 100)
-                    )
+            Text(
+                L10n.f(
+                    "legacy.pip_status_line_with_level",
+                    appCoordinator.pipAudioPreviewConfig.isPreviewMuted ? L10n.tr("legacy.key_218") : L10n.tr("legacy.key_185"),
+                    Int(pipRuntime.previewAudioLevel * 100)
                 )
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-            }
-
-            if let infoMessage = pipRuntime.infoMessage, !infoMessage.isEmpty {
-                Text(L10n.f("fmt.device.status", infoMessage))
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-            }
+            )
+                .font(.footnote)
+                .foregroundStyle(.secondary)
         }
     }
 
@@ -265,30 +334,6 @@ struct PiPCameraSettingsView: View {
             get: { pipRuntime.selectedAudioSourceID ?? pipRuntime.audioSources.first?.id ?? "" },
             set: { pipRuntime.selectAudioSource(withID: $0) }
         )
-    }
-
-    private var pipTopActionRow: some View {
-        HStack(spacing: 12) {
-            VStack(alignment: .leading, spacing: 4) {
-                Text(L10n.tr("legacy.key_168"))
-                    .font(.title3.weight(.semibold))
-                Text(L10n.tr("legacy.pip_13"))
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-            }
-            Spacer(minLength: 0)
-            if appCoordinator.isPiPPreviewVisible {
-                Button(L10n.tr("legacy.pip_25")) {
-                    appCoordinator.hidePiPPreview()
-                }
-                .buttonStyle(.bordered)
-            } else {
-                Button(L10n.tr("legacy.pip_12")) {
-                    appCoordinator.activatePiPPreview()
-                }
-                .buttonStyle(.borderedProminent)
-            }
-        }
     }
 
     private var previewStateBadge: some View {
@@ -342,6 +387,12 @@ struct PiPCameraSettingsView: View {
             || (pipRuntime.lastVideoEnumeratedCount == 0 && pipRuntime.lastAudioEnumeratedCount == 0)
     }
 
+    private var statusColor: Color {
+        if appCoordinator.isPiPPreviewVisible { return .green }
+        if appCoordinator.enableCameraPiP { return .yellow }
+        return .white.opacity(0.85)
+    }
+
     @ViewBuilder
     private var permissionRecoveryGuide: some View {
         VStack(alignment: .leading, spacing: 6) {
@@ -393,28 +444,38 @@ struct PiPCameraSettingsView: View {
     }
 
     @ViewBuilder
-    private func sectionHeader(_ title: String, subtitle: String) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(title)
-                .font(.title3.weight(.semibold))
-            Text(subtitle)
-                .font(.callout)
-                .foregroundStyle(.secondary)
-        }
-    }
+    private func card<Content: View>(
+        title: String,
+        icon: String,
+        @ViewBuilder content: () -> Content
+    ) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(spacing: 8) {
+                Image(systemName: icon)
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(Color(red: 0.89, green: 0.40, blue: 0.19))
+                Text(title)
+                    .font(.headline)
+            }
 
-    @ViewBuilder
-    private func card<Content: View>(@ViewBuilder content: () -> Content) -> some View {
-        VStack(alignment: .leading, spacing: 10, content: content)
-            .padding(14)
-            .background(
-                RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    .fill(Color(nsColor: .controlBackgroundColor))
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    .stroke(Color.black.opacity(0.06), lineWidth: 1)
-            )
+            content()
+        }
+        .padding(16)
+        .background(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .fill(
+                    LinearGradient(
+                        colors: [Color(nsColor: .controlBackgroundColor), Color(nsColor: .windowBackgroundColor)],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .stroke(Color.black.opacity(0.08), lineWidth: 1)
+        )
+        .shadow(color: Color.black.opacity(0.05), radius: 6, y: 3)
     }
 
     @ViewBuilder
@@ -438,56 +499,6 @@ struct PiPCameraSettingsView: View {
         )
     }
 
-    @ViewBuilder
-    private var diagnosticSummary: some View {
-        VStack(alignment: .leading, spacing: 5) {
-            Text(L10n.tr("legacy.key_198"))
-                .font(.subheadline.weight(.semibold))
-
-            Text(L10n.f("fmt.pip.diag.video_auth", authText(for: pipRuntime.authorizationStatus)))
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-            Text(L10n.f("fmt.pip.diag.video_enum", pipRuntime.lastVideoEnumeratedCount, pipRuntime.lastVideoAvailableCount))
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-            Text(
-                L10n.f(
-                    "fmt.pip.diag.video_discovery",
-                    pipRuntime.lastVideoDiscoveryCount,
-                    yesNo(pipRuntime.lastVideoUsedLegacyFallback),
-                    yesNo(pipRuntime.lastVideoIncludedSystemDefault)
-                )
-            )
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-            Text(L10n.f("fmt.pip.diag.audio_auth", authText(for: pipRuntime.microphoneAuthorizationStatus)))
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-            Text(L10n.f("fmt.pip.diag.audio_enum", pipRuntime.lastAudioEnumeratedCount, pipRuntime.lastAudioAvailableCount))
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-            Text(
-                L10n.f(
-                    "fmt.pip.diag.audio_discovery",
-                    pipRuntime.lastAudioDiscoveryCount,
-                    yesNo(pipRuntime.lastAudioUsedLegacyFallback)
-                )
-            )
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-            Text(
-                L10n.f(
-                    "fmt.pip.diag.last_refresh",
-                    timestampText(pipRuntime.lastVideoRefreshAt),
-                    timestampText(pipRuntime.lastAudioRefreshAt)
-                )
-            )
-                .font(.footnote)
-                .foregroundStyle(.secondary)
-        }
-        .padding(.top, 6)
-    }
-
     private func openPrivacySettings() {
         guard let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?Privacy_Camera") else {
             return
@@ -497,7 +508,6 @@ struct PiPCameraSettingsView: View {
 
     private func runInAppDiagnostics() {
         showingDiagnostics = true
-        diagnosticFeedback = L10n.tr("legacy.key_171")
         pipRuntime.refreshSources()
         pipRuntime.refreshAudioSources()
 
@@ -505,53 +515,7 @@ struct PiPCameraSettingsView: View {
             try? await Task.sleep(nanoseconds: 650_000_000)
             pipRuntime.refreshSources()
             pipRuntime.refreshAudioSources()
-            diagnosticFeedback = summarizeInAppDiagnostics()
             showingDiagnostics = false
         }
-    }
-
-    private func summarizeInAppDiagnostics() -> String {
-        let videoAuth = authText(for: pipRuntime.authorizationStatus)
-        let audioAuth = authText(for: pipRuntime.microphoneAuthorizationStatus)
-        let videoTotal = pipRuntime.lastVideoEnumeratedCount
-        let videoAvailable = pipRuntime.lastVideoAvailableCount
-        let audioTotal = pipRuntime.lastAudioEnumeratedCount
-        let audioAvailable = pipRuntime.lastAudioAvailableCount
-        let pass = pipRuntime.authorizationStatus == .authorized
-            && pipRuntime.microphoneAuthorizationStatus == .authorized
-            && videoTotal > 0
-            && audioTotal > 0
-        let result = pass ? "PASS" : "BLOCKED"
-        return L10n.f(
-            "fmt.pip.diag.summary",
-            result,
-            videoAuth,
-            audioAuth,
-            videoAvailable,
-            videoTotal,
-            audioAvailable,
-            audioTotal
-        )
-    }
-
-    private func authText(for status: AVAuthorizationStatus) -> String {
-        switch status {
-        case .authorized: return L10n.tr("legacy.key_90")
-        case .notDetermined: return L10n.tr("legacy.key_166")
-        case .denied: return L10n.tr("legacy.key_89")
-        case .restricted: return L10n.tr("legacy.key_36")
-        @unknown default: return L10n.tr("legacy.key_164")
-        }
-    }
-
-    private func yesNo(_ value: Bool) -> String {
-        value ? "YES" : "NO"
-    }
-
-    private func timestampText(_ date: Date?) -> String {
-        guard let date else { return "-" }
-        let formatter = DateFormatter()
-        formatter.dateFormat = "HH:mm:ss"
-        return formatter.string(from: date)
     }
 }

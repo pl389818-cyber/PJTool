@@ -10,12 +10,18 @@ import CoreMedia
 import Foundation
 
 struct VideoCuttingFFmpegProject {
+    enum PerformanceProfile {
+        case balanced
+        case quality
+    }
+
     let sourceURL: URL
     let keepRanges: [CMTimeRange]
     let cropRectNormalized: VideoCropRect
     let audioProcessingConfig: VideoCuttingAudioProcessingConfig
     let outputURL: URL
     let hasAudioTrack: Bool
+    let performanceProfile: PerformanceProfile
 }
 
 struct FFmpegToolPaths {

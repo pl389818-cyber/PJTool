@@ -12,6 +12,7 @@ struct PJToolApp: App {
     private static let videoCuttingWindowID = "video-cutting-window"
     @StateObject private var appCoordinator = AppCoordinator()
     @StateObject private var videoCuttingViewModel = VideoCuttingViewModel()
+    @StateObject private var audioExtractViewModel = AudioExtractViewModel()
     @Environment(\.scenePhase) private var scenePhase
 
     var body: some Scene {
@@ -19,6 +20,7 @@ struct PJToolApp: App {
             ContentView(
                 appCoordinator: appCoordinator,
                 videoCuttingViewModel: videoCuttingViewModel,
+                audioExtractViewModel: audioExtractViewModel,
                 videoCuttingWindowID: Self.videoCuttingWindowID
             )
             .environment(\.locale, appCoordinator.appLocale)

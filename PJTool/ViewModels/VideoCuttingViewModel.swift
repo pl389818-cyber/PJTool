@@ -33,7 +33,7 @@ final class VideoCuttingViewModel: ObservableObject {
     @Published private(set) var sourceVideoAspect: Double = 16.0 / 9.0
     @Published var cropRectNormalized: VideoCropRect = .full
     @Published var isApplyingCrop = false
-    @Published var isNoiseReductionEnabled = true
+    @Published var isNoiseReductionEnabled = false
     @Published var noiseReductionPercent: Double = 50
     @Published var selectedAudioEQPreset: VideoCuttingAudioEQPreset = .balanced
     @Published private(set) var hasAudioTrack = false
@@ -78,6 +78,14 @@ final class VideoCuttingViewModel: ObservableObject {
     var canDeleteSelectedRangeAndReload: Bool {
         guard sourceURL != nil, !isBusy, sourceDuration > 0, let selectedDeleteRange else { return false }
         let normalized = normalizeDeleteRanges([selectedDeleteRange])
+        guard !normalized.isEmpty else { return false }
+        let keepRanges = trimEngine.keepRanges(from: normalized, sourceDuration: makeDurationTime())
+        return !keepRanges.isEmpty
+    }
+
+    var canApplyAllDeleteRangesAndReload: Bool {
+        guard sourceURL != nil, !isBusy, sourceDuration > 0 else { return false }
+        let normalized = normalizeDeleteRanges(deleteRanges)
         guard !normalized.isEmpty else { return false }
         let keepRanges = trimEngine.keepRanges(from: normalized, sourceDuration: makeDurationTime())
         return !keepRanges.isEmpty
@@ -243,6 +251,46 @@ final class VideoCuttingViewModel: ObservableObject {
         applyDeleteRangeEdit(updated, preferSelection: range.id, editMessage: L10n.tr("legacy.key_91"))
     }
 
+    func addDeleteRangeByInput() {
+        addDeleteRange(startText: keepStartText, endText: keepEndText)
+    }
+
+    func addDeleteRange(startText: String, endText: String) {
+        guard hasSource else {
+            statusMessage = L10n.tr("legacy.key_201")
+            return
+        }
+
+        guard let start = Double(startText), let end = Double(endText) else {
+            statusMessage = L10n.tr("legacy.key_11")
+            return
+        }
+        addDeleteRange(start: start, end: end)
+    }
+
+    func addDeleteRange(start: Double, end: Double) {
+        guard hasSource else {
+            statusMessage = L10n.tr("legacy.key_201")
+            return
+        }
+        let snappedStart = snapToFrame(start)
+        let snappedEnd = snapToFrame(end)
+        let lower = min(snappedStart, snappedEnd)
+        let upper = max(snappedStart, snappedEnd)
+
+        guard upper > lower else {
+            statusMessage = L10n.tr("legacy.key_10")
+            return
+        }
+
+        let range = makeCutRange(start: lower, end: upper)
+        var updated = deleteRanges
+        updated.append(range)
+        keepStartText = formatSecondsForInput(lower)
+        keepEndText = formatSecondsForInput(upper)
+        applyDeleteRangeEdit(updated, preferSelection: range.id, editMessage: L10n.tr("legacy.key_91"))
+    }
+
     func updateDeleteRange(id: UUID, start: Double? = nil, end: Double? = nil) {
         guard let index = deleteRanges.firstIndex(where: { $0.id == id }) else { return }
         var range = deleteRanges[index]
@@ -308,7 +356,55 @@ final class VideoCuttingViewModel: ObservableObject {
                     keepRanges: keepRanges,
                     cropRectNormalized: .full,
                     outputURL: outputURL,
-                    applyAudioProcessing: false
+                    applyAudioProcessing: false,
+                    performanceProfile: .balanced
+                )
+                loadVideo(url: exported)
+                statusMessage = L10n.f("fmt.video.delete_selected_reloaded", exported.lastPathComponent)
+            } catch {
+                statusMessage = L10n.f("fmt.video.delete_failed", error.localizedDescription)
+            }
+        }
+    }
+
+    func applyAllDeleteRangesAndReload() {
+        guard let sourceURL else {
+            statusMessage = L10n.tr("legacy.key_26")
+            return
+        }
+
+        let normalized = normalizeDeleteRanges(deleteRanges)
+        guard !normalized.isEmpty else {
+            statusMessage = L10n.tr("legacy.key_27")
+            return
+        }
+
+        let keepRanges = trimEngine.keepRanges(from: normalized, sourceDuration: makeDurationTime())
+        guard !keepRanges.isEmpty else {
+            statusMessage = L10n.tr("legacy.key_153")
+            return
+        }
+
+        let outputURL: URL
+        do {
+            outputURL = try makeInlineTrimOutputURL(for: sourceURL, suffix: "cutall")
+        } catch {
+            statusMessage = L10n.tr("legacy.key_25")
+            return
+        }
+
+        isExporting = true
+        statusMessage = L10n.tr("legacy.key_170")
+        Task {
+            defer { isExporting = false }
+            do {
+                let exported = try await runFFmpegExport(
+                    sourceURL: sourceURL,
+                    keepRanges: keepRanges,
+                    cropRectNormalized: .full,
+                    outputURL: outputURL,
+                    applyAudioProcessing: false,
+                    performanceProfile: .balanced
                 )
                 loadVideo(url: exported)
                 statusMessage = L10n.f("fmt.video.delete_selected_reloaded", exported.lastPathComponent)
@@ -357,7 +453,8 @@ final class VideoCuttingViewModel: ObservableObject {
                     keepRanges: [CMTimeRange(start: .zero, duration: makeDurationTime())],
                     cropRectNormalized: .full,
                     outputURL: outputURL,
-                    applyAudioProcessing: true
+                    applyAudioProcessing: true,
+                    performanceProfile: .quality
                 )
                 exportURL = exported
                 let removedTempFiles = cleanupHistoricalTemporaryFilesAfterExport(
@@ -455,7 +552,8 @@ final class VideoCuttingViewModel: ObservableObject {
                     keepRanges: keepRanges,
                     cropRectNormalized: VideoCropRect(normalizedCropRect),
                     outputURL: outputURL,
-                    applyAudioProcessing: true
+                    applyAudioProcessing: false,
+                    performanceProfile: .balanced
                 )
                 loadVideo(url: exported)
                 statusMessage = L10n.f("fmt.video.crop_reloaded", exported.lastPathComponent)
@@ -822,7 +920,8 @@ final class VideoCuttingViewModel: ObservableObject {
         keepRanges: [CMTimeRange],
         cropRectNormalized: VideoCropRect,
         outputURL: URL,
-        applyAudioProcessing: Bool
+        applyAudioProcessing: Bool,
+        performanceProfile: VideoCuttingFFmpegProject.PerformanceProfile
     ) async throws -> URL {
         await prepareFFmpegIfNeeded()
         if isFFmpegReady {
@@ -836,7 +935,8 @@ final class VideoCuttingViewModel: ObservableObject {
                     eqPreset: .balanced
                 ),
                 outputURL: outputURL,
-                hasAudioTrack: applyAudioProcessing && hasAudioTrack
+                hasAudioTrack: hasAudioTrack,
+                performanceProfile: performanceProfile
             )
             do {
                 return try await ffmpegExportEngine.export(project: project) { [weak self] ratio in

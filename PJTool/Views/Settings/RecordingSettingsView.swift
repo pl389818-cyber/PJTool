@@ -14,17 +14,77 @@ struct RecordingSettingsView: View {
     let audioSelectionBinding: Binding<String>
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            sectionHeader(L10n.tr("legacy.key_112"), subtitle: L10n.tr("legacy.key_5"))
-
+        VStack(alignment: .leading, spacing: 16) {
+            heroBanner
             recordingControlCard
             permissionStatusCard
             microphoneCard
         }
     }
 
+    private var heroBanner: some View {
+        HStack(alignment: .center, spacing: 14) {
+            ZStack {
+                Circle()
+                    .fill(
+                        LinearGradient(
+                            colors: [Color.red.opacity(0.9), Color.pink.opacity(0.75)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .frame(width: 44, height: 44)
+
+                Image(systemName: "record.circle")
+                    .font(.system(size: 20, weight: .semibold))
+                    .foregroundStyle(.white)
+            }
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text(L10n.tr("section.recording.title"))
+                    .font(.system(size: 25, weight: .bold, design: .rounded))
+                Text(L10n.tr("section.recording.subtitle"))
+                    .font(.callout.weight(.medium))
+                    .foregroundStyle(Color.white.opacity(0.85))
+            }
+
+            Spacer(minLength: 10)
+            statusChip
+        }
+        .padding(16)
+        .background(
+            LinearGradient(
+                colors: [Color(red: 0.78, green: 0.22, blue: 0.18), Color(red: 0.30, green: 0.14, blue: 0.45)],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .stroke(Color.white.opacity(0.18), lineWidth: 1)
+        )
+        .shadow(color: Color.black.opacity(0.12), radius: 10, y: 6)
+    }
+
+    private var statusChip: some View {
+        HStack(spacing: 6) {
+            Circle()
+                .fill(appCoordinator.recorderState.isRecording ? .red : .white.opacity(0.85))
+                .frame(width: 8, height: 8)
+            Text(appCoordinator.statusMessage)
+                .font(.caption.weight(.semibold))
+                .lineLimit(1)
+        }
+        .foregroundStyle(.white)
+        .padding(.horizontal, 10)
+        .padding(.vertical, 6)
+        .background(Color.black.opacity(0.24))
+        .clipShape(Capsule())
+    }
+
     private var recordingControlCard: some View {
-        card {
+        card(title: L10n.tr("legacy.key_102"), icon: "record.circle.fill") {
             HStack(spacing: 12) {
                 Button(actionButtonTitle) {
                     if appCoordinator.recorderState.isRecording {
@@ -75,7 +135,7 @@ struct RecordingSettingsView: View {
     }
 
     private var permissionStatusCard: some View {
-        card {
+        card(title: L10n.tr("legacy.key_65"), icon: "checkmark.shield") {
             VStack(alignment: .leading, spacing: 6) {
                 statusRow(L10n.tr("legacy.key_228"), isAudioAuthorized, audioPermissionText)
                 statusRow(L10n.tr("legacy.key_134"), isCameraAuthorized, cameraPermissionText)
@@ -84,10 +144,7 @@ struct RecordingSettingsView: View {
     }
 
     private var microphoneCard: some View {
-        card {
-            Text(L10n.tr("legacy.key_111"))
-                .font(.headline)
-
+        card(title: L10n.tr("legacy.key_111"), icon: "mic") {
             Picker(L10n.tr("legacy.key_205"), selection: audioSelectionBinding) {
                 ForEach(appCoordinator.audioEngine.sources) { source in
                     let label = source.badgeText.isEmpty ? source.name : "\(source.name) (\(source.badgeText))"
@@ -166,27 +223,37 @@ struct RecordingSettingsView: View {
     }
 
     @ViewBuilder
-    private func sectionHeader(_ title: String, subtitle: String) -> some View {
-        VStack(alignment: .leading, spacing: 4) {
-            Text(title)
-                .font(.title3.weight(.semibold))
-            Text(subtitle)
-                .font(.callout)
-                .foregroundStyle(.secondary)
-        }
-    }
+    private func card<Content: View>(
+        title: String,
+        icon: String,
+        @ViewBuilder content: () -> Content
+    ) -> some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(spacing: 8) {
+                Image(systemName: icon)
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(Color(red: 0.89, green: 0.40, blue: 0.19))
+                Text(title)
+                    .font(.headline)
+            }
 
-    @ViewBuilder
-    private func card<Content: View>(@ViewBuilder content: () -> Content) -> some View {
-        VStack(alignment: .leading, spacing: 10, content: content)
-            .padding(14)
+            content()
+        }
+            .padding(16)
             .background(
-                RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    .fill(Color(nsColor: .controlBackgroundColor))
+                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                    .fill(
+                        LinearGradient(
+                            colors: [Color(nsColor: .controlBackgroundColor), Color(nsColor: .windowBackgroundColor)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
             )
             .overlay(
-                RoundedRectangle(cornerRadius: 14, style: .continuous)
-                    .stroke(Color.black.opacity(0.06), lineWidth: 1)
+                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                    .stroke(Color.black.opacity(0.08), lineWidth: 1)
             )
+            .shadow(color: Color.black.opacity(0.05), radius: 6, y: 3)
     }
 }

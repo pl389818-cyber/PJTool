@@ -65,7 +65,8 @@ struct SettingsSidebarView: View {
             .recording,
             .pipCamera,
             .screenDrawing,
-            .videoCutting
+            .videoCutting,
+            .audioExtract
         ]
     }
 

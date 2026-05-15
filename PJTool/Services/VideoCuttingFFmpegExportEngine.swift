@@ -49,6 +49,7 @@ private extension VideoCuttingFFmpegExportEngine {
         let isFullKeep: Bool
         let hasAudioTrack: Bool
         let audioFilterChain: String?
+        let performanceProfile: VideoCuttingFFmpegProject.PerformanceProfile
     }
 
     struct FilterPlan {
@@ -93,7 +94,8 @@ private extension VideoCuttingFFmpegExportEngine {
             isFullCrop: fullCrop,
             isFullKeep: fullKeep,
             hasAudioTrack: hasAudioTrack,
-            audioFilterChain: audioFilter
+            audioFilterChain: audioFilter,
+            performanceProfile: project.performanceProfile
         )
     }
 
@@ -127,7 +129,8 @@ private extension VideoCuttingFFmpegExportEngine {
         }
 
         if context.isFullKeep && context.isFullCrop && !context.hasAudioTrack {
-            let args: [String] = [
+            let videoEncode = videoEncodeSettings(for: context.performanceProfile)
+            var args: [String] = [
                 "-hide_banner",
                 "-loglevel", "error",
                 "-y",
@@ -135,13 +138,15 @@ private extension VideoCuttingFFmpegExportEngine {
                 "-i", context.sourceURL.path,
                 "-map", "0:v:0",
                 "-c:v", "libx264",
-                "-preset", "medium",
-                "-crf", "18",
+                "-preset", videoEncode.preset,
+                "-crf", videoEncode.crf,
                 "-pix_fmt", "yuv420p",
-                "-an",
-                "-movflags", "+faststart",
-                outputURL.path
+                "-an"
             ]
+            if let threadLimit = videoEncode.threadLimit {
+                args.append(contentsOf: ["-threads", String(threadLimit)])
+            }
+            args.append(contentsOf: ["-movflags", "+faststart", outputURL.path])
             return FFmpegCommand(
                 executableURL: tools.ffmpegURL,
                 arguments: args,
@@ -173,6 +178,7 @@ private extension VideoCuttingFFmpegExportEngine {
         }
 
         let filterPlan = buildFilterPlan(context: context)
+        let videoEncode = videoEncodeSettings(for: context.performanceProfile)
         var args: [String] = [
             "-hide_banner",
             "-loglevel", "error",
@@ -182,10 +188,13 @@ private extension VideoCuttingFFmpegExportEngine {
             "-filter_complex", filterPlan.graph,
             "-map", filterPlan.videoLabel,
             "-c:v", "libx264",
-            "-preset", "medium",
-            "-crf", "18",
+            "-preset", videoEncode.preset,
+            "-crf", videoEncode.crf,
             "-pix_fmt", "yuv420p"
         ]
+        if let threadLimit = videoEncode.threadLimit {
+            args.append(contentsOf: ["-threads", String(threadLimit)])
+        }
 
         if let audioLabel = filterPlan.audioLabel {
             args.append(contentsOf: [
@@ -413,6 +422,21 @@ private extension VideoCuttingFFmpegExportEngine {
 
     func formatTime(_ seconds: Double) -> String {
         String(format: "%.6f", max(0, seconds))
+    }
+
+    func videoEncodeSettings(
+        for profile: VideoCuttingFFmpegProject.PerformanceProfile
+    ) -> (preset: String, crf: String, threadLimit: Int?) {
+        switch profile {
+        case .balanced:
+            // Inline edit flows (crop/delete reload) favor low CPU usage and responsiveness.
+            // Final export still uses quality profile parameters below.
+            let cpuCount = max(1, ProcessInfo.processInfo.activeProcessorCount)
+            let threadLimit = min(6, max(2, cpuCount / 2))
+            return ("ultrafast", "26", threadLimit)
+        case .quality:
+            return ("medium", "18", nil)
+        }
     }
 
     func removeFileIfExists(at url: URL) throws {

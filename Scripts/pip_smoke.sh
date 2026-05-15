@@ -16,7 +16,7 @@ DEVICE_STATUS="PASS"
 MANUAL_STATUS="BLOCKED"
 
 set +e
-xcodebuild -project "$ROOT_DIR/PJTool.xcodeproj" -scheme PJTool -destination 'platform=macOS' -derivedDataPath /private/tmp/pjtool-derived build >"$BUILD_LOG" 2>&1
+DERIVED_DATA_PATH=/private/tmp/pjtool-derived "$ROOT_DIR/Scripts/run_build.sh" build >"$BUILD_LOG" 2>&1
 if ! grep -q "BUILD SUCCEEDED" "$BUILD_LOG"; then
   BUILD_STATUS="FAIL"
 fi

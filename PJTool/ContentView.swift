@@ -11,6 +11,7 @@ struct ContentView: View {
     private static let sidebarLaunchWidth: CGFloat = 200
     @ObservedObject private var appCoordinator: AppCoordinator
     @ObservedObject private var videoCuttingViewModel: VideoCuttingViewModel
+    @ObservedObject private var audioExtractViewModel: AudioExtractViewModel
     @Environment(\.openWindow) private var openWindow
     private let videoCuttingWindowID: String
 
@@ -25,10 +26,12 @@ struct ContentView: View {
     init(
         appCoordinator: AppCoordinator,
         videoCuttingViewModel: VideoCuttingViewModel,
+        audioExtractViewModel: AudioExtractViewModel,
         videoCuttingWindowID: String
     ) {
         self._appCoordinator = ObservedObject(wrappedValue: appCoordinator)
         self._videoCuttingViewModel = ObservedObject(wrappedValue: videoCuttingViewModel)
+        self._audioExtractViewModel = ObservedObject(wrappedValue: audioExtractViewModel)
         self.videoCuttingWindowID = videoCuttingWindowID
     }
 
@@ -120,19 +123,93 @@ struct ContentView: View {
             ScreenDrawingSettingsView(appCoordinator: appCoordinator)
         case .videoCutting:
             videoCuttingEntryView
+        case .audioExtract:
+            AudioExtractSettingsView(viewModel: audioExtractViewModel)
         case .appSettings:
             LanguageSettingsView(appCoordinator: appCoordinator)
         }
     }
 
     private var videoCuttingEntryView: some View {
-        HStack(alignment: .top, spacing: 14) {
-            VStack(alignment: .leading, spacing: 10) {
-                Text(L10n.tr("legacy.key_197"))
-                    .font(.title3.weight(.semibold))
-                Text(L10n.tr("legacy.key_93"))
-                    .font(.callout)
-                    .foregroundStyle(.secondary)
+        VStack(alignment: .leading, spacing: 16) {
+            videoCuttingHeroBanner
+            videoCuttingActionCard
+        }
+    }
+
+    private var videoCuttingHeroBanner: some View {
+        HStack(alignment: .center, spacing: 14) {
+            ZStack {
+                Circle()
+                    .fill(
+                        LinearGradient(
+                            colors: [Color.purple.opacity(0.9), Color.indigo.opacity(0.75)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .frame(width: 44, height: 44)
+
+                Image(systemName: "scissors")
+                    .font(.system(size: 20, weight: .semibold))
+                    .foregroundStyle(.white)
+            }
+
+            VStack(alignment: .leading, spacing: 4) {
+                Text(L10n.tr("section.videoCutting.title"))
+                    .font(.system(size: 25, weight: .bold, design: .rounded))
+                Text(L10n.tr("section.videoCutting.subtitle"))
+                    .font(.callout.weight(.medium))
+                    .foregroundStyle(Color.white.opacity(0.85))
+            }
+
+            Spacer(minLength: 10)
+
+            HStack(spacing: 6) {
+                Circle()
+                    .fill(videoCuttingViewModel.isPreparingFFmpeg ? .yellow : .white.opacity(0.85))
+                    .frame(width: 8, height: 8)
+                Text(videoCuttingViewModel.ffmpegPermissionStateText)
+                    .font(.caption.weight(.semibold))
+                    .lineLimit(1)
+            }
+            .foregroundStyle(.white)
+            .padding(.horizontal, 10)
+            .padding(.vertical, 6)
+            .background(Color.black.opacity(0.24))
+            .clipShape(Capsule())
+        }
+        .padding(16)
+        .background(
+            LinearGradient(
+                colors: [Color(red: 0.42, green: 0.28, blue: 0.74), Color(red: 0.18, green: 0.34, blue: 0.65)],
+                startPoint: .topLeading,
+                endPoint: .bottomTrailing
+            )
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .stroke(Color.white.opacity(0.18), lineWidth: 1)
+        )
+        .shadow(color: Color.black.opacity(0.12), radius: 10, y: 6)
+    }
+
+    private var videoCuttingActionCard: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack(spacing: 8) {
+                Image(systemName: "film.stack")
+                    .font(.subheadline.weight(.semibold))
+                    .foregroundStyle(Color(red: 0.89, green: 0.40, blue: 0.19))
+                Text(L10n.tr("legacy.key_124"))
+                    .font(.headline)
+            }
+
+            Text(L10n.tr("legacy.key_93"))
+                .font(.callout)
+                .foregroundStyle(.secondary)
+
+            HStack(spacing: 10) {
                 Button(L10n.tr("legacy.key_124")) {
                     hasUserOpenedVideoCutting = true
                     openVideoCuttingWindow()
@@ -144,24 +221,29 @@ struct ContentView: View {
                 }
                 .buttonStyle(.bordered)
                 .disabled(videoCuttingViewModel.isPreparingFFmpeg)
-
-                Text(L10n.tr("ffmpeg.permission.explain"))
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
-                    .fixedSize(horizontal: false, vertical: true)
-
-                Text(videoCuttingViewModel.ffmpegPermissionStateText)
-                    .font(.caption)
-                    .foregroundStyle(.secondary)
-                    .lineLimit(1)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
+
+            Text(L10n.tr("ffmpeg.permission.explain"))
+                .font(.caption2)
+                .foregroundStyle(.secondary)
+                .fixedSize(horizontal: false, vertical: true)
         }
-        .padding(14)
+        .padding(16)
         .background(
-            RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(Color(nsColor: .controlBackgroundColor))
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .fill(
+                    LinearGradient(
+                        colors: [Color(nsColor: .controlBackgroundColor), Color(nsColor: .windowBackgroundColor)],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
         )
+        .overlay(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .stroke(Color.black.opacity(0.08), lineWidth: 1)
+        )
+        .shadow(color: Color.black.opacity(0.05), radius: 6, y: 3)
     }
 
     private func bootstrapUIStateIfNeeded(totalWidth: CGFloat) {

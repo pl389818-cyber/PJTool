@@ -25,6 +25,9 @@ struct VideoCuttingModalView: View {
     @State private var cropDragStartRect: CGRect?
     @State private var hoveredCropHandle: VideoCropHandle?
     @State private var activeDragHandle: VideoCropHandle?
+    @State private var isDeleteTrackHovered = false
+    @State private var pendingDeleteStartText = ""
+    @State private var pendingDeleteEndText = ""
     private let cropResizeHotspotDiameter: CGFloat = 50
     private let cropInteractionCoordinateSpace = "videoCuttingCropInteractionSpace"
     private let cropInteractionABMode: CropInteractionABMode = .normal
@@ -455,55 +458,205 @@ struct VideoCuttingModalView: View {
     }
 
     private var deleteTrackToolbar: some View {
-        HStack(spacing: 10) {
-            Text(L10n.tr("legacy.key_24"))
-                .font(.footnote.weight(.semibold))
-                .foregroundStyle(Color.white.opacity(0.8))
+        VStack(alignment: .leading, spacing: 10) {
+            HStack(spacing: 10) {
+                Text(L10n.tr("legacy.key_24"))
+                    .font(.footnote.weight(.semibold))
+                    .foregroundStyle(Color.white.opacity(0.8))
 
-            Text("FPS \(String(format: "%.2f", viewModel.videoFPS))")
-                .font(.caption.monospacedDigit())
-                .foregroundStyle(Color.white.opacity(0.52))
+                Text("FPS \(String(format: "%.2f", viewModel.videoFPS))")
+                    .font(.caption.monospacedDigit())
+                    .foregroundStyle(Color.white.opacity(0.52))
 
-            Button(L10n.tr("legacy.key_149")) {
-                viewModel.addDeleteRangeAtPlayhead()
+                Spacer(minLength: 0)
             }
-            .buttonStyle(.bordered)
 
-            Button(viewModel.isExporting ? L10n.tr("legacy.key_46") : L10n.tr("legacy.key_211")) {
-                viewModel.deleteSelectedRangeAndReload()
+            HStack(spacing: 10) {
+                Text(L10n.tr("video.delete.hover_add_hint"))
+                    .font(.caption)
+                    .foregroundStyle(Color.white.opacity(0.72))
+
+                Button(viewModel.isExporting ? L10n.tr("legacy.key_46") : L10n.tr("legacy.key_211")) {
+                    viewModel.deleteSelectedRangeAndReload()
+                }
+                .buttonStyle(.bordered)
+                .disabled(!viewModel.canDeleteSelectedRangeAndReload)
+
+                Button(viewModel.isExporting ? L10n.tr("legacy.key_46") : L10n.tr("video.delete.apply_all")) {
+                    viewModel.applyAllDeleteRangesAndReload()
+                }
+                .buttonStyle(.borderedProminent)
+                .disabled(!viewModel.canApplyAllDeleteRangesAndReload)
+
+                Spacer(minLength: 0)
             }
-            .buttonStyle(.bordered)
-            .disabled(!viewModel.canDeleteSelectedRangeAndReload)
-
-            Spacer(minLength: 0)
         }
     }
 
     private var deleteTrackArea: some View {
         GeometryReader { proxy in
-            ZStack(alignment: .leading) {
-                RoundedRectangle(cornerRadius: 8, style: .continuous)
-                    .fill(Color.white.opacity(0.06))
-                RoundedRectangle(cornerRadius: 8, style: .continuous)
-                    .stroke(Color.white.opacity(0.12), lineWidth: 1)
+            VStack(spacing: 6) {
+                if shouldShowDeleteInputBubble {
+                    deleteInputBubble
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .transition(.opacity.combined(with: .move(edge: .top)))
+                }
 
-                if viewModel.deleteRanges.isEmpty {
-                    Text(L10n.tr("legacy.key_158"))
-                        .font(.caption)
-                        .foregroundStyle(Color.white.opacity(0.45))
-                        .padding(.horizontal, 10)
-                } else {
-                    ForEach(viewModel.deleteRanges) { range in
-                        deleteRangeChip(range: range, trackWidth: proxy.size.width)
+                if !viewModel.deleteRanges.isEmpty {
+                    deleteRangeBubblesRow
+                }
+
+                ZStack(alignment: .leading) {
+                    RoundedRectangle(cornerRadius: 8, style: .continuous)
+                        .fill(Color.white.opacity(0.06))
+                    RoundedRectangle(cornerRadius: 8, style: .continuous)
+                        .stroke(Color.white.opacity(0.12), lineWidth: 1)
+
+                    if viewModel.deleteRanges.isEmpty {
+                        Text(L10n.tr("legacy.key_158"))
+                            .font(.caption)
+                            .foregroundStyle(Color.white.opacity(0.45))
+                            .padding(.horizontal, 10)
+                    } else {
+                        ForEach(viewModel.deleteRanges) { range in
+                            deleteRangeChip(range: range, trackWidth: proxy.size.width)
+                        }
                     }
                 }
+                .frame(height: 42)
             }
             .contentShape(Rectangle())
+            .onAppear {
+                syncPendingDeleteInput()
+            }
+            .onHover { isHovering in
+                withAnimation(.easeOut(duration: 0.15)) {
+                    isDeleteTrackHovered = isHovering
+                }
+                if isHovering {
+                    syncPendingDeleteInput()
+                }
+            }
             .onTapGesture {
                 viewModel.selectDeleteRange(id: nil)
             }
         }
-        .frame(height: 42)
+        .frame(height: deleteTrackAreaHeight)
+    }
+
+    private var deleteTrackAreaHeight: CGFloat {
+        let inputHeight: CGFloat = shouldShowDeleteInputBubble ? 40 : 0
+        let bubblesHeight: CGFloat = viewModel.deleteRanges.isEmpty ? 0 : 32
+        return 42 + inputHeight + bubblesHeight
+    }
+
+    private var shouldShowDeleteInputBubble: Bool {
+        isDeleteTrackHovered
+    }
+
+    private var deleteInputBubble: some View {
+        HStack(spacing: 8) {
+            Image(systemName: "plus.bubble.fill")
+                .font(.caption)
+                .foregroundStyle(Color.cyan.opacity(0.92))
+            Text(L10n.tr("legacy.key_149"))
+                .font(.caption.weight(.semibold))
+                .foregroundStyle(Color.white.opacity(0.9))
+
+            Text(L10n.tr("legacy.key_12"))
+                .font(.caption2)
+                .foregroundStyle(Color.white.opacity(0.7))
+            TextField("0", text: $pendingDeleteStartText)
+                .textFieldStyle(.roundedBorder)
+                .frame(width: 78)
+
+            Text(L10n.tr("legacy.key_13"))
+                .font(.caption2)
+                .foregroundStyle(Color.white.opacity(0.7))
+            TextField("10", text: $pendingDeleteEndText)
+                .textFieldStyle(.roundedBorder)
+                .frame(width: 78)
+
+            Button(L10n.tr("video.delete.confirm")) {
+                viewModel.addDeleteRange(startText: pendingDeleteStartText, endText: pendingDeleteEndText)
+                syncPendingDeleteInput()
+            }
+            .buttonStyle(.borderedProminent)
+            .controlSize(.small)
+        }
+        .padding(.horizontal, 10)
+        .padding(.vertical, 8)
+        .background(
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                .fill(Color.black.opacity(0.72))
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                .stroke(Color.cyan.opacity(0.32), lineWidth: 1)
+        )
+    }
+
+    private var deleteRangeBubblesRow: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 8) {
+                ForEach(viewModel.deleteRanges) { range in
+                    deleteRangeBubble(range: range)
+                }
+            }
+            .padding(.vertical, 2)
+        }
+    }
+
+    private func deleteRangeBubble(range: CutRange) -> some View {
+        let start = viewModel.deleteRangeStartSeconds(for: range.id)
+        let end = viewModel.deleteRangeEndSeconds(for: range.id)
+        let isSelected = viewModel.selectedDeleteRangeID == range.id
+        let label = L10n.f(
+            "fmt.video.delete_bubble_range",
+            String(format: "%.2f", start),
+            String(format: "%.2f", end)
+        )
+
+        return HStack(spacing: 6) {
+            Text("🫧")
+                .font(.caption)
+            Text(label)
+                .font(.caption.monospacedDigit())
+                .foregroundStyle(Color.white.opacity(0.92))
+                .lineLimit(1)
+            Button {
+                viewModel.removeDeleteRange(id: range.id)
+            } label: {
+                Image(systemName: "xmark.circle.fill")
+                    .font(.caption)
+                    .foregroundStyle(Color.white.opacity(0.75))
+            }
+            .buttonStyle(.plain)
+        }
+        .padding(.horizontal, 10)
+        .padding(.vertical, 6)
+        .background(
+            Capsule(style: .continuous)
+                .fill(isSelected ? Color.cyan.opacity(0.28) : Color.white.opacity(0.13))
+        )
+        .overlay(
+            Capsule(style: .continuous)
+                .stroke(isSelected ? Color.cyan.opacity(0.92) : Color.white.opacity(0.2), lineWidth: 1)
+        )
+        .contentShape(Capsule(style: .continuous))
+        .onTapGesture {
+            viewModel.selectDeleteRange(id: range.id)
+        }
+    }
+
+    private func syncPendingDeleteInput() {
+        if let selected = viewModel.selectedDeleteRange {
+            pendingDeleteStartText = String(format: "%.3f", selected.start.seconds)
+            pendingDeleteEndText = String(format: "%.3f", selected.end.seconds)
+            return
+        }
+        pendingDeleteStartText = viewModel.keepStartText
+        pendingDeleteEndText = viewModel.keepEndText
     }
 
     private func deleteRangeChip(range: CutRange, trackWidth: CGFloat) -> some View {

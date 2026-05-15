@@ -15,27 +15,42 @@ struct FFmpegBinaryService {
             throw FFmpegError.unsupportedArchitecture
         }
 
-        if let systemPaths = discoverSystemToolPaths() {
-            try validateTool(at: systemPaths.ffmpegURL)
-            try validateTool(at: systemPaths.ffprobeURL)
-            return systemPaths
+        if let bundlePaths = bundledToolPaths() {
+            if (try? validateToolPair(bundlePaths)) != nil {
+                return bundlePaths
+            }
+
+            // Fallback to Application Support copy when direct bundle execution fails.
+            if let installed = try? installAndValidateBundlePair(bundlePaths) {
+                return installed
+            }
         }
 
-        guard let bundlePaths = bundledToolPaths() else {
-            throw FFmpegError.missingBundledBinary("ffmpeg/ffprobe")
+        if let systemPaths = discoverSystemToolPaths() {
+            if (try? validateToolPair(systemPaths)) != nil {
+                return systemPaths
+            }
         }
+
+        throw FFmpegError.missingBundledBinary("ffmpeg/ffprobe")
+    }
+
+    private func validateToolPair(_ paths: FFmpegToolPaths) throws {
+        try validateTool(at: paths.ffmpegURL)
+        try validateTool(at: paths.ffprobeURL)
+    }
+
+    private func installAndValidateBundlePair(_ bundlePaths: FFmpegToolPaths) throws -> FFmpegToolPaths {
         let installRoot = try ensureInstallRoot()
         let installed = FFmpegToolPaths(
             ffmpegURL: installRoot.appendingPathComponent("ffmpeg"),
             ffprobeURL: installRoot.appendingPathComponent("ffprobe")
         )
-
         try installOrUpdateBinary(from: bundlePaths.ffmpegURL, to: installed.ffmpegURL)
         try installOrUpdateBinary(from: bundlePaths.ffprobeURL, to: installed.ffprobeURL)
         try ensureExecutablePermission(at: installed.ffmpegURL)
         try ensureExecutablePermission(at: installed.ffprobeURL)
-        try validateTool(at: installed.ffmpegURL)
-        try validateTool(at: installed.ffprobeURL)
+        try validateToolPair(installed)
         return installed
     }
 
@@ -48,23 +63,39 @@ struct FFmpegBinaryService {
     }
 
     private func bundledToolPaths() -> FFmpegToolPaths? {
-        guard let ffmpegURL = Bundle.main.url(
-            forResource: "ffmpeg",
-            withExtension: nil,
-            subdirectory: "ThirdParty/ffmpeg/arm64"
-        ) else {
-            return nil
-        }
-
-        guard let ffprobeURL = Bundle.main.url(
-            forResource: "ffprobe",
-            withExtension: nil,
-            subdirectory: "ThirdParty/ffmpeg/arm64"
-        ) else {
-            return nil
-        }
-
+        guard let ffmpegURL = resolveBundledBinary(named: "ffmpeg"),
+              let ffprobeURL = resolveBundledBinary(named: "ffprobe") else { return nil }
         return FFmpegToolPaths(ffmpegURL: ffmpegURL, ffprobeURL: ffprobeURL)
+    }
+
+    private func resolveBundledBinary(named name: String) -> URL? {
+        var candidates: [URL] = []
+
+        if let resourceURL = Bundle.main.resourceURL {
+            candidates.append(resourceURL.appendingPathComponent(name))
+        }
+        if let direct = Bundle.main.url(forResource: name, withExtension: nil) {
+            candidates.append(direct)
+        }
+        if let legacy = Bundle.main.url(
+            forResource: name,
+            withExtension: nil,
+            subdirectory: "ThirdParty/ffmpeg/arm64"
+        ) {
+            candidates.append(legacy)
+        }
+
+        var visited = Set<String>()
+        for candidate in candidates {
+            let resolved = candidate.resolvingSymlinksInPath()
+            let path = resolved.path
+            guard visited.insert(path).inserted else { continue }
+            if fileManager.fileExists(atPath: path) {
+                return resolved
+            }
+        }
+
+        return nil
     }
 
     private func discoverSystemToolPaths() -> FFmpegToolPaths? {
