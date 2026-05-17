@@ -7,7 +7,19 @@
 
 import Foundation
 
-final class FFmpegRunner {
+private struct FFmpegLocalizedErrorFormatter {
+    @MainActor
+    static func launchFailed(_ reason: String) -> String {
+        L10n.f("fmt.ffmpeg.launch_failed", reason)
+    }
+
+    @MainActor
+    static func commandFailed(exitCode: Int32, message: String) -> String {
+        L10n.f("fmt.ffmpeg.command_failed", exitCode, message)
+    }
+}
+
+nonisolated final class FFmpegRunner {
     func run(
         command: FFmpegCommand,
         onProgress: ((Double) -> Void)? = nil
@@ -21,50 +33,22 @@ final class FFmpegRunner {
         process.standardOutput = stdoutPipe
         process.standardError = stderrPipe
 
-        let lock = NSLock()
-        var stdoutText = ""
-        var stderrText = ""
-        var progressLineBuffer = ""
-
-        func appendStdout(_ text: String) {
-            lock.lock()
-            stdoutText.append(text)
-            lock.unlock()
-        }
-
-        func appendStderr(_ text: String) {
-            lock.lock()
-            stderrText.append(text)
-            lock.unlock()
-        }
-
-        func parseProgressIfNeeded(_ text: String) {
-            guard let expected = command.expectedDurationSeconds, expected > 0 else { return }
-            progressLineBuffer.append(text)
-            while let index = progressLineBuffer.firstIndex(of: "\n") {
-                let line = String(progressLineBuffer[..<index]).trimmingCharacters(in: .whitespacesAndNewlines)
-                progressLineBuffer.removeSubrange(progressLineBuffer.startIndex...index)
-                if let msValue = line.split(separator: "=", maxSplits: 1).last,
-                   line.hasPrefix("out_time_ms="),
-                   let ms = Double(msValue) {
-                    let ratio = max(0, min(1, (ms / 1_000_000.0) / expected))
-                    onProgress?(ratio)
-                }
-            }
-        }
+        let captureState = FFmpegOutputCaptureState()
 
         stdoutPipe.fileHandleForReading.readabilityHandler = { handle in
             let data = handle.availableData
             guard !data.isEmpty else { return }
             let text = String(decoding: data, as: UTF8.self)
-            appendStdout(text)
-            parseProgressIfNeeded(text)
+            captureState.appendStdout(text)
+            captureState.consumeProgress(from: text, expectedDurationSeconds: command.expectedDurationSeconds) { ratio in
+                onProgress?(ratio)
+            }
         }
 
         stderrPipe.fileHandleForReading.readabilityHandler = { handle in
             let data = handle.availableData
             guard !data.isEmpty else { return }
-            appendStderr(String(decoding: data, as: UTF8.self))
+            captureState.appendStderr(String(decoding: data, as: UTF8.self))
         }
 
         return try await withCheckedThrowingContinuation { continuation in
@@ -74,21 +58,16 @@ final class FFmpegRunner {
 
                 let stdoutTail = stdoutPipe.fileHandleForReading.readDataToEndOfFile()
                 if !stdoutTail.isEmpty {
-                    appendStdout(String(decoding: stdoutTail, as: UTF8.self))
+                    captureState.appendStdout(String(decoding: stdoutTail, as: UTF8.self))
                 }
                 let stderrTail = stderrPipe.fileHandleForReading.readDataToEndOfFile()
                 if !stderrTail.isEmpty {
-                    appendStderr(String(decoding: stderrTail, as: UTF8.self))
+                    captureState.appendStderr(String(decoding: stderrTail, as: UTF8.self))
                 }
 
-                lock.lock()
-                let out = stdoutText
-                let err = stderrText
-                lock.unlock()
-
                 let result = FFmpegExecutionResult(
-                    stdout: out,
-                    stderr: err,
+                    stdout: captureState.stdout,
+                    stderr: captureState.stderr,
                     exitCode: process.terminationStatus
                 )
 
@@ -108,18 +87,76 @@ final class FFmpegRunner {
     }
 }
 
+nonisolated private final class FFmpegOutputCaptureState: @unchecked Sendable {
+    private let lock = NSLock()
+    private var stdoutText = ""
+    private var stderrText = ""
+    private var progressLineBuffer = ""
+
+    var stdout: String {
+        lock.withLock { stdoutText }
+    }
+
+    var stderr: String {
+        lock.withLock { stderrText }
+    }
+
+    func appendStdout(_ text: String) {
+        lock.withLock {
+            stdoutText.append(text)
+        }
+    }
+
+    func appendStderr(_ text: String) {
+        lock.withLock {
+            stderrText.append(text)
+        }
+    }
+
+    func consumeProgress(
+        from text: String,
+        expectedDurationSeconds: Double?,
+        onProgress: (Double) -> Void
+    ) {
+        guard let expectedDurationSeconds, expectedDurationSeconds > 0 else { return }
+        let ratios: [Double] = lock.withLock {
+            progressLineBuffer.append(text)
+            var parsedRatios: [Double] = []
+            while let index = progressLineBuffer.firstIndex(of: "\n") {
+                let line = String(progressLineBuffer[..<index]).trimmingCharacters(in: .whitespacesAndNewlines)
+                progressLineBuffer.removeSubrange(progressLineBuffer.startIndex...index)
+                guard line.hasPrefix("out_time_ms="),
+                      let msValue = line.split(separator: "=", maxSplits: 1).last,
+                      let ms = Double(msValue) else {
+                    continue
+                }
+                let ratio = max(0, min(1, (ms / 1_000_000.0) / expectedDurationSeconds))
+                parsedRatios.append(ratio)
+            }
+            return parsedRatios
+        }
+        ratios.forEach(onProgress)
+    }
+}
+
 extension FFmpegRunner {
-    enum FFmpegRunnerError: LocalizedError {
+    enum FFmpegRunnerError: Error {
         case launchFailed(String)
         case commandFailed(FFmpegExecutionResult)
+    }
+}
 
-        var errorDescription: String? {
-            switch self {
-            case let .launchFailed(reason):
-                return L10n.f("fmt.ffmpeg.launch_failed", reason)
-            case let .commandFailed(result):
-                let message = result.stderr.isEmpty ? result.stdout : result.stderr
-                return L10n.f("fmt.ffmpeg.command_failed", result.exitCode, message)
+extension FFmpegRunner.FFmpegRunnerError: LocalizedError {
+    var errorDescription: String? {
+        switch self {
+        case let .launchFailed(reason):
+            return MainActor.assumeIsolated {
+                FFmpegLocalizedErrorFormatter.launchFailed(reason)
+            }
+        case let .commandFailed(result):
+            let message = result.stderr.isEmpty ? result.stdout : result.stderr
+            return MainActor.assumeIsolated {
+                FFmpegLocalizedErrorFormatter.commandFailed(exitCode: result.exitCode, message: message)
             }
         }
     }

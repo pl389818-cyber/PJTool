@@ -19,6 +19,7 @@ struct AudioExtractSettingsView: View {
             logsCard
         }
         .animation(.easeInOut(duration: 0.2), value: viewModel.isExtracting)
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     private var heroBanner: some View {
@@ -52,6 +53,7 @@ struct AudioExtractSettingsView: View {
             statusChip
         }
         .padding(16)
+        .frame(maxWidth: .infinity, alignment: .leading)
         .background(
             LinearGradient(
                 colors: [Color(red: 0.90, green: 0.39, blue: 0.18), Color(red: 0.16, green: 0.45, blue: 0.62)],
@@ -259,6 +261,7 @@ struct AudioExtractSettingsView: View {
             content()
         }
         .padding(16)
+        .frame(maxWidth: .infinity, alignment: .leading)
         .background(
             RoundedRectangle(cornerRadius: 16, style: .continuous)
                 .fill(

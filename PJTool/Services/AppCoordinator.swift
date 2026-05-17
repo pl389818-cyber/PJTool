@@ -11,6 +11,12 @@ import Combine
 import CoreGraphics
 import Foundation
 
+enum PiPFilmStopTrigger {
+    case manual
+    case hide
+    case close
+}
+
 @MainActor
 final class AppCoordinator: ObservableObject {
     private static let languageOptionDefaultsKey = "pjtool.appLanguage.option"
@@ -19,6 +25,7 @@ final class AppCoordinator: ObservableObject {
     private static let drawAutoCaptureOnCloseEnabledDefaultsKey = "pjtool.draw.autoCaptureOnClose.enabled"
     private static let pipHotkeyRegisteredStatusKey = "pip.hotkey.registered.status"
     private static let pipHotkeyFallbackStatusKey = "pip.hotkey.fallback.status"
+    private static let pipFilmTitleRecordingSuffix = " - 录像中"
     @Published private(set) var isRecordingArmed = false
     @Published var enableCameraPiP = false {
         didSet {
@@ -66,6 +73,8 @@ final class AppCoordinator: ObservableObject {
     @Published private(set) var resolvedLanguage: ResolvedAppLanguage = .en
     @Published private(set) var statusMessage = L10n.tr("legacy.key_115")
     @Published private(set) var pipStatusMessage = L10n.tr("legacy.pip_2")
+    @Published private(set) var pipFilmState: PiPFilmRecordingState = .idle
+    @Published private(set) var lastPiPFilmOutputURL: URL?
     @Published private(set) var isPiPPreviewVisible = false
     @Published private(set) var drawStatusMessage = L10n.tr("legacy.key_75")
     @Published private(set) var isDrawOverlayVisible = false
@@ -104,11 +113,14 @@ final class AppCoordinator: ObservableObject {
 
     private let screenDrawHotkeyService: ScreenDrawHotkeyService
     private let pipHotkeyService: PiPHotkeyService
+    private let pipFilmRecorder = PiPFilmRecorderService()
     private let screenDrawAutoCaptureService = ScreenDrawAutoCaptureService()
     private var cancellables: Set<AnyCancellable> = []
     private var shouldRestoreMainWindowAfterRecording = false
     private var drawSystemDefinedMonitor: Any?
     private var pendingDrawCaptureRefreshTask: Task<Void, Never>?
+    private var isSuppressingPiPHideCallback = false
+    private var pendingPiPFilmStopTrigger: PiPFilmStopTrigger?
 
     convenience init() {
         let drawSessionStore = ScreenDrawSessionStore()
@@ -182,17 +194,35 @@ final class AppCoordinator: ObservableObject {
             guard let self else { return }
             if isVisible {
                 self.isPiPPreviewVisible = true
-                self.pipStatusMessage = L10n.tr("legacy.pip_6")
+                if !self.isPiPFilmRecording {
+                    self.pipStatusMessage = L10n.tr("legacy.pip_6")
+                }
             } else {
                 self.isPiPPreviewVisible = false
-                self.pipPreviewRuntime.stopPreview()
-                self.pipStatusMessage = L10n.tr("legacy.pip_5")
+                if self.isSuppressingPiPHideCallback {
+                    self.isSuppressingPiPHideCallback = false
+                    self.pipPreviewRuntime.stopPreview()
+                } else if self.isPiPFilmRecording || self.isPiPFilmPreparing {
+                    self.stopPiPFilmRecording(trigger: .close)
+                } else {
+                    self.pipPreviewRuntime.stopPreview()
+                    self.pipStatusMessage = L10n.tr("legacy.pip_5")
+                }
             }
             if self.recorderState.isRecording {
                 Task { [weak self] in
                     guard let self else { return }
                     await self.syncPiPWindowCaptureState()
                 }
+            }
+        }
+        self.pipController.onCloseRequested = { [weak self] in
+            guard let self else { return }
+            if self.isPiPFilmRecording || self.isPiPFilmPreparing {
+                self.stopPiPFilmRecording(trigger: .close)
+            } else {
+                self.pipLayout = self.pipController.currentLayoutState()
+                self.pipController.hide()
             }
         }
 
@@ -251,6 +281,25 @@ final class AppCoordinator: ObservableObject {
 
     var canStopRecording: Bool {
         (recorderState.isRecording || recorder.state.isRecording) && !recorderState.isBusy
+    }
+
+    var isPiPFilmRecording: Bool {
+        pipFilmState.isRecording
+    }
+
+    var isPiPFilmPreparing: Bool {
+        if case .preparing = pipFilmState {
+            return true
+        }
+        return false
+    }
+
+    var canStartPiPFilmRecording: Bool {
+        !pipFilmState.isBusy && !pipFilmState.isRecording
+    }
+
+    var canStopPiPFilmRecording: Bool {
+        pipFilmState.isRecording && !pipFilmState.isBusy
     }
 
     var drawHandDrawnIntensity: CGFloat {
@@ -351,9 +400,116 @@ final class AppCoordinator: ObservableObject {
     }
 
     func hidePiPPreview() {
+        if isPiPFilmRecording || isPiPFilmPreparing {
+            stopPiPFilmRecording(trigger: .hide)
+            return
+        }
         pipLayout = pipController.currentLayoutState()
         pipController.hide()
         refreshRecordingWindowCaptureIfNeeded()
+    }
+
+    func startPiPFilmRecording() {
+        guard canStartPiPFilmRecording else { return }
+        pipFilmRecorder.resetFailureIfNeeded()
+        pendingPiPFilmStopTrigger = nil
+        pipFilmState = .preparing
+
+        Task { [weak self] in
+            guard let self else { return }
+            do {
+                let didShowPreview = await ensurePiPPreviewVisibleForFilmRecording()
+                guard didShowPreview else {
+                    throw PiPFilmRecorderServiceError.runtimeStartFailed(
+                        L10n.tr("legacy.pip_space")
+                    )
+                }
+                if let pendingStopTrigger = consumePendingPiPFilmStopTrigger() {
+                    pipFilmState = .idle
+                    pipController.applyRuntimeWindowTitleSuffix(nil)
+                    if pendingStopTrigger != .manual {
+                        performPiPHideAfterFilmStop()
+                    }
+                    return
+                }
+                let outputDirectory = try PJToolOutputDirectoryPolicy.preparePiPRecordingsDirectory()
+                pipStatusMessage = L10n.tr("pip.film.status.preparing")
+                try await pipFilmRecorder.startRecording(with: pipPreviewRuntime, outputDirectory: outputDirectory)
+                pipFilmState = pipFilmRecorder.state
+                pipController.applyRuntimeWindowTitleSuffix(Self.pipFilmTitleRecordingSuffix)
+                if let pendingStopTrigger = consumePendingPiPFilmStopTrigger() {
+                    stopPiPFilmRecording(trigger: pendingStopTrigger)
+                    return
+                }
+                pipStatusMessage = L10n.tr("pip.film.status.recording")
+            } catch {
+                if let pendingStopTrigger = consumePendingPiPFilmStopTrigger() {
+                    pipFilmState = .idle
+                    pipController.applyRuntimeWindowTitleSuffix(nil)
+                    if pendingStopTrigger != .manual {
+                        performPiPHideAfterFilmStop()
+                    }
+                    return
+                }
+                pipFilmState = pipFilmRecorder.state
+                pipController.applyRuntimeWindowTitleSuffix(nil)
+                pipStatusMessage = L10n.f("pip.film.status.failed", readablePiPFilmMessage(error))
+            }
+        }
+    }
+
+    func stopPiPFilmRecording(trigger: PiPFilmStopTrigger = .manual) {
+        Task { [weak self] in
+            guard let self else { return }
+            if self.isPiPFilmPreparing {
+                self.pendingPiPFilmStopTrigger = trigger
+                self.pipStatusMessage = L10n.tr("pip.film.status.stopping")
+                if trigger != .manual {
+                    self.performPiPHideAfterFilmStop()
+                }
+                return
+            }
+            guard self.pipFilmState.isRecording else {
+                if trigger != .manual {
+                    self.performPiPHideAfterFilmStop()
+                }
+                return
+            }
+            self.pipStatusMessage = L10n.tr("pip.film.status.stopping")
+            self.pipFilmState = .stopping
+            do {
+                let outputURL = try await self.pipFilmRecorder.stopRecording(with: self.pipPreviewRuntime)
+                self.lastPiPFilmOutputURL = outputURL
+                self.pipFilmState = self.pipFilmRecorder.state
+                self.pipController.applyRuntimeWindowTitleSuffix(nil)
+                if trigger == .manual {
+                    self.pipStatusMessage = L10n.f("pip.film.status.saved", outputURL.lastPathComponent)
+                } else {
+                    self.performPiPHideAfterFilmStop()
+                    self.pipStatusMessage = L10n.f("pip.film.status.saved", outputURL.lastPathComponent)
+                }
+            } catch {
+                self.pipFilmState = self.pipFilmRecorder.state
+                self.pipController.applyRuntimeWindowTitleSuffix(nil)
+                self.pipStatusMessage = L10n.f("pip.film.status.failed", self.readablePiPFilmMessage(error))
+                if trigger != .manual {
+                    self.performPiPHideAfterFilmStop()
+                }
+            }
+        }
+    }
+
+    func openPiPRecordingsDirectory() {
+        do {
+            let directory = try PJToolOutputDirectoryPolicy.preparePiPRecordingsDirectory()
+            if let lastPiPFilmOutputURL {
+                NSWorkspace.shared.activateFileViewerSelecting([lastPiPFilmOutputURL])
+            } else {
+                NSWorkspace.shared.activateFileViewerSelecting([directory])
+            }
+        } catch {
+            pipStatusMessage = L10n.f("pip.film.status.failed", readablePiPFilmMessage(error))
+        }
     }
 
     func showScreenDrawOverlay() {
@@ -521,10 +677,59 @@ final class AppCoordinator: ObservableObject {
                 }
             }
             .store(in: &cancellables)
+
+        pipFilmRecorder.$state
+            .receive(on: RunLoop.main)
+            .sink { [weak self] state in
+                self?.pipFilmState = state
+            }
+            .store(in: &cancellables)
+
+        pipFilmRecorder.$lastOutputURL
+            .receive(on: RunLoop.main)
+            .sink { [weak self] url in
+                self?.lastPiPFilmOutputURL = url
+            }
+            .store(in: &cancellables)
     }
 
     private func unavailableReason() -> String {
         L10n.tr("legacy.key_107")
+    }
+
+    private func readablePiPFilmMessage(_ error: Error) -> String {
+        let localized = (error as NSError).localizedDescription
+        if !localized.isEmpty {
+            return localized
+        }
+        return L10n.tr("pip.film.error.unknown")
+    }
+
+    private func consumePendingPiPFilmStopTrigger() -> PiPFilmStopTrigger? {
+        let trigger = pendingPiPFilmStopTrigger
+        pendingPiPFilmStopTrigger = nil
+        return trigger
+    }
+
+    private func performPiPHideAfterFilmStop() {
+        pipLayout = pipController.currentLayoutState()
+        isSuppressingPiPHideCallback = true
+        pipController.hide()
+        refreshRecordingWindowCaptureIfNeeded()
+    }
+
+    private func ensurePiPPreviewVisibleForFilmRecording() async -> Bool {
+        if isPiPPreviewVisible {
+            return true
+        }
+        activatePiPPreview()
+        for _ in 0..<12 {
+            if isPiPPreviewVisible {
+                return true
+            }
+            try? await Task.sleep(nanoseconds: 100_000_000)
+        }
+        return isPiPPreviewVisible
     }
 
     private func hideMainWindowForRecording() {
@@ -599,14 +804,13 @@ final class AppCoordinator: ObservableObject {
         statusMessage = L10n.tr("legacy.key_21")
 
         // 录屏主成片以“屏幕真实内容”为准，不再叠加独立摄像头二轨。
-        let shouldCaptureCameraTrack = false
         let shouldCaptureMicrophone = isAudioAuthorized
             && audioEngine.selectedSourceID != nil
 
         let request = RecordingRequest(
             microphoneDeviceID: shouldCaptureMicrophone ? audioEngine.selectedSourceID : nil,
-            cameraDeviceID: shouldCaptureCameraTrack ? pipPreviewRuntime.selectedSourceID : nil,
-            cameraAudioDeviceID: shouldCaptureCameraTrack ? pipPreviewRuntime.selectedAudioSourceID : nil,
+            cameraDeviceID: nil,
+            cameraAudioDeviceID: nil,
             pipWindowID: isPiPPreviewVisible ? pipController.currentWindowID : nil,
             screenDrawWindowIDs: screenDrawWhitelistWindowIDs(),
             pipLayout: pipLayout,

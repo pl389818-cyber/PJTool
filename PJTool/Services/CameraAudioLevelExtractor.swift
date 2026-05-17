@@ -9,7 +9,7 @@ import CoreMedia
 import Foundation
 
 enum CameraAudioLevelExtractor {
-    static func extract(from sampleBuffer: CMSampleBuffer) -> Double {
+    nonisolated static func extract(from sampleBuffer: CMSampleBuffer) -> Double {
         guard let dataBuffer = CMSampleBufferGetDataBuffer(sampleBuffer) else { return 0 }
         let totalLength = CMBlockBufferGetDataLength(dataBuffer)
         guard totalLength > 0 else { return 0 }
@@ -43,7 +43,7 @@ enum CameraAudioLevelExtractor {
         return levelFromInt16(rawBytes, channels: channels)
     }
 
-    private static func levelFromFloat32(_ bytes: [UInt8], channels: Int) -> Double {
+    nonisolated private static func levelFromFloat32(_ bytes: [UInt8], channels: Int) -> Double {
         bytes.withUnsafeBytes { raw in
             let pointer = raw.bindMemory(to: Float.self)
             let count = pointer.count
@@ -66,7 +66,7 @@ enum CameraAudioLevelExtractor {
         }
     }
 
-    private static func levelFromInt32(_ bytes: [UInt8], channels: Int) -> Double {
+    nonisolated private static func levelFromInt32(_ bytes: [UInt8], channels: Int) -> Double {
         bytes.withUnsafeBytes { raw in
             let pointer = raw.bindMemory(to: Int32.self)
             let count = pointer.count
@@ -89,7 +89,7 @@ enum CameraAudioLevelExtractor {
         }
     }
 
-    private static func levelFromInt16(_ bytes: [UInt8], channels: Int) -> Double {
+    nonisolated private static func levelFromInt16(_ bytes: [UInt8], channels: Int) -> Double {
         bytes.withUnsafeBytes { raw in
             let pointer = raw.bindMemory(to: Int16.self)
             let count = pointer.count

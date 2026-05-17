@@ -31,7 +31,6 @@ final class CameraDeviceCatalog {
         var includedSystemDefault = false
 
         if devices.isEmpty {
-            devices = AVCaptureDevice.devices(for: .video)
             usedLegacyFallback = true
         }
 
@@ -62,8 +61,12 @@ final class CameraDeviceCatalog {
         var usedLegacyFallback = false
 
         if devices.isEmpty {
-            devices = AVCaptureDevice.devices(for: .audio)
             usedLegacyFallback = true
+        }
+
+        if let preferred = AVCaptureDevice.default(for: .audio),
+           !devices.contains(where: { $0.uniqueID == preferred.uniqueID }) {
+            devices.append(preferred)
         }
 
         let normalized = normalize(devices, includeOffline: includeOffline)

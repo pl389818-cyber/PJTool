@@ -682,7 +682,6 @@ final class CameraEngine: NSObject, ObservableObject {
         var includedSystemDefault = false
 
         if devices.isEmpty {
-            devices = AVCaptureDevice.devices(for: .video)
             usedLegacyFallback = true
         }
         if let preferred = AVCaptureDevice.default(for: .video),
@@ -718,8 +717,12 @@ final class CameraEngine: NSObject, ObservableObject {
         var usedLegacyFallback = false
 
         if devices.isEmpty {
-            devices = AVCaptureDevice.devices(for: .audio)
             usedLegacyFallback = true
+        }
+
+        if let preferred = AVCaptureDevice.default(for: .audio),
+           !devices.contains(where: { $0.uniqueID == preferred.uniqueID }) {
+            devices.append(preferred)
         }
 
         let deduplicated = Dictionary(devices.map { ($0.uniqueID, $0) }, uniquingKeysWith: { current, _ in current })

@@ -135,6 +135,7 @@ struct ContentView: View {
             videoCuttingHeroBanner
             videoCuttingActionCard
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     private var videoCuttingHeroBanner: some View {
@@ -180,6 +181,7 @@ struct ContentView: View {
             .clipShape(Capsule())
         }
         .padding(16)
+        .frame(maxWidth: .infinity, alignment: .leading)
         .background(
             LinearGradient(
                 colors: [Color(red: 0.42, green: 0.28, blue: 0.74), Color(red: 0.18, green: 0.34, blue: 0.65)],
@@ -229,6 +231,7 @@ struct ContentView: View {
                 .fixedSize(horizontal: false, vertical: true)
         }
         .padding(16)
+        .frame(maxWidth: .infinity, alignment: .leading)
         .background(
             RoundedRectangle(cornerRadius: 16, style: .continuous)
                 .fill(

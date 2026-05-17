@@ -20,6 +20,7 @@ struct RecordingSettingsView: View {
             permissionStatusCard
             microphoneCard
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     private var heroBanner: some View {
@@ -52,6 +53,7 @@ struct RecordingSettingsView: View {
             statusChip
         }
         .padding(16)
+        .frame(maxWidth: .infinity, alignment: .leading)
         .background(
             LinearGradient(
                 colors: [Color(red: 0.78, green: 0.22, blue: 0.18), Color(red: 0.30, green: 0.14, blue: 0.45)],
@@ -239,21 +241,22 @@ struct RecordingSettingsView: View {
 
             content()
         }
-            .padding(16)
-            .background(
-                RoundedRectangle(cornerRadius: 16, style: .continuous)
-                    .fill(
-                        LinearGradient(
-                            colors: [Color(nsColor: .controlBackgroundColor), Color(nsColor: .windowBackgroundColor)],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
+        .padding(16)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .fill(
+                    LinearGradient(
+                        colors: [Color(nsColor: .controlBackgroundColor), Color(nsColor: .windowBackgroundColor)],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
                     )
-            )
-            .overlay(
-                RoundedRectangle(cornerRadius: 16, style: .continuous)
-                    .stroke(Color.black.opacity(0.08), lineWidth: 1)
-            )
-            .shadow(color: Color.black.opacity(0.05), radius: 6, y: 3)
+                )
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .stroke(Color.black.opacity(0.08), lineWidth: 1)
+        )
+        .shadow(color: Color.black.opacity(0.05), radius: 6, y: 3)
     }
 }

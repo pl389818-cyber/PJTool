@@ -19,6 +19,7 @@ struct ScreenDrawingSettingsView: View {
             captureCard
             dismissalCard
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     private var heroBanner: some View {
@@ -51,6 +52,7 @@ struct ScreenDrawingSettingsView: View {
             statusChip
         }
         .padding(16)
+        .frame(maxWidth: .infinity, alignment: .leading)
         .background(
             LinearGradient(
                 colors: [Color(red: 0.16, green: 0.58, blue: 0.54), Color(red: 0.18, green: 0.36, blue: 0.48)],
@@ -268,6 +270,7 @@ struct ScreenDrawingSettingsView: View {
             content()
         }
         .padding(16)
+        .frame(maxWidth: .infinity, alignment: .leading)
         .background(
             RoundedRectangle(cornerRadius: 16, style: .continuous)
                 .fill(

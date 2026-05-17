@@ -10,6 +10,7 @@ import Foundation
 struct PJToolOutputDirectoryPolicy {
     private static let appFolderName = "PJTool"
     private static let recordingsFolderName = "Recordings"
+    private static let pipRecordingsFolderName = "PiPRecordings"
     private static let videoCutsFolderName = "VideoCuts"
     private static let audioExtractFolderName = "AudioExtract"
     private static let screenDrawFolderName = "ScreenDraw"
@@ -22,6 +23,16 @@ struct PJToolOutputDirectoryPolicy {
         let directory = moviesRootDirectory().appendingPathComponent(recordingsFolderName, isDirectory: true)
         try ensureDirectoryExists(directory)
         return directory
+    }
+
+    static func pipRecordingsDirectory() throws -> URL {
+        let directory = moviesRootDirectory().appendingPathComponent(pipRecordingsFolderName, isDirectory: true)
+        try ensureDirectoryExists(directory)
+        return directory
+    }
+
+    static func preparePiPRecordingsDirectory() throws -> URL {
+        try pipRecordingsDirectory()
     }
 
     static func defaultAudioExtractRootDirectory() -> URL {

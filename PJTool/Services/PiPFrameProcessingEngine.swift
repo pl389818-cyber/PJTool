@@ -68,13 +68,15 @@ final class PiPFrameProcessingEngine {
     }
 
     func processAssetForKeyframes(cameraURL: URL) -> [FaceFramingKeyframe] {
-        let asset = AVURLAsset(url: cameraURL)
-        guard let videoTrack = asset.tracks(withMediaType: .video).first else {
+        let videoTrack: AVAssetTrack
+        do {
+            videoTrack = try loadFirstVideoTrack(from: cameraURL)
+        } catch {
             return []
         }
 
         do {
-            let reader = try AVAssetReader(asset: asset)
+            let reader = try AVAssetReader(asset: videoTrack.asset!)
             let output = AVAssetReaderTrackOutput(
                 track: videoTrack,
                 outputSettings: [
@@ -107,6 +109,32 @@ final class PiPFrameProcessingEngine {
         }
     }
 
+    private func loadFirstVideoTrack(from cameraURL: URL) throws -> AVAssetTrack {
+        var loadedTrack: AVAssetTrack?
+        var loadedError: Error?
+        let semaphore = DispatchSemaphore(value: 0)
+
+        Task {
+            do {
+                let asset = AVURLAsset(url: cameraURL)
+                let tracks = try await asset.loadTracks(withMediaType: .video)
+                loadedTrack = tracks.first
+            } catch {
+                loadedError = error
+            }
+            semaphore.signal()
+        }
+
+        semaphore.wait()
+        if let loadedTrack {
+            return loadedTrack
+        }
+        if let loadedError {
+            throw loadedError
+        }
+        throw NSError(domain: "PJTool.PiPFrameProcessingEngine", code: 1)
+    }
+
     private func detectFaceIfNeeded(
         pixelBuffer: CVPixelBuffer,
         seconds: Double
@@ -130,7 +158,7 @@ final class PiPFrameProcessingEngine {
             return lastDetectedFaceRect
         }
 
-        let faces = (request.results as? [VNFaceObservation]) ?? []
+        let faces = request.results ?? []
         let largestFace = faces.max { lhs, rhs in
             (lhs.boundingBox.width * lhs.boundingBox.height) < (rhs.boundingBox.width * rhs.boundingBox.height)
         }

@@ -35,6 +35,7 @@ struct PiPCameraSettingsView: View {
                 }
             }
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
 
     private var heroBanner: some View {
@@ -67,6 +68,7 @@ struct PiPCameraSettingsView: View {
             statusChip
         }
         .padding(16)
+        .frame(maxWidth: .infinity, alignment: .leading)
         .background(
             LinearGradient(
                 colors: [Color(red: 0.11, green: 0.55, blue: 0.73), Color(red: 0.17, green: 0.24, blue: 0.62)],
@@ -105,6 +107,9 @@ struct PiPCameraSettingsView: View {
                     Text(previewConsoleSummary)
                         .font(.footnote)
                         .foregroundStyle(.secondary)
+                    Text(L10n.tr("pip.film.card.subtitle"))
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
                     Text(L10n.tr("pip.hotkey.tip"))
                         .font(.footnote)
                         .foregroundStyle(.secondary)
@@ -125,6 +130,35 @@ struct PiPCameraSettingsView: View {
                     }
                     .buttonStyle(.borderedProminent)
                 }
+                if appCoordinator.canStartPiPFilmRecording {
+                    Button(L10n.tr("pip.film.action.start")) {
+                        appCoordinator.startPiPFilmRecording()
+                    }
+                    .buttonStyle(.bordered)
+                    .disabled(!appCoordinator.canStartPiPFilmRecording)
+                } else {
+                    Button(L10n.tr("pip.film.action.stop")) {
+                        appCoordinator.stopPiPFilmRecording()
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .tint(.red)
+                    .disabled(!appCoordinator.canStopPiPFilmRecording)
+                }
+
+                Button(L10n.tr("pip.film.action.open_folder")) {
+                    appCoordinator.openPiPRecordingsDirectory()
+                }
+                .buttonStyle(.bordered)
+            }
+
+            Text(filmStatusSummary)
+                .font(.footnote)
+                .foregroundStyle(.secondary)
+
+            if let outputURL = appCoordinator.lastPiPFilmOutputURL {
+                Text(L10n.f("pip.film.latest_output", outputURL.lastPathComponent))
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
             }
         }
     }
@@ -371,6 +405,21 @@ struct PiPCameraSettingsView: View {
         return L10n.tr("legacy.pip_17")
     }
 
+    private var filmStatusSummary: String {
+        switch appCoordinator.pipFilmState {
+        case .idle:
+            return L10n.tr("pip.film.status.idle")
+        case .preparing:
+            return L10n.tr("pip.film.status.preparing")
+        case .recording:
+            return L10n.tr("pip.film.status.recording")
+        case .stopping:
+            return L10n.tr("pip.film.status.stopping")
+        case let .failed(reason):
+            return L10n.f("pip.film.status.failed", reason)
+        }
+    }
+
     private var selectedDeviceSummary: String {
         let selectedCamera = pipRuntime.sources.first(where: {
             $0.id == pipRuntime.selectedSourceID
@@ -461,6 +510,7 @@ struct PiPCameraSettingsView: View {
             content()
         }
         .padding(16)
+        .frame(maxWidth: .infinity, alignment: .leading)
         .background(
             RoundedRectangle(cornerRadius: 16, style: .continuous)
                 .fill(

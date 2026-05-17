@@ -18,6 +18,7 @@ final class PiPOverlayWindowController: NSObject, ObservableObject {
     @Published private(set) var isVisible = false
 
     var onVisibilityChanged: ((Bool) -> Void)?
+    var onCloseRequested: (() -> Void)?
     var currentWindowID: CGWindowID? {
         guard let windowNumber = panel?.windowNumber, windowNumber > 0 else { return nil }
         return CGWindowID(windowNumber)
@@ -27,6 +28,7 @@ final class PiPOverlayWindowController: NSObject, ObservableObject {
     private var hostScreen: NSScreen?
     private var observers: [NotificationToken] = []
     private var windowConfig: PiPWindowConfig = .default
+    private var runtimeTitleSuffix: String?
     private let desiredCollectionBehavior: NSWindow.CollectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
     private var isApplyingProgrammaticFrame = false
     private var pendingLayoutSyncWorkItem: DispatchWorkItem?
@@ -146,7 +148,7 @@ final class PiPOverlayWindowController: NSObject, ObservableObject {
     func applyWindowConfig(_ config: PiPWindowConfig) {
         windowConfig = config
         guard let panel else { return }
-        panel.title = config.resolvedWindowTitle
+        panel.title = resolvedWindowTitle()
         applyTitleBarVisibility(using: panel, isVisible: config.isTitleBarVisible)
         if let previewView = panel.contentView as? PiPPreviewView {
             previewView.applyTitleBarVisibility(config.isTitleBarVisible)
@@ -156,6 +158,11 @@ final class PiPOverlayWindowController: NSObject, ObservableObject {
         if panel.isVisible, config.isAlwaysOnTop {
             panel.orderFrontRegardless()
         }
+    }
+
+    func applyRuntimeWindowTitleSuffix(_ suffix: String?) {
+        runtimeTitleSuffix = suffix
+        panel?.title = resolvedWindowTitle()
     }
 
     private func configureFrontmostObservers() {
@@ -215,7 +222,11 @@ final class PiPOverlayWindowController: NSObject, ObservableObject {
         panel.collectionBehavior = desiredCollectionBehavior
         guard windowConfig.isAlwaysOnTop || forceActivate else { return }
         if forceActivate {
-            NSRunningApplication.current.activate(options: [.activateIgnoringOtherApps])
+            if #available(macOS 14.0, *) {
+                NSRunningApplication.current.activate(options: [])
+            } else {
+                NSRunningApplication.current.activate(options: [.activateIgnoringOtherApps])
+            }
         }
         panel.orderFrontRegardless()
     }
@@ -281,14 +292,19 @@ final class PiPOverlayWindowController: NSObject, ObservableObject {
         panel.hasShadow = true
         panel.isOpaque = true
         panel.backgroundColor = .windowBackgroundColor
-        panel.title = windowConfig.resolvedWindowTitle
+        panel.title = resolvedWindowTitle()
         applyTitleBarVisibility(using: panel, isVisible: windowConfig.isTitleBarVisible)
         panel.tabbingMode = .disallowed
         panel.isReleasedWhenClosed = false
         panel.isRestorable = false
         panel.animationBehavior = .utilityWindow
         panel.onCloseRequested = { [weak self] in
-            self?.hide()
+            guard let self else { return }
+            if let handler = self.onCloseRequested {
+                handler()
+            } else {
+                self.hide()
+            }
         }
 
         let content = PiPPreviewView(frame: panel.contentView?.bounds ?? .zero)
@@ -417,6 +433,15 @@ final class PiPOverlayWindowController: NSObject, ObservableObject {
             aspectRatio.height(forWidth: minimumWidth)
         )
         return CGSize(width: minimumWidth, height: minimumHeight)
+    }
+
+    private func resolvedWindowTitle() -> String {
+        let base = windowConfig.resolvedWindowTitle
+        guard let runtimeTitleSuffix,
+              !runtimeTitleSuffix.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+            return base
+        }
+        return base + runtimeTitleSuffix
     }
 
     private func clamped(frame: CGRect, in bounds: CGRect) -> CGRect {
